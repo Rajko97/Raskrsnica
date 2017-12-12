@@ -21,12 +21,12 @@ public class MainActivity extends AppCompatActivity {
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager=getFragmentManager();
+                /*FragmentManager fragmentManager=getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                     BlankFragment fragment1 = new BlankFragment();
                     fragmentTransaction.replace(android.R.id.content, fragment1);
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
 
             }
         });
