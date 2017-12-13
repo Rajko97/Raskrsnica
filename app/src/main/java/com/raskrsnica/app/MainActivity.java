@@ -24,23 +24,21 @@ public class MainActivity extends AppCompatActivity {
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.support.v4.app.Fragment fragment = new DataBaseFragment();
+
+                android.support.v4.app.Fragment fragment = new SettingsFragment();
                 android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, fragment);
                 ft.commit();
-                /*FragmentManager fragmentManager=getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                    BlankFragment fragment1 = new BlankFragment();
-                    fragmentTransaction.replace(android.R.id.content, fragment1);
-                fragmentTransaction.commit();*/
 
             }
         });
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                android.support.v4.app.Fragment fragment = new DataBaseFragment();
+                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, fragment);
+                ft.commit();
             }
         });
     }
