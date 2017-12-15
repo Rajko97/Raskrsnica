@@ -16,6 +16,10 @@ public class MainActivity extends AppCompatActivity {
         Button bt2=(Button)findViewById(R.id.databasebutton);
 
         android.support.v4.app.Fragment fragment = null;
+        fragment = new SettingsFragment();
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override

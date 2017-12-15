@@ -3,4 +3,23 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="raskrsnice">
+        <item>Raskrsnica1</item>
+        <item>Raskrsnica2</item>
+        <item>Raskrsnica3</item>
+        <item>Raskrsnica4</item>
+        <item>Raskrsnica5</item>
+        <item>Raskrsnica6</item>
+        <item>Raskrsnica7</item>
+        <item>Raskrsnica8</item>
+        <item>Raskrsnica9</item>
+        <item>Raskrsnica10</item>
+    </string-array>
+
+    <string-array name="pozicije">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>
