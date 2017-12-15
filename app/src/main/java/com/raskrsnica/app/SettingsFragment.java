@@ -2,6 +2,7 @@ package com.raskrsnica.app;
 
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,6 +65,16 @@ public class SettingsFragment extends Fragment {
         });
         final TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
         tp.setIs24HourView(true);
+
+        Button button=(Button)rootView.findViewById(R.id.btNext);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),CountingActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 

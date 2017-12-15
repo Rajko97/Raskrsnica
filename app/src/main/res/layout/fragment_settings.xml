@@ -26,6 +26,14 @@
         android:layout_height="150dp"
         android:timePickerMode="spinner" />
 
+    <Button
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="100dp"
+        android:id="@+id/btNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next" />
+
     <LinearLayout
         android:id="@+id/datum_layout"
         android:layout_width="100dp"
