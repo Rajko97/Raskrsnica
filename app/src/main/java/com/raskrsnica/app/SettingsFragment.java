@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,6 +37,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+
         Spinner spinner1=(Spinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter1 =ArrayAdapter.createFromResource(rootView.getContext(),R.array.raskrsnice, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,7 +61,8 @@ public class SettingsFragment extends Fragment {
                 newFragment.show(getFragmentManager(), "DatePicker");
             }
         });
-
+        final TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
+        tp.setIs24HourView(true);
         return rootView;
     }
 
