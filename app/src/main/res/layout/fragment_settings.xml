@@ -17,6 +17,7 @@
         android:id="@+id/spinner2"
         android:layout_width="100dp"
         android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:id="@+id/datum_layout"
         android:layout_marginTop="100dp"
