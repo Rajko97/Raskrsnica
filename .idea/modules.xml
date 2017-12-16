@@ -4,9 +4,7 @@
     <modules>
       <module fileurl="file://F:\SandraMilanovic\Raskrsnica\ProjekatRaskrsnica.iml" filepath="F:\SandraMilanovic\Raskrsnica\ProjekatRaskrsnica.iml" />
       <module fileurl="file://$PROJECT_DIR$/Raskrsnica.iml" filepath="$PROJECT_DIR$/Raskrsnica.iml" />
-      <module fileurl="file://A:\AppsTeam\Raskrsnica\Raskrsnica.iml" filepath="A:\AppsTeam\Raskrsnica\Raskrsnica.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://A:\AppsTeam\Raskrsnica\app\app.iml" filepath="A:\AppsTeam\Raskrsnica\app\app.iml" />
     </modules>
   </component>
 </project>
