@@ -11,3 +11,8 @@ public class CountingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_counting);
     }
 }
+
+/*Literatura:
+    INTENT
+    -Prosledjivanje parametara: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
+ */

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -86,6 +87,7 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO provera da li je korisnik ukljucio bar jedan smer
                 Intent intent=new Intent(getActivity(),CountingActivity.class); //pravimo novi intent
                 Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
                 //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
@@ -93,8 +95,31 @@ public class SettingsFragment extends Fragment {
                 b.putString("POZICIJA", spinner2.getSelectedItem().toString());
                 b.putString("DATUM", datum.getText().toString()+" "+mesec.getText().toString()); //TODO Da se ubaci i godina!
                 b.putString("VREME", tp.getCurrentHour()+ ":" + tp.getCurrentMinute());
+                //TODO da se proslede izabrani smerovi
                 intent.putExtras(b); // ubacujemo podatke intentu
                 startActivity(intent); // pozivamo intent
+            }
+        });
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //Kad menjamo poziciju sa koje se broji
+            @Override                                                                 //moramo da promenimo i nazive smerova
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView Levo, Pravo, Desno;
+                Levo = (TextView) rootView.findViewById(R.id.textLevo);
+                Pravo = (TextView) rootView.findViewById(R.id.textPravo);
+                Desno = (TextView) rootView.findViewById(R.id.textDesno);
+                int x = Integer.valueOf(spinner2.getSelectedItem().toString());
+                int y = x % 4 +1;
+                Levo.setText(x+"."+y);
+                y = (x +1)% 4 +1;
+                Pravo.setText(x+"."+y);
+                y = (x +2)% 4 +1;
+                Desno.setText(x+"."+y);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
         return rootView;
@@ -106,8 +131,10 @@ public class SettingsFragment extends Fragment {
     -Sve o spineru: https://developer.android.com/reference/android/widget/Spinner.html
     -Kreiranje spinera sa nizom stringova: https://stackoverflow.com/questions/17311335/how-to-populate-a-spinner-from-string-array
     -Citanje vrednosti: https://stackoverflow.com/questions/5787809/get-spinner-selected-items-text
+    -Kad se promeni vrednost - event: https://stackoverflow.com/questions/1337424/android-spinner-get-the-selected-item-change-event
     INTENT
         -Prosledjivanje parametara: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
     DATUM I VREME
         -ucitavanje vrednosti: https://stackoverflow.com/questions/10346685/android-how-to-get-values-from-date-and-time-picker
+
 */
