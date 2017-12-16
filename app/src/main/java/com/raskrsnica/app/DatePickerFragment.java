@@ -16,11 +16,12 @@ import java.util.TimeZone;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int yy = calendar.get(Calendar.YEAR);
-        int mm=calendar.get(Calendar.MONTH);
+        int mm = calendar.get(Calendar.MONTH);
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
         return new DatePickerDialog(getActivity(), this, yy, mm, dd);
     }
@@ -29,13 +30,16 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 
         TextView mesec_tekst = (TextView) getActivity().findViewById(R.id.mesec);
-        TextView dan_tekst=(TextView)getActivity().findViewById(R.id.datum);
-        Calendar c=Calendar.getInstance();
+        TextView dan_tekst = (TextView) getActivity().findViewById(R.id.datum);
+        TextView godina=(TextView)getActivity().findViewById(R.id.godina);
+
+        Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, selectedMonth);
         SimpleDateFormat dateformat1 = new SimpleDateFormat("MMMM");
-        String monthString= dateformat1.format(c.getTime());
+        String monthString = dateformat1.format(c.getTime());
         mesec_tekst.setText(monthString);
-        dan_tekst.setText(selectedDay+"");
+
+        dan_tekst.setText(selectedDay + "");
+        godina.setText(selectedYear+"");
     }
 }
-
