@@ -27,7 +27,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
 
     CountDownTimer countDownTimer;
-    public boolean b=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
