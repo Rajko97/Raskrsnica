@@ -1,5 +1,8 @@
 package com.raskrsnica.app;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +14,10 @@ import android.widget.ToggleButton;
 
 import java.util.concurrent.TimeUnit;
 
+
 public class CountingActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
-
+    public boolean b=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +27,9 @@ public class CountingActivity extends AppCompatActivity {
         Button bt_nazad=(Button)findViewById(R.id.nazad);
         Button bt_baza=(Button)findViewById(R.id.baza);
 
+
             countDownTimer= new CountDownTimer(900000, 1000) {
+                int i=0;
                 @Override
                 public void onTick(long l) {
                     timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -33,7 +39,11 @@ public class CountingActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
 
-                    //Todo:Timer treba da se ponovi jos 3 puta
+                    if(i<3)
+                    {
+                        start();
+                        i++;
+                    }
                 }
             }.start();
 

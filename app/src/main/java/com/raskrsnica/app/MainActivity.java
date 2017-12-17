@@ -1,12 +1,10 @@
 package com.raskrsnica.app;
 
 
-import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -17,11 +15,14 @@ public class MainActivity extends AppCompatActivity{
         Button bt1=(Button)findViewById(R.id.settingsbutton);
         Button bt2=(Button)findViewById(R.id.databasebutton);
 
+
         android.support.v4.app.Fragment fragment = null;
         fragment = new SettingsFragment();
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
         ft.commit();
+
+
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
                 ft.commit();
             }
         });
+
     }
 
 }
