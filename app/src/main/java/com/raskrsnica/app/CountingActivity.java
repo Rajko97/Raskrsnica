@@ -1,5 +1,8 @@
 package com.raskrsnica.app;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.media.session.ParcelableVolumeInfo;
@@ -13,10 +16,7 @@ import android.widget.ToggleButton;
 import org.w3c.dom.Text;
 
 import java.util.concurrent.TimeUnit;
-//TODO SJEBAO SE STOP ZA TIMER
 public class CountingActivity extends AppCompatActivity implements View.OnClickListener {
-    CountDownTimer countDownTimer;
-
 
     private int[] dugmiciVozila = {R.id.vozilo1, R.id.vozilo2, R.id.vozilo3, R.id.vozilo4, R.id.vozilo5, R.id.vozilo6, R.id.vozilo7, R.id.vozilo8, R.id.vozilo9, R.id.vozilo10};
     private int[] textVozila = {R.id.brojVozila1, R.id.brojVozila2, R.id.brojVozila3, R.id.brojVozila4, R.id.brojVozila5, R.id.brojVozila6, R.id.brojVozila7, R.id.brojVozila8, R.id.brojVozila9, R.id.brojVozila10};
@@ -25,6 +25,9 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private int[] brojVozilaDesno = new int[10]; //Drugi nacin, isto je
     TextView[] textViews = new TextView[10];
 
+
+    CountDownTimer countDownTimer;
+    public boolean b=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +37,14 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         Button bt_nazad = (Button) findViewById(R.id.nazad);
         Button bt_baza = (Button) findViewById(R.id.baza);
 
+
         for (int id : dugmiciVozila) {
             findViewById(id).setOnClickListener(this);
         for (int i = 0; i < 10; i++) {
             textViews[i] = (TextView) findViewById(textVozila[i]);
         }
-            countDownTimer = new CountDownTimer(900000, 1000) {
+            countDownTimer= new CountDownTimer(900000, 1000) {
+                int i=0;
                 @Override
                 public void onTick(long l) {
                     timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -49,7 +54,11 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFinish() {
 
-                    //Todo:Timer treba da se ponovi jos 3 puta
+                    if(i<3)
+                    {
+                        start();
+                        i++;
+                    }
                 }
             }.start();
 

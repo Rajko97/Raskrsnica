@@ -25,8 +25,8 @@ import java.util.Calendar;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
 
+public class SettingsFragment extends Fragment {
 
     public SettingsFragment() {
         // Required empty public constructor
