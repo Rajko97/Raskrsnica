@@ -91,7 +91,7 @@ public class SettingsFragment extends Fragment {
                 //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
                 b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
                 b.putString("POZICIJA", spinner2.getSelectedItem().toString());
-                b.putString("DATUM", datum.getText().toString()+" "+mesec.getText().toString()+""+godina.getText().toString());
+                b.putString("DATUM", datum.getText().toString()+" "+mesec.getText().toString()+" "+godina.getText().toString());
                 b.putString("VREME", tp.getCurrentHour()+ ":" + tp.getCurrentMinute());
                 //TODO da se proslede izabrani smerovi
                 intent.putExtras(b); // ubacujemo podatke intentu
