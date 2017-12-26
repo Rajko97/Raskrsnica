@@ -39,8 +39,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
         for (int id : dugmiciVozila) {
             findViewById(id).setOnClickListener(this);
-        for (int i = 0; i < 10; i++) {
-            textViews[i] = (TextView) findViewById(textVozila[i]);
+        for (int i2 = 0; i2 < 10; i2++) {
+            textViews[i2] = (TextView) findViewById(textVozila[i2]);
         }
             countDownTimer= new CountDownTimer(900000, 1000) {
                 int i=0;
