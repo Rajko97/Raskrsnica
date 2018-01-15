@@ -1,8 +1,10 @@
 package com.raskrsnica.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.media.session.ParcelableVolumeInfo;
@@ -25,50 +27,58 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private int[] brojVozilaDesno = new int[10]; //Drugi nacin, isto je
     TextView[] textViews = new TextView[10];
 
-
     CountDownTimer countDownTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counting);
         final TextView timer = (TextView) findViewById(R.id.kvantum);
-        Button bt = (Button) findViewById(R.id.stop);
+        Button bt_stop = (Button) findViewById(R.id.stop);
         Button bt_nazad = (Button) findViewById(R.id.nazad);
         Button bt_baza = (Button) findViewById(R.id.baza);
 
 
         for (int id : dugmiciVozila) {
             findViewById(id).setOnClickListener(this);
+        }
         for (int i2 = 0; i2 < 10; i2++) {
             textViews[i2] = (TextView) findViewById(textVozila[i2]);
         }
-            countDownTimer= new CountDownTimer(900000, 1000) {
-                int i=0;
-                @Override
-                public void onTick(long l) {
-                    timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
-                            TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
+
+        countDownTimer= new CountDownTimer(900000, 1000) {
+            int i=0;
+            @Override
+            public void onTick(long l) {
+                timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
+                        TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
+            }
+            @Override
+            public void onFinish() {
+                if(i<3)
+                {
+                    start();
+                    i++;
                 }
+            }
+        }.start();
 
-                @Override
-                public void onFinish() {
-
-                    if(i<3)
-                    {
-                        start();
-                        i++;
-                    }
-                }
-            }.start();
-
-            bt.setOnClickListener(new View.OnClickListener() {
+        bt_stop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     countDownTimer.cancel(); //Dugme prekida kvnatum skroz
+                    AlertDialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
+                    alertDialog.setTitle("Obavestenje");
+                    alertDialog.setMessage("Zaustavili ste brojanje.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 }
-            });
-
-            bt_nazad.setOnClickListener(new View.OnClickListener() {
+        });
+        bt_nazad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(CountingActivity.this, MainActivity.class);
@@ -76,14 +86,15 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
-    }
     @Override
     public void onClick(View v) {
-
         int indeks = -1; //trazimo indeks dugmeta koje smo pritisnuli
-        for (indeks = 0; indeks < 10; indeks++)
-            if(v.getId() == dugmiciVozila[indeks])
+        for (int i = 0; i < 10; i++)
+            if(v.getId() == dugmiciVozila[i])
+            {
+                indeks = i;
                 break;
+            }
         if (indeks == -1) // ako nije u nizu dugmica vozila
             return;        // zanemarujemo ga
         //TextView tekst =  v.findViewById(textVozila[indeks]);
