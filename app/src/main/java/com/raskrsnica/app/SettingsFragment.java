@@ -2,7 +2,9 @@ package com.raskrsnica.app;
 
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -17,9 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -27,6 +33,8 @@ import java.util.Calendar;
  */
 
 public class SettingsFragment extends Fragment {
+
+    final static int REQ_CODE = 1;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -38,6 +46,7 @@ public class SettingsFragment extends Fragment {
     String day = dateformat2.format(c.getTime());
     SimpleDateFormat dateformat3 = new SimpleDateFormat("yyy");
     String year = dateformat3.format(c.getTime());
+    ToggleButton tbLevo, tbDesno, tbPravo;
 
     //globalne prom jer treba da im pristupimo na vise mesta (pri kreiranju i pri prosledjivanju na drugu aktivnost)
     Spinner spinner1, spinner2;
@@ -81,31 +90,53 @@ public class SettingsFragment extends Fragment {
         tp = (TimePicker) rootView.findViewById(R.id.timePicker);
         tp.setIs24HourView(true);
 
+        tbLevo=(ToggleButton)rootView.findViewById(R.id.toggleButtonLevo);
+        tbDesno=(ToggleButton)rootView.findViewById(R.id.toggleButtonDesno);
+        tbPravo=(ToggleButton)rootView.findViewById(R.id.toggleButtonPravo);
+
+        final TextView Levo, Pravo, Desno;
+        Levo = (TextView) rootView.findViewById(R.id.textLevo);
+        Pravo = (TextView) rootView.findViewById(R.id.textPravo);
+        Desno = (TextView) rootView.findViewById(R.id.textDesno);
+
         Button button=(Button)rootView.findViewById(R.id.btNext); //Kad se klikne next dugme
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO provera da li je korisnik ukljucio bar jedan smer
-                Intent intent=new Intent(getActivity(),CountingActivity.class); //pravimo novi intent
-                Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
-                //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
-                b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
-                b.putString("POZICIJA", spinner2.getSelectedItem().toString());
-                b.putString("DATUM", datum.getText().toString()+" "+mesec.getText().toString()+" "+godina.getText().toString());
-                b.putString("VREME", tp.getCurrentHour()+ ":" + tp.getCurrentMinute());
-                //TODO da se proslede izabrani smerovi
-                intent.putExtras(b); // ubacujemo podatke intentu
-                startActivity(intent); // pozivamo intent
+                //provera da li je korisnik ukljucio bar jedan smer
+                if(!tbLevo.isChecked() && !tbDesno.isChecked() && !tbPravo.isChecked()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("Greska!");
+                    alertDialog.setMessage("Niste izabrali nijedan smer!");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                else
+                    {
+                    Intent intent = new Intent(getActivity(), CountingActivity.class); //pravimo novi intent
+                    Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
+                    //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
+                    b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
+                    b.putString("POZICIJA", spinner2.getSelectedItem().toString());
+                    b.putString("DATUM", datum.getText().toString() + " " + mesec.getText().toString() + " " + godina.getText().toString());
+                    b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
+                    b.putString("SMER_LEVO", tbLevo.isChecked()?Levo.getText().toString():"0");
+                    b.putString("SMER_PRAVO", tbPravo.isChecked()?Pravo.getText().toString():"0");
+                    b.putString("SMER_DESNO", tbDesno.isChecked()?Desno.getText().toString():"0");
+                    intent.putExtras(b); // ubacujemo podatke intentu
+                    getActivity().startActivityForResult(intent, REQ_CODE); // pozivamo intent
+                }
             }
         });
 
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //Kad menjamo poziciju sa koje se broji
             @Override                                                                 //moramo da promenimo i nazive smerova
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView Levo, Pravo, Desno;
-                Levo = (TextView) rootView.findViewById(R.id.textLevo);
-                Pravo = (TextView) rootView.findViewById(R.id.textPravo);
-                Desno = (TextView) rootView.findViewById(R.id.textDesno);
                 int x = Integer.valueOf(spinner2.getSelectedItem().toString());
                 int y = x % 4 +1;
                 Levo.setText(x+"."+y);
@@ -121,6 +152,7 @@ public class SettingsFragment extends Fragment {
             }
         });
         return rootView;
+
     }
 }
 
