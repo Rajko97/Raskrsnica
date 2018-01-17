@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -75,6 +77,7 @@ public class SettingsFragment extends Fragment {
         mesec=(TextView) rootView.findViewById(R.id.mesec);
         datum=(TextView)rootView.findViewById(R.id.datum);
         godina=(TextView)rootView.findViewById(R.id.godina);
+
         mesec.setText(month + "");
         datum.setText(day + "");
         godina.setText(year+"");
@@ -94,6 +97,7 @@ public class SettingsFragment extends Fragment {
         tbDesno=(ToggleButton)rootView.findViewById(R.id.toggleButtonDesno);
         tbPravo=(ToggleButton)rootView.findViewById(R.id.toggleButtonPravo);
 
+
         final TextView Levo, Pravo, Desno;
         Levo = (TextView) rootView.findViewById(R.id.textLevo);
         Pravo = (TextView) rootView.findViewById(R.id.textPravo);
@@ -101,6 +105,7 @@ public class SettingsFragment extends Fragment {
 
         Button button=(Button)rootView.findViewById(R.id.btNext); //Kad se klikne next dugme
         button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
             @Override
             public void onClick(View view) {
                 //provera da li je korisnik ukljucio bar jedan smer

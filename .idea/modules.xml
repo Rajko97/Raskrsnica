@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Raskrsnica.iml" filepath="$PROJECT_DIR$/Raskrsnica.iml" />
+      <module fileurl="file://C:\Users\sandr\Desktop\Rasnkrsnica\Raskrsnica.iml" filepath="C:\Users\sandr\Desktop\Rasnkrsnica\Raskrsnica.iml" />
+      <module fileurl="file://A:\AppsTeam\Raskrsnica\Rasnkrsnica.iml" filepath="A:\AppsTeam\Raskrsnica\Rasnkrsnica.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\sandr\Desktop\Rasnkrsnica\app\app.iml" filepath="C:\Users\sandr\Desktop\Rasnkrsnica\app\app.iml" />
     </modules>
   </component>
 </project>
