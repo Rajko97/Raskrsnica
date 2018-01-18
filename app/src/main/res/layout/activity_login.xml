@@ -20,12 +20,14 @@
         android:paddingBottom="100dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp">
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_margin="10dp"
+            android:layout_weight="0.2"
+            android:contentDescription="@string/logo"
             app:srcCompat="@drawable/logo_white" />
 
         <TextView
@@ -36,9 +38,9 @@
             android:layout_weight="0.2"
             android:gravity="center"
             android:layout_margin="10dp"
-            android:text="Prijavite se da bi ste nastavili."
+            android:text="@string/prijava"
             android:textColor="#ffffff"
-            android:textSize="22dp" />
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/editText"
@@ -56,11 +58,11 @@
             android:drawablePadding="15dp"
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
-            android:hint="Korisničko ime"
+            android:hint="@string/korisnicko_ime"
             android:inputType="textPersonName"
             android:textColorHint="#ffffff"
             android:textColor="#ffffff"
-            android:textSize="22dp" />
+            android:textSize="15sp" />
 
         <EditText
 
@@ -79,10 +81,10 @@
             android:drawablePadding="15dp"
             android:gravity="center_vertical"
             android:drawableStart="@drawable/ic_password_icon"
-            android:hint="Lozinka"
+            android:hint="@string/lozinka"
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
-            android:textSize="22dp"
+            android:textSize="15sp"
             android:inputType="textPassword" />
 
         <Button
@@ -96,8 +98,8 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="0.1"
             android:background="@drawable/loginbutton_background"
-            android:text="Prijavi se"
-            android:textSize="22dp"
+            android:text="@string/login"
+            android:textSize="15sp"
             android:gravity="center"
             android:textColor="#d90647"
             />
