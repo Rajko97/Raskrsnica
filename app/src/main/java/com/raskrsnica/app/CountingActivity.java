@@ -255,8 +255,20 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                brojVozilaDesno[voziloID]+=np.getValue()+minValue;
-                textViews[voziloID].setText(brojVozilaDesno[voziloID]+"");
+                switch(izabraniSmer) {
+                    case 0:
+                        brojVozilaLevo[voziloID]+=np.getValue()+minValue;
+                        textViews[voziloID].setText(brojVozilaLevo[voziloID]+"");
+                        break;
+                    case 1:
+                        brojVozilaPravo[voziloID]+=np.getValue()+minValue;
+                        textViews[voziloID].setText(brojVozilaPravo[voziloID]+"");
+                        break;
+                    case 2:
+                        brojVozilaDesno[voziloID]+=np.getValue()+minValue;
+                        textViews[voziloID].setText(brojVozilaDesno[voziloID]+"");
+                        break;
+                }
                 d.dismiss();
             }
         });
