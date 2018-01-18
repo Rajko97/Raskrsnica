@@ -36,7 +36,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     TextView[] textViews = new TextView[10];
 
     CountDownTimer countDownTimer;
-
+ //Todo kada korisnik zadrzi dugme i ono kad moze da doda 5 odjednom naprimer i kad moze da oduzima, mora da se stavi da ne ide u minus(ispod nule), nego samo do nule
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
