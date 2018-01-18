@@ -37,6 +37,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
     CountDownTimer countDownTimer;
  //Todo kada korisnik zadrzi dugme i ono kad moze da doda 5 odjednom naprimer i kad moze da oduzima, mora da se stavi da ne ide u minus(ispod nule), nego samo do nule
+  //TODO utrosio sam 3 sata da napravim da ide ispod nule jer mi stosovis tako rekao. A inace ne moze da ide ispod nule nego mora posebno da se formatira
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
