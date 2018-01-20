@@ -4,10 +4,12 @@ package com.raskrsnica.app;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -21,11 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -54,7 +62,7 @@ public class SettingsFragment extends Fragment {
     Spinner spinner1, spinner2;
     TextView mesec, datum, godina;
     TimePicker tp;
-
+    CountDownTimer countDownTimer;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -123,19 +131,80 @@ public class SettingsFragment extends Fragment {
                 }
                 else
                     {
-                    Intent intent = new Intent(getActivity(), CountingActivity.class); //pravimo novi intent
-                    Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
-                    //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
-                    b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
-                    b.putString("POZICIJA", spinner2.getSelectedItem().toString());
-                    b.putString("DATUM", datum.getText().toString() + " " + mesec.getText().toString() + " " + godina.getText().toString());
-                    b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
-                    b.putString("SMER_LEVO", tbLevo.isChecked()?Levo.getText().toString():"0");
-                    b.putString("SMER_PRAVO", tbPravo.isChecked()?Pravo.getText().toString():"0");
-                    b.putString("SMER_DESNO", tbDesno.isChecked()?Desno.getText().toString():"0");
-                    intent.putExtras(b); // ubacujemo podatke intentu
-                    getActivity().startActivityForResult(intent, REQ_CODE); // pozivamo intent
+                        final AlertDialog alertDialog= new AlertDialog.Builder(getActivity()).create();
+                        alertDialog.setTitle("Vreme do brojanja");
+                        alertDialog.setMessage("00:00:00");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                countDownTimer.cancel();
+                                dialogInterface.dismiss();
+                                Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
+                            }
+                        });
+                        alertDialog.show();   //
+
+
+                        countDownTimer = new CountDownTimer(getRemainingTimeinMS(2), 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                try
+                                {
+                                    long mills = getRemainingTimeinMS(1);
+                                    int hours = 23-(int) ((mills/(1000 * 60 * 60) % 24));
+                                    int mins = 59-(int) (mills/(1000*60)) % 60;
+                                    int seconds = 59-(int) (mills/1000) % 60;
+                                    String diff = hours + ":" + mins+":"+seconds;
+                                    alertDialog.setMessage(diff);
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                alertDialog.dismiss();
+                                PokreniBrojanje();
+                            }
+                        }.start();
                 }
+            }
+
+            private long getRemainingTimeinMS(int arg) {
+                SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
+                Date d = new Date();
+                Date date2 = null;
+                try {
+                    date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long mills = d.getTime()-date2.getTime();
+                if (arg == 1)
+                    return mills;
+                else {
+                    int hours = 23-(int) ((mills/(1000 * 60 * 60) % 24));
+                    int mins = 59-(int) (mills/(1000*60)) % 60;
+                    int seconds = 59-(int) (mills/1000) % 60;
+                    return (long) (hours*60*60+mins*60+seconds)*1000;
+                }
+            }
+
+            private void PokreniBrojanje() {
+                Intent intent = new Intent(getActivity(), CountingActivity.class); //pravimo novi intent
+                Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
+                //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
+                b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
+                b.putString("POZICIJA", spinner2.getSelectedItem().toString());
+                b.putString("DATUM", datum.getText().toString() + " " + mesec.getText().toString() + " " + godina.getText().toString());
+                b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
+                b.putString("SMER_LEVO", tbLevo.isChecked()?Levo.getText().toString():"0");
+                b.putString("SMER_PRAVO", tbPravo.isChecked()?Pravo.getText().toString():"0");
+                b.putString("SMER_DESNO", tbDesno.isChecked()?Desno.getText().toString():"0");
+                intent.putExtras(b); // ubacujemo podatke intentu
+                getActivity().startActivityForResult(intent, REQ_CODE); // pozivamo intent
             }
         });
 

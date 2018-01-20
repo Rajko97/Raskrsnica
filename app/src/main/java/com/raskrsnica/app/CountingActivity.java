@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -24,14 +25,17 @@ import android.widget.ToggleButton;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.concurrent.TimeUnit;
 
 
 public class CountingActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, NumberPicker.OnValueChangeListener {
     private int[] dugmiciVozila = {R.id.vozilo1, R.id.vozilo2, R.id.vozilo3, R.id.vozilo4, R.id.vozilo5, R.id.vozilo6, R.id.vozilo7, R.id.vozilo8, R.id.vozilo9, R.id.vozilo10};
     private int[] textVozila = {R.id.brojVozila1, R.id.brojVozila2, R.id.brojVozila3, R.id.brojVozila4, R.id.brojVozila5, R.id.brojVozila6, R.id.brojVozila7, R.id.brojVozila8, R.id.brojVozila9, R.id.brojVozila10};
-    private int[][] brojVozila = new int[3][10]; //Drugi nacin, isto je
+    private int[][][] brojVozila = new int[4][3][10]; //Drugi nacin, isto je
     private int izabraniSmer = -1;
+    private int kvantum = 0;
     TextView[] textViews = new TextView[10];
 
     CountDownTimer countDownTimer;
@@ -100,7 +104,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
 
         countDownTimer= new CountDownTimer(900000, 1000) {
-            int i=0;
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -108,10 +111,15 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onFinish() {
-                if(i<3)
+                if(kvantum<3)
                 {
+                    kvantum++;
+                    for (int i = 0; i <10; i++)
+                        textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
                     start();
-                    i++;
+                }
+                else {
+                    SacuvajPodatke();
                 }
             }
         }.start();
@@ -159,7 +167,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                         tb[(finalI +2)%3].setChecked(false);
                         izabraniSmer = finalI;
                         for (int i = 0; i <10; i++)
-                            textViews[i].setText(brojVozila[izabraniSmer][i] + "");
+                            textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
                     }
                     else {
                         if (!tb[(finalI +1)%3].isChecked() && !tb[(finalI +2)%3].isChecked())
@@ -168,6 +176,10 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
+    }
+
+    private void SacuvajPodatke() {
+        //todo da se podaci cuvaju u lokalnoj bazi
     }
 
     @Override
@@ -186,7 +198,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         for (int i = 0; i < 10; i++)
             if(v.getId() == dugmiciVozila[i])
             {
-                textViews[i].setText(++brojVozila[izabraniSmer][i] + "");
+                textViews[i].setText(++brojVozila[kvantum][izabraniSmer][i] + "");
                 break;
             }
     }
@@ -217,9 +229,9 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                brojVozila[izabraniSmer][voziloID]+=np.getValue()+minValue;
-                brojVozila[izabraniSmer][voziloID]=brojVozila[izabraniSmer][voziloID]>0?brojVozila[izabraniSmer][voziloID]:0;
-                textViews[voziloID].setText(brojVozila[izabraniSmer][voziloID]);
+                brojVozila[kvantum][izabraniSmer][voziloID]+=np.getValue()+minValue;
+                brojVozila[kvantum][izabraniSmer][voziloID]=brojVozila[kvantum][izabraniSmer][voziloID]>0?brojVozila[kvantum][izabraniSmer][voziloID]:0;
+                textViews[voziloID].setText(brojVozila[kvantum][izabraniSmer][voziloID]+"");
                 d.dismiss();
             }
         });
