@@ -3,8 +3,6 @@ package com.raskrsnica.app;
 
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -58,7 +56,6 @@ public class SettingsFragment extends Fragment {
     String year = dateformat3.format(c.getTime());
     ToggleButton tbLevo, tbDesno, tbPravo;
 
-    //globalne prom jer treba da im pristupimo na vise mesta (pri kreiranju i pri prosledjivanju na drugu aktivnost)
     Spinner spinner1, spinner2;
     TextView mesec, datum, godina;
     TimePicker tp;
@@ -116,7 +113,6 @@ public class SettingsFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
             @Override
             public void onClick(View view) {
-                //provera da li je korisnik ukljucio bar jedan smer
                 if(!tbLevo.isChecked() && !tbDesno.isChecked() && !tbPravo.isChecked()) {
                     AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                     alertDialog.setTitle("Greska!");
@@ -139,10 +135,11 @@ public class SettingsFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 countDownTimer.cancel();
                                 dialogInterface.dismiss();
-                                Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
+                                toast.show();
                             }
                         });
-                        alertDialog.show();   //
+                        alertDialog.show();
 
 
                         countDownTimer = new CountDownTimer(getRemainingTimeinMS(2), 1000) {
@@ -193,9 +190,8 @@ public class SettingsFragment extends Fragment {
             }
 
             private void PokreniBrojanje() {
-                Intent intent = new Intent(getActivity(), CountingActivity.class); //pravimo novi intent
-                Bundle b = new Bundle(); // pravimo paket za podatke koje cemo da prosledimo
-                //Ubacujemo podatke u paket u formatu <kljuc> <vrednost>
+                Intent intent = new Intent(getActivity(), CountingActivity.class);
+                Bundle b = new Bundle();
                 b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
                 b.putString("POZICIJA", spinner2.getSelectedItem().toString());
                 b.putString("DATUM", datum.getText().toString() + " " + mesec.getText().toString() + " " + godina.getText().toString());
@@ -203,13 +199,13 @@ public class SettingsFragment extends Fragment {
                 b.putString("SMER_LEVO", tbLevo.isChecked()?Levo.getText().toString():"0");
                 b.putString("SMER_PRAVO", tbPravo.isChecked()?Pravo.getText().toString():"0");
                 b.putString("SMER_DESNO", tbDesno.isChecked()?Desno.getText().toString():"0");
-                intent.putExtras(b); // ubacujemo podatke intentu
-                getActivity().startActivityForResult(intent, REQ_CODE); // pozivamo intent
+                intent.putExtras(b);
+                getActivity().startActivityForResult(intent, REQ_CODE);
             }
         });
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //Kad menjamo poziciju sa koje se broji
-            @Override                                                                 //moramo da promenimo i nazive smerova
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int x = Integer.valueOf(spinner2.getSelectedItem().toString());
                 int y = x % 4 +1;
