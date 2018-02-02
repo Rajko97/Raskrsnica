@@ -6,339 +6,673 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
+    android:background="#ffffff"
     tools:context="com.raskrsnica.app.CountingActivity">
 
-    <TextView
-        android:id="@+id/textHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="[DATUM - VREME] Raskrsnica - sa pozicije: smerovi: "
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/kvantum"
-            android:layout_width="199dp"
-            android:layout_height="100dp"
-            android:textSize="45sp" />
-
-        <Button
-            android:id="@+id/stop"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="Stop" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="0.15"
-        android:gravity="center">
-        <LinearLayout
-            android:id="@+id/ukljuciLevo"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/textLevo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="1.2"/>
-            <ToggleButton
-                android:id="@+id/toggleButtonLevo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
-        </LinearLayout>
-
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:background="@drawable/timer_bg"
             android:orientation="vertical"
-            android:id="@+id/ukljuciPravo">
-            <TextView
-                android:id="@+id/textPravo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="1.3"/>
-            <ToggleButton
-                android:id="@+id/toggleButtonPravo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
-        </LinearLayout>
+            android:paddingTop="65dp"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/ukljuciDesno">
+            >
+
             <TextView
-                android:id="@+id/textDesno"
+                android:id="@+id/kvantum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="1.4"/>
-            <ToggleButton
-                android:id="@+id/toggleButtonDesno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
+                android:textSize="35dp"
+                android:textStyle="bold"
+                android:textColor="#D90647"
+                android:textAlignment="center"/>
         </LinearLayout>
     </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.6"
-        android:fillViewport="true"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/brojVozila10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center" />
-
-                    <Button
-                        android:id="@+id/vozilo10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="V1" />
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.8"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/nazad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="Nazad" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/baza"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="Baza" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_left_circle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/textView6"
+                    style="@style/stil2"
+                    android:drawableStart="@drawable/ic_bicikl"
+                    android:text="Bicikl"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv3"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv4"
+                    style="@style/stil2"
+                    android:drawableStart="@drawable/ic_motor"
+                    android:text="Motor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv7"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv8"
+                    android:drawableStart="@drawable/ic_auto"
+                    android:text="Automobil"
+                    style="@style/stil2"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv13"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv14"
+                    style="@style/stil2"
+                    android:drawableStart="@drawable/ic_autobus"
+                    android:text="Autobus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv19"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv20"
+                    android:drawableStart="@drawable/ic_laka_teretna"
+                    android:text="Laka teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv25"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv26"
+                    android:drawableStart="@drawable/ic_srednja_teretna"
+                    android:text="Srednja teretna"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv32"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv33"
+                    android:drawableStart="@drawable/ic_teska_teretna"
+                    android:text="Teška teretna"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv38"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv39"
+                    android:drawableStart="@drawable/ic_autovoz"
+                    android:text="Autovoz"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv44"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv45"
+                    android:drawableStart="@drawable/ic_traktor"
+                    android:text="Traktor"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv50"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv51"
+                    android:drawableStart="@drawable/ic_zaprega"
+                    android:text="Zaprega"
+                    style="@style/stil2"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/textView8"
+                    android:drawableStart="@drawable/ic_bicikl"
+                    android:text="Bicikl"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv5"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv6"
+                    android:drawableStart="@drawable/ic_motor"
+                    android:text="Motor"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv9"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv10"
+                    android:drawableStart="@drawable/ic_auto"
+                    android:text="Automobil"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv15"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv16"
+                    android:drawableStart="@drawable/ic_autobus"
+                    android:text="Autobus"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv21"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv22"
+                    android:drawableStart="@drawable/ic_laka_teretna"
+                    android:text="Laka teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv28"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv29"
+                    android:drawableStart="@drawable/ic_srednja_teretna"
+                    android:text="Srednja teretna"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv34"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv35"
+                    android:drawableStart="@drawable/ic_teska_teretna"
+                    android:text="Teška teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv40"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv41"
+                    android:drawableStart="@drawable/ic_autovoz"
+                    android:text="Autovoz"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv46"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv47"
+                    android:drawableStart="@drawable/ic_traktor"
+                    android:text="Traktor"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv52"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv53"
+                    android:drawableStart="@drawable/ic_zaprega"
+                    android:text="Zaprega"
+                    style="@style/stil2"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_right_circle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView10"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/textView9"
+                    android:text="Bicikl"
+                    android:drawableStart="@drawable/ic_bicikl"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv2"
+                    android:drawableStart="@drawable/ic_motor"
+                    android:text="Motor"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv11"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv12"
+                    android:drawableStart="@drawable/ic_auto"
+                    android:text="Automobil"
+                    style="@style/stil2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv17"
+                     style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv18"
+                    android:drawableStart="@drawable/ic_autobus"
+                    android:text="Autobus"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv23"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv24"
+                    android:drawableStart="@drawable/ic_laka_teretna"
+                    android:text="Laka teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv30"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv31"
+                    android:drawableStart="@drawable/ic_srednja_teretna"
+                    android:text="Srednja teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv36"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv37"
+                    android:drawableStart="@drawable/ic_teska_teretna"
+                    android:text="Teška teretna"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv42"
+                    style="@style/stil1"/>
+
+                <Button
+                    android:id="@+id/tv43"
+                    android:drawableStart="@drawable/ic_autovoz"
+                    android:text="Autovoz"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv48"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv49"
+                    android:drawableStart="@drawable/ic_traktor"
+                    android:text="Traktor"
+                    style="@style/stil2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv54"
+                    style="@style/stil1" />
+
+                <Button
+                    android:id="@+id/tv55"
+                    android:drawableStart="@drawable/ic_zaprega"
+                    android:text="Zaprega"
+                    style="@style/stil2"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

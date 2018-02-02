@@ -114,6 +114,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!tbLevo.isChecked() && !tbDesno.isChecked() && !tbPravo.isChecked()) {
+
                     AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                     alertDialog.setTitle("Greska!");
                     alertDialog.setMessage("Niste izabrali nijedan smer!");
@@ -127,7 +128,7 @@ public class SettingsFragment extends Fragment {
                 }
                 else
                     {
-                        final AlertDialog alertDialog= new AlertDialog.Builder(getActivity()).create();
+                        /*final AlertDialog alertDialog= new AlertDialog.Builder(getActivity()).create();
                         alertDialog.setTitle("Vreme do brojanja");
                         alertDialog.setMessage("00:00:00");
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
@@ -158,15 +159,15 @@ public class SettingsFragment extends Fragment {
                                 {
                                     e.printStackTrace();
                                 }
-                            }
+                            }*/
 
-                            @Override
-                            public void onFinish() {
-                                alertDialog.dismiss();
+                            //@Override
+                            //public void onFinish() {
+                                //alertDialog.dismiss();
                                 PokreniBrojanje();
                             }
-                        }.start();
-                }
+                        //}.start();
+
             }
 
             private long getRemainingTimeinMS(int arg) {

@@ -32,9 +32,6 @@ public class LoginActivity extends AppCompatActivity implements Responsable{
     }
     @Override
     public void successResponse(JSONObject res) {
-        if(res.getString("ENTITY_RESPONSE_KEY").equals("OATIENT_ROLE_RESPONSE_KEY")) {
-
-        }
     }
 
     @Override

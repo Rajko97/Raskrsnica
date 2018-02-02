@@ -31,25 +31,25 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CountingActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, NumberPicker.OnValueChangeListener {
-    private int[] dugmiciVozila = {R.id.vozilo1, R.id.vozilo2, R.id.vozilo3, R.id.vozilo4, R.id.vozilo5, R.id.vozilo6, R.id.vozilo7, R.id.vozilo8, R.id.vozilo9, R.id.vozilo10};
+    /*private int[] dugmiciVozila = {R.id.vozilo1, R.id.vozilo2, R.id.vozilo3, R.id.vozilo4, R.id.vozilo5, R.id.vozilo6, R.id.vozilo7, R.id.vozilo8, R.id.vozilo9, R.id.vozilo10};
     private int[] textVozila = {R.id.brojVozila1, R.id.brojVozila2, R.id.brojVozila3, R.id.brojVozila4, R.id.brojVozila5, R.id.brojVozila6, R.id.brojVozila7, R.id.brojVozila8, R.id.brojVozila9, R.id.brojVozila10};
     private int[][][] brojVozila = new int[4][3][10]; //Drugi nacin, isto je
-    private int izabraniSmer = -1;
+    private int izabraniSmer = -1;*/
     private int kvantum = 0;
-    TextView[] textViews = new TextView[10];
+    //TextView[] textViews = new TextView[10];
 
     CountDownTimer countDownTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counting);
 
         final TextView timer = (TextView) findViewById(R.id.kvantum);
-        Button bt_stop = (Button) findViewById(R.id.stop);
-        Button bt_nazad = (Button) findViewById(R.id.nazad);
-        Button bt_baza = (Button) findViewById(R.id.baza);
+        //Button bt_nazad = (Button) findViewById(R.id.nazad);
+        //Button bt_baza = (Button) findViewById(R.id.baza);
 
-        final ToggleButton tb[] = new ToggleButton[3];
+        /*final ToggleButton tb[] = new ToggleButton[3];
         tb[0] = (ToggleButton) findViewById(R.id.toggleButtonLevo);
         tb[1] = (ToggleButton) findViewById(R.id.toggleButtonPravo);
         tb[2] = (ToggleButton) findViewById(R.id.toggleButtonDesno);
@@ -101,46 +101,30 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             tb[izabraniSmer].setChecked(true);
         }
 
+*/
 
-
-        countDownTimer= new CountDownTimer(900000, 1000) {
+        countDownTimer = new CountDownTimer(900000, 1000) {
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
                         TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
             }
+
             @Override
             public void onFinish() {
-                if(kvantum<3)
-                {
+                if (kvantum < 3) {
                     kvantum++;
-                    for (int i = 0; i <10; i++)
-                        textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
+                    // for (int i = 0; i <10; i++)
+                    //   textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
                     start();
-                }
-                else {
-                    SacuvajPodatke();
+                } else {
+                    //SacuvajPodatke();
                 }
             }
         }.start();
+    }
 
-        bt_stop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    countDownTimer.cancel(); //Dugme prekida kvnatum skroz
-                    AlertDialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
-                    alertDialog.setTitle("Obavestenje");
-                    alertDialog.setMessage("Zaustavili ste brojanje.");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-                }
-        });
-        bt_nazad.setOnClickListener(new View.OnClickListener() {
+      /*  bt_nazad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //Intent intent = new Intent(CountingActivity.this, MainActivity.class);
@@ -175,39 +159,39 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     }
                 }
             });
-        }
-    }
+        }*/
 
-    private void SacuvajPodatke() {
+
+   /*private void SacuvajPodatke() {
         //todo da se podaci cuvaju u lokalnoj bazi
     }
-
+*/
     @Override
     public boolean onLongClick(View view) {
-        for (int i = 0; i < 10; i++)
+      /*  for (int i = 0; i < 10; i++)
             if(view.getId() == dugmiciVozila[i])
             {
                 showNumberPicker(i);
                 return true;
-            }
+            }*/
         return false;
     }
 
     @Override
     public void onClick(View v) {
-        for (int i = 0; i < 10; i++)
+       /* for (int i = 0; i < 10; i++)
             if(v.getId() == dugmiciVozila[i])
             {
                 textViews[i].setText(++brojVozila[kvantum][izabraniSmer][i] + "");
                 break;
-            }
+            }*/
     }
 
     @Override
     public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-        Log.i("value is",""+newVal);
+       // Log.i("value is",""+newVal);
     }
-    public void showNumberPicker(final int voziloID) {
+  /*  public void showNumberPicker(final int voziloID) {
         final Dialog d = new Dialog(CountingActivity.this);
         d.setTitle("NumberPicker");
         d.setContentView(R.layout.dialog);
@@ -242,9 +226,9 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             }
         });
         d.show();
-    }
-}
+    }*/
 
+}
 /*Literatura:
     CountDownTimer
         https://developer.android.com/reference/android/os/CountDownTimer.html
