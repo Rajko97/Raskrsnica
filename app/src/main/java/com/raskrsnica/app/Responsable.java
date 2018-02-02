@@ -1,6 +1,6 @@
 package com.raskrsnica.app;
 
-import com.android..volley.VolleyError;
+import com.android.volley.VolleyError;
 import org.json.JSONObject;
 
 /**
@@ -8,6 +8,6 @@ import org.json.JSONObject;
  */
 
 public interface Responsable {
-    public void successResponse(res:JSONObject);
-    public void errorResponse(err: JSONObject);
+    public void successResponse(JSONObject res);
+    public void errorResponse(JSONObject err);
 }
