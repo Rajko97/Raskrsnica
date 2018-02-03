@@ -13,7 +13,9 @@ import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,7 +47,6 @@ import static android.app.Activity.RESULT_OK;
 public class SettingsFragment extends Fragment {
 
     final static int REQ_CODE = 1;
-
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -59,7 +60,7 @@ public class SettingsFragment extends Fragment {
     ToggleButton tbLevo, tbDesno, tbPravo;
 
     //globalne prom jer treba da im pristupimo na vise mesta (pri kreiranju i pri prosledjivanju na drugu aktivnost)
-    Spinner spinner1, spinner2;
+    Spinner spinner1,spinner2;
     TextView mesec, datum, godina;
     TimePicker tp;
     CountDownTimer countDownTimer;
@@ -72,11 +73,13 @@ public class SettingsFragment extends Fragment {
         String[] pozicije=new String[]{"1","2", "3", "4"};
 
         spinner1=(Spinner) rootView.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_spinner_item, raskrsnice);
+        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, raskrsnice);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adapter1);
+        spinner1.setDropDownVerticalOffset(50);
 
-        spinner2=(Spinner) rootView.findViewById(R.id.spinner2);
+
+        /*spinner2=(Spinner) rootView.findViewById(R.id.spinner2);
         ArrayAdapter<String> adapter2 =new ArrayAdapter<>(rootView.getContext(),android.R.layout.simple_spinner_item,pozicije);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
@@ -166,11 +169,11 @@ public class SettingsFragment extends Fragment {
                             //@Override
                             //public void onFinish() {
                                 //alertDialog.dismiss();
-                                PokreniBrojanje();
-                            }
+                               // PokreniBrojanje();
+                            //}
                         //}.start();
 
-            }
+            /*}
 
             private long getRemainingTimeinMS(int arg) {
                 SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
@@ -224,10 +227,11 @@ public class SettingsFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
         return rootView;
 
     }
+
 }
 
 /*Literatura:
