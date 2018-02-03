@@ -31,14 +31,21 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CountingActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, NumberPicker.OnValueChangeListener {
-    /*private int[] dugmiciVozila = {R.id.vozilo1, R.id.vozilo2, R.id.vozilo3, R.id.vozilo4, R.id.vozilo5, R.id.vozilo6, R.id.vozilo7, R.id.vozilo8, R.id.vozilo9, R.id.vozilo10};
-    private int[] textVozila = {R.id.brojVozila1, R.id.brojVozila2, R.id.brojVozila3, R.id.brojVozila4, R.id.brojVozila5, R.id.brojVozila6, R.id.brojVozila7, R.id.brojVozila8, R.id.brojVozila9, R.id.brojVozila10};
-    private int[][][] brojVozila = new int[4][3][10]; //Drugi nacin, isto je
-    private int izabraniSmer = -1;*/
-    private int kvantum = 0;
-    //TextView[] textViews = new TextView[10];
+    private int[][] dugmiciVozila = {
+        {R.id.btnVL1, R.id.btnVL2, R.id.btnVL3, R.id.btnVL4, R.id.btnVL5, R.id.btnVL6, R.id.btnVL7, R.id.btnVL8, R.id.btnVL9, R.id.btnVL10},
+        {R.id.btnVP1, R.id.btnVP2, R.id.btnVP3, R.id.btnVP4, R.id.btnVP5, R.id.btnVP6, R.id.btnVP7, R.id.btnVP8, R.id.btnVP9, R.id.btnVP10},
+        {R.id.btnVD1, R.id.btnVD2, R.id.btnVD3, R.id.btnVD4, R.id.btnVD5, R.id.btnVD6, R.id.btnVD7, R.id.btnVD8, R.id.btnVD9, R.id.btnVD10}
+    };
+    private int[][] textVozila = {
+            {R.id.txtVL1, R.id.txtVL2, R.id.txtVL3, R.id.txtVL4, R.id.txtVL5, R.id.txtVL6, R.id.txtVL7, R.id.txtVL8, R.id.txtVL9, R.id.txtVL10},
+            {R.id.txtVP1, R.id.txtVP2, R.id.txtVP3, R.id.txtVP4, R.id.txtVP5, R.id.txtVP6, R.id.txtVP7, R.id.txtVP8, R.id.txtVP9, R.id.txtVP10},
+            {R.id.txtVD1, R.id.txtVD2, R.id.txtVD3, R.id.txtVD4, R.id.txtVD5, R.id.txtVD6, R.id.txtVD7, R.id.txtVD8, R.id.txtVD9, R.id.txtVD10}
 
-    CountDownTimer countDownTimer;
+    };
+    private TextView[][] textViews = new TextView[3][10];
+    private CountDownTimer countDownTimer;
+    private int kvantum = 0;
+    private int[][][] brojVozila = new int[4][3][10]; //4 kvantuma * 3 smera * 10 vozila
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +53,16 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_counting);
 
         final TextView timer = (TextView) findViewById(R.id.kvantum);
-        //Button bt_nazad = (Button) findViewById(R.id.nazad);
-        //Button bt_baza = (Button) findViewById(R.id.baza);
 
-        /*final ToggleButton tb[] = new ToggleButton[3];
-        tb[0] = (ToggleButton) findViewById(R.id.toggleButtonLevo);
-        tb[1] = (ToggleButton) findViewById(R.id.toggleButtonPravo);
-        tb[2] = (ToggleButton) findViewById(R.id.toggleButtonDesno);
+        for (int[] ids: dugmiciVozila)
+            for (int id : ids) {
+                findViewById(id).setOnClickListener(this);
+                findViewById(id).setOnLongClickListener(this);
+            }
 
-        for (int id : dugmiciVozila) {
-            findViewById(id).setOnClickListener(this);
-            findViewById(id).setOnLongClickListener(this);
-        }
-        for (int i2 = 0; i2 < 10; i2++) {
-            textViews[i2] = (TextView) findViewById(textVozila[i2]);
-        }
+        for(int i = 0; i < textVozila.length; i++)
+            for (int j = 0; j < textVozila[i].length; j++)
+                textViews[i][j] = (TextView) findViewById(textVozila[i][j]);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -71,8 +73,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             String Levo = b.getString("SMER_LEVO");
             String Pravo = b.getString("SMER_PRAVO");
             String Desno = b.getString("SMER_DESNO");
-            TextView header = (TextView) findViewById(R.id.textHeader);
-            header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
+           // TextView header = (TextView) findViewById(R.id.textHeader);
+            /*header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
             LinearLayout lin1 = (LinearLayout) findViewById(R.id.ukljuciLevo);
             LinearLayout lin2 = (LinearLayout) findViewById(R.id.ukljuciPravo);
             LinearLayout lin3 = (LinearLayout) findViewById(R.id.ukljuciDesno);
@@ -98,12 +100,12 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 izabraniSmer = 1;
                 text2.setText(Pravo);
             }
-            tb[izabraniSmer].setChecked(true);
+            tb[izabraniSmer].setChecked(true);*/
         }
 
-*/
 
-        countDownTimer = new CountDownTimer(900000, 1000) {
+        //900000 default
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -114,89 +116,57 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             public void onFinish() {
                 if (kvantum < 3) {
                     kvantum++;
-                    // for (int i = 0; i <10; i++)
-                    //   textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
+                    for (int i = 0; i < textViews.length; i++)
+                        for (int j = 0; j < textViews[0].length; j++)
+                            textViews[i][j].setText("0");
                     start();
                 } else {
-                    //SacuvajPodatke();
+                    SacuvajPodatke();
+                    Intent i= getIntent();
+                    setResult(RESULT_OK, i);
+                    finish();
                 }
             }
         }.start();
     }
 
-      /*  bt_nazad.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Intent intent = new Intent(CountingActivity.this, MainActivity.class);
-                    //startActivity(intent);
-                    finish();
-                }
-            });
-        bt_baza.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent i= getIntent();
-                setResult(RESULT_OK, i);
-                finish();
-            }
-        });
-        for (int i = 0; i < 3; i++) {
-            final int finalI = i;
-            tb[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b == true) {
-                        tb[(finalI +1)%3].setChecked(false);
-                        tb[(finalI +2)%3].setChecked(false);
-                        izabraniSmer = finalI;
-                        for (int i = 0; i <10; i++)
-                            textViews[i].setText(brojVozila[kvantum][izabraniSmer][i] + "");
-                    }
-                    else {
-                        if (!tb[(finalI +1)%3].isChecked() && !tb[(finalI +2)%3].isChecked())
-                            tb[finalI].setChecked(true);
-                    }
-                }
-            });
-        }*/
-
-
-   /*private void SacuvajPodatke() {
+   private void SacuvajPodatke() {
         //todo da se podaci cuvaju u lokalnoj bazi
     }
-*/
+
     @Override
     public boolean onLongClick(View view) {
-      /*  for (int i = 0; i < 10; i++)
-            if(view.getId() == dugmiciVozila[i])
+        for (int i = 0; i < dugmiciVozila.length; i++)
+            for (int j = 0; j < dugmiciVozila[i].length; j++)
+            if(view.getId() == dugmiciVozila[i][j])
             {
-                showNumberPicker(i);
+                showNumberPicker(i, j);
                 return true;
-            }*/
+            }
         return false;
     }
 
     @Override
     public void onClick(View v) {
-       /* for (int i = 0; i < 10; i++)
-            if(v.getId() == dugmiciVozila[i])
-            {
-                textViews[i].setText(++brojVozila[kvantum][izabraniSmer][i] + "");
-                break;
-            }*/
+        for (int i = 0; i < dugmiciVozila.length; i++)
+            for (int j = 0; j < dugmiciVozila[i].length; j++)
+                if(v.getId() == dugmiciVozila[i][j])
+                {
+                    textViews[i][j].setText(++brojVozila[kvantum][i][j] + "");
+                    break;
+                }
     }
 
     @Override
     public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
        // Log.i("value is",""+newVal);
     }
-  /*  public void showNumberPicker(final int voziloID) {
+    public void showNumberPicker(final int voziloSmer, final int voziloID) {
         final Dialog d = new Dialog(CountingActivity.this);
         d.setTitle("NumberPicker");
         d.setContentView(R.layout.dialog);
         Button b1 = (Button) d.findViewById(R.id.button1);
-        Button b2 = (Button) d.findViewById(R.id.button2);
         final int minValue = -15;
         final int maxValue = 30;
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
@@ -213,21 +183,30 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                brojVozila[kvantum][izabraniSmer][voziloID]+=np.getValue()+minValue;
-                brojVozila[kvantum][izabraniSmer][voziloID]=brojVozila[kvantum][izabraniSmer][voziloID]>0?brojVozila[kvantum][izabraniSmer][voziloID]:0;
-                textViews[voziloID].setText(brojVozila[kvantum][izabraniSmer][voziloID]+"");
-                d.dismiss();
-            }
-        });
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                brojVozila[kvantum][voziloSmer][voziloID]+=np.getValue()+minValue;
+                brojVozila[kvantum][voziloSmer][voziloID]=brojVozila[kvantum][voziloSmer][voziloID]>0?brojVozila[kvantum][voziloSmer][voziloID]:0;
+                textViews[voziloSmer][voziloID].setText(brojVozila[kvantum][voziloSmer][voziloID]+"");
                 d.dismiss();
             }
         });
         d.show();
-    }*/
+    }
 
+    @Override
+    public void onBackPressed() {
+       new AlertDialog.Builder(this)
+               .setTitle("Da li ste sigurni da želite da otkažete brojanje?")
+               .setMessage("Ukoliko potvrdite, podaci koje ste merili neće biti sačuvani!")
+               .setCancelable(false)
+               .setPositiveButton("Da", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       CountingActivity.this.finish();
+                   }
+               })
+               .setNegativeButton("Ne", null)
+               .show();
+    }
 }
 /*Literatura:
     CountDownTimer

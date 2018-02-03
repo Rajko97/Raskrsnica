@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class LoginActivity extends AppCompatActivity {
+import org.json.JSONObject;
+
+public class LoginActivity extends AppCompatActivity implements Responsable{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +29,13 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public void successResponse(JSONObject res) {
+    }
+
+    @Override
+    public void errorResponse(JSONObject err) {
+
     }
 }

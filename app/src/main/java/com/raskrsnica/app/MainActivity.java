@@ -16,70 +16,66 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity{
     final static int REQ_CODE = 1;
+    final static int FRAGMENT_SETTINGS = 1, FRAGMENT_DATABASE = 2;
+
+    TextView tv1, tv2;
+    ImageView img1, img2;
+    LinearLayout btnSettings, btnDataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final LinearLayout bt1=(LinearLayout) findViewById(R.id.settingsbutton);
-        final LinearLayout bt2=(LinearLayout) findViewById(R.id.databasebutton);
-        final TextView tv1=(TextView)findViewById(R.id.settingstext);
-        final TextView tv2=(TextView)findViewById(R.id.bazatext);
-        final ImageView img1=(ImageView)findViewById(R.id.imgSettings);
-        final ImageView img2=(ImageView)findViewById(R.id.imgBaza);
+        btnSettings=(LinearLayout) findViewById(R.id.settingsbutton);
+        btnDataBase=(LinearLayout) findViewById(R.id.databasebutton);
+        tv1=(TextView)findViewById(R.id.settingstext);
+        tv2=(TextView)findViewById(R.id.bazatext);
+        img1=(ImageView)findViewById(R.id.imgSettings);
+        img2=(ImageView)findViewById(R.id.imgBaza);
 
-
-        android.support.v4.app.Fragment fragment = null;
-        fragment = new SettingsFragment();
-        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
-        ft.commit();
-
-
-
-        bt1.setOnClickListener(new View.OnClickListener() {
+        btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                android.support.v4.app.Fragment fragment = new SettingsFragment();
-                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, fragment);
-                ft.commit();
-                tv1.setTextColor(Color.rgb(217,6,71));
-                tv2.setTextColor(Color.rgb(185,185,185));
-                bt1.setBackgroundColor(Color.rgb(255,255,255));
-                bt2.setBackgroundResource(R.drawable.tab2);
-                img1.setImageResource(R.drawable.ic_podesavanja_color);
-                img2.setImageResource(R.drawable.ic_baza_grey);
-
+                postaviFragment(FRAGMENT_SETTINGS);
             }
         });
-        bt2.setOnClickListener(new View.OnClickListener() {
+        btnDataBase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.support.v4.app.Fragment fragment = new DataBaseFragment();
-                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, fragment);
-                ft.commit();
-                tv1.setTextColor(Color.rgb(185,185,185));
-                tv2.setTextColor(Color.rgb(217,6,71));
-                bt2.setBackgroundColor(Color.rgb(255,255,255));
-                bt1.setBackgroundResource(R.drawable.tab1);
-                img1.setImageResource(R.drawable.ic_podesavanja_grey);
-                img2.setImageResource(R.drawable.ic_baza_color);
+                postaviFragment(FRAGMENT_DATABASE);
             }
         });
-
+        postaviFragment(FRAGMENT_SETTINGS);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQ_CODE  && resultCode == RESULT_OK ) {
-            android.support.v4.app.Fragment fragment = new DataBaseFragment();
-            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
-            ft.commit();
+            postaviFragment(FRAGMENT_DATABASE);
+        }
+    }
+    private void postaviFragment(int fragmentID) {
+        android.support.v4.app.Fragment fragment = fragmentID == FRAGMENT_SETTINGS? new SettingsFragment(): new DataBaseFragment();
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
+
+        if (fragmentID == FRAGMENT_SETTINGS) {
+            tv1.setTextColor(Color.rgb(217, 6, 71));
+            tv2.setTextColor(Color.rgb(185, 185, 185));
+            btnSettings.setBackgroundColor(Color.rgb(255, 255, 255));
+            btnDataBase.setBackgroundResource(R.drawable.tab2);
+            img1.setImageResource(R.drawable.ic_podesavanja_color);
+            img2.setImageResource(R.drawable.ic_baza_grey);
+        }
+        else {
+            tv1.setTextColor(Color.rgb(185, 185, 185));
+            tv2.setTextColor(Color.rgb(217, 6, 71));
+            btnDataBase.setBackgroundColor(Color.rgb(255, 255, 255));
+            btnSettings.setBackgroundResource(R.drawable.tab1);
+            img1.setImageResource(R.drawable.ic_podesavanja_grey);
+            img2.setImageResource(R.drawable.ic_baza_color);
         }
     }
 
