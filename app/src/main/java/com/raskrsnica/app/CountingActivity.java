@@ -104,8 +104,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
-
-        countDownTimer = new CountDownTimer(900000, 1000) {
+        //900000 default
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -199,6 +199,20 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         d.show();
     }
 
+    @Override
+    public void onBackPressed() {
+       new AlertDialog.Builder(this)
+               .setMessage("Da li ste sigurni da želite da otkažete brojanje? Podaci koje ste merili neće biti sačuvani.")
+               .setCancelable(false)
+               .setPositiveButton("Da", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       CountingActivity.this.finish();
+                   }
+               })
+               .setNegativeButton("Ne", null)
+               .show();
+    }
 }
 /*Literatura:
     CountDownTimer
