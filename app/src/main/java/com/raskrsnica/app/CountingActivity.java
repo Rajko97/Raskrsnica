@@ -73,63 +73,57 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             String Levo = b.getString("SMER_LEVO");
             String Pravo = b.getString("SMER_PRAVO");
             String Desno = b.getString("SMER_DESNO");
-           // TextView header = (TextView) findViewById(R.id.textHeader);
-            /*header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
-            LinearLayout lin1 = (LinearLayout) findViewById(R.id.ukljuciLevo);
-            LinearLayout lin2 = (LinearLayout) findViewById(R.id.ukljuciPravo);
-            LinearLayout lin3 = (LinearLayout) findViewById(R.id.ukljuciDesno);
-            TextView text1 = (TextView) findViewById(R.id.textLevo);
-            TextView text2 = (TextView) findViewById(R.id.textPravo);
-            TextView text3 = (TextView) findViewById(R.id.textDesno);
-
-            if(Desno.equals("0"))
-                lin3.setVisibility(View.GONE);
-            else {
-                izabraniSmer = 2;
-                text3.setText(Desno);
-            }
-            if (Levo.equals("0"))
-                lin1.setVisibility(View.GONE);
-            else {
-                izabraniSmer = 0;
-                text1.setText(Levo);
-            }
-            if(Pravo.equals("0"))
-                lin2.setVisibility(View.GONE);
-            else {
-                izabraniSmer = 1;
-                text2.setText(Pravo);
-            }
-            tb[izabraniSmer].setChecked(true);*/
-        }
+            //TextView header = (TextView) findViewById(R.id.textHeader);
+            //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
 
-        //900000 default
-        countDownTimer = new CountDownTimer(60000, 1000) {
-            @Override
-            public void onTick(long l) {
-                timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
-                        TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
-            }
-
-            @Override
-            public void onFinish() {
-                if (kvantum < 3) {
-                    kvantum++;
-                    for (int i = 0; i < textViews.length; i++)
-                        for (int j = 0; j < textViews[0].length; j++)
-                            textViews[i][j].setText("0");
-                    start();
-                } else {
-                    SacuvajPodatke();
-                    Intent i= getIntent();
-                    setResult(RESULT_OK, i);
-                    finish();
+            // @drawable/circle
+            if (Levo.equals("0")) {
+                for (int i = 0; i < textVozila[2].length; i++) {
+                    TextView ivVectorImage = (TextView) findViewById(textVozila[0][i]);
+                    ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
-        }.start();
-    }
+                if (Pravo.equals("0")) {
+                    for (int i = 0; i < textVozila[2].length; i++) {
+                        TextView ivVectorImage = (TextView) findViewById(textVozila[0][i]);
+                        ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+                if (Desno.equals("0")) {
+                    for (int i = 0; i < textVozila[2].length; i++) {
+                        TextView ivVectorImage = (TextView) findViewById(textVozila[2][i]);
+                        ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+            }
 
+
+            //900000 default
+            countDownTimer = new CountDownTimer(60000, 1000) {
+                @Override
+                public void onTick(long l) {
+                    timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
+                            TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
+                }
+
+                @Override
+                public void onFinish() {
+                    if (kvantum < 3) {
+                        kvantum++;
+                        for (int i = 0; i < textViews.length; i++)
+                            for (int j = 0; j < textViews[0].length; j++)
+                                textViews[i][j].setText("0");
+                        start();
+                    } else {
+                        SacuvajPodatke();
+                        Intent i = getIntent();
+                        setResult(RESULT_OK, i);
+                        finish();
+                    }
+                }
+            }.start();
+        }
 
    private void SacuvajPodatke() {
         //todo da se podaci cuvaju u lokalnoj bazi
