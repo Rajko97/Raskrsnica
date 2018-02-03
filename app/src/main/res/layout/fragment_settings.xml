@@ -25,7 +25,8 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:popupBackground="@drawable/spinner_popup_background"
-                android:background="@drawable/spinner_background" />
+                android:background="@drawable/spinner_background"
+                />
         </LinearLayout>
 
         <LinearLayout

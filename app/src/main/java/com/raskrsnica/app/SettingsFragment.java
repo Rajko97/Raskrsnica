@@ -45,6 +45,7 @@ import static android.app.Activity.RESULT_OK;
 public class SettingsFragment extends Fragment {
 
     final static int REQ_CODE = 1;
+    public int i=0;
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -71,9 +72,10 @@ public class SettingsFragment extends Fragment {
 
         spinner1=(Spinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, raskrsnice);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter1.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner1.setAdapter(adapter1);
         spinner1.setDropDownVerticalOffset(50);
+        spinner1.setOnTouchListener(Spinner_OnTouch);
 
         /*spinner2=(Spinner) rootView.findViewById(R.id.spinner2);
         ArrayAdapter<String> adapter2 =new ArrayAdapter<>(rootView.getContext(),android.R.layout.simple_spinner_item,pozicije);
@@ -227,6 +229,23 @@ public class SettingsFragment extends Fragment {
         return rootView;
 
     }
+    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+               if(i%2==0)
+               {
+                   spinner1.setBackgroundResource(R.drawable.spinner_background2);
+                   i++;
+               }
+               else{
+                   spinner1.setBackgroundResource(R.drawable.spinner_background);
+                   i++;
+               }
+            }
+            return false;
+        }
+    };
+
 
 }
 

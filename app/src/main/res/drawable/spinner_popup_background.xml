@@ -5,8 +5,8 @@
                 <gradient android:startColor="#D90646"
                     android:centerColor="#E22339"
                     android:endColor="#EB402C"/>
-                <corners android:bottomLeftRadius="50dp"
-                    android:bottomRightRadius="50dp"/>
+                <corners android:bottomLeftRadius="30dp"
+                    android:bottomRightRadius="30dp"/>
                 <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
             </shape>
         </item>
