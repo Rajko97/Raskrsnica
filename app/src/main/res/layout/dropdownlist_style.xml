@@ -8,6 +8,7 @@
     android:singleLine="true"
     android:textSize="20dp"
     android:textColor="#ffffff"
+    android:background="@drawable/spiner_items_background"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:paddingBottom="20dp"
