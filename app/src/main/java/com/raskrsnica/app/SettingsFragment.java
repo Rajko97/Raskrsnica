@@ -73,7 +73,7 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, raskrsnice);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adapter1);
-
+        spinner1.setDropDownVerticalOffset(50);
 
         /*spinner2=(Spinner) rootView.findViewById(R.id.spinner2);
         ArrayAdapter<String> adapter2 =new ArrayAdapter<>(rootView.getContext(),android.R.layout.simple_spinner_item,pozicije);
