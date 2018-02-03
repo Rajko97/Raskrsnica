@@ -167,7 +167,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         d.setTitle("NumberPicker");
         d.setContentView(R.layout.dialog);
         Button b1 = (Button) d.findViewById(R.id.button1);
-        Button b2 = (Button) d.findViewById(R.id.button2);
         final int minValue = -15;
         final int maxValue = 30;
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
@@ -190,19 +189,14 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 d.dismiss();
             }
         });
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                d.dismiss();
-            }
-        });
         d.show();
     }
 
     @Override
     public void onBackPressed() {
        new AlertDialog.Builder(this)
-               .setMessage("Da li ste sigurni da želite da otkažete brojanje? Podaci koje ste merili neće biti sačuvani.")
+               .setTitle("Da li ste sigurni da želite da otkažete brojanje?")
+               .setMessage("Ukoliko potvrdite, podaci koje ste merili neće biti sačuvani!")
                .setCancelable(false)
                .setPositiveButton("Da", new DialogInterface.OnClickListener() {
                    @Override
