@@ -76,11 +76,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/txtVL1"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/textView6"
+                    android:id="@+id/btnVL1"
                     style="@style/stil2"
                     android:drawableStart="@drawable/ic_bicikl"
                     android:text="Bicikl"
@@ -98,11 +98,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv3"
+                    android:id="@+id/txtVL2"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv4"
+                    android:id="@+id/btnVL2"
                     style="@style/stil2"
                     android:drawableStart="@drawable/ic_motor"
                     android:text="Motor" />
@@ -117,11 +117,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv7"
+                    android:id="@+id/txtVL3"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv8"
+                    android:id="@+id/btnVL3"
                     android:drawableStart="@drawable/ic_auto"
                     android:text="Automobil"
                     style="@style/stil2"
@@ -137,11 +137,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv13"
+                    android:id="@+id/txtVL4"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv14"
+                    android:id="@+id/btnVL4"
                     style="@style/stil2"
                     android:drawableStart="@drawable/ic_autobus"
                     android:text="Autobus" />
@@ -156,11 +156,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv19"
+                    android:id="@+id/txtVL5"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv20"
+                    android:id="@+id/btnVL5"
                     android:drawableStart="@drawable/ic_laka_teretna"
                     android:text="Laka teretna"
                     style="@style/stil2"/>
@@ -175,11 +175,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv25"
+                    android:id="@+id/txtVL6"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv26"
+                    android:id="@+id/btnVL6"
                     android:drawableStart="@drawable/ic_srednja_teretna"
                     android:text="Srednja teretna"
                     style="@style/stil2" />
@@ -194,11 +194,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv32"
+                    android:id="@+id/txtVL7"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv33"
+                    android:id="@+id/btnVL7"
                     android:drawableStart="@drawable/ic_teska_teretna"
                     android:text="Teška teretna"
                     style="@style/stil2" />
@@ -213,11 +213,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv38"
+                    android:id="@+id/txtVL8"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv39"
+                    android:id="@+id/btnVL8"
                     android:drawableStart="@drawable/ic_autovoz"
                     android:text="Autovoz"
                     style="@style/stil2" />
@@ -232,11 +232,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv44"
-                    style="@style/stil1"/>
+                    android:id="@+id/txtVL9"
+                    style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv45"
+                    android:id="@+id/btnVL9"
                     android:drawableStart="@drawable/ic_traktor"
                     android:text="Traktor"
                     style="@style/stil2" />
@@ -251,11 +251,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv50"
+                    android:id="@+id/txtVL10"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv51"
+                    android:id="@+id/btnVL10"
                     android:drawableStart="@drawable/ic_zaprega"
                     android:text="Zaprega"
                     style="@style/stil2"/>
@@ -291,11 +291,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/txtVP1"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/textView8"
+                    android:id="@+id/btnVP1"
                     android:drawableStart="@drawable/ic_bicikl"
                     android:text="Bicikl"
                     style="@style/stil2" />
@@ -310,11 +310,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv5"
+                    android:id="@+id/txtVP2"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv6"
+                    android:id="@+id/btnVP2"
                     android:drawableStart="@drawable/ic_motor"
                     android:text="Motor"
                     style="@style/stil2" />
@@ -329,11 +329,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv9"
+                    android:id="@+id/txtVP3"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv10"
+                    android:id="@+id/btnVP3"
                     android:drawableStart="@drawable/ic_auto"
                     android:text="Automobil"
                     style="@style/stil2" />
@@ -348,11 +348,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv15"
+                    android:id="@+id/txtVP4"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv16"
+                    android:id="@+id/btnVP4"
                     android:drawableStart="@drawable/ic_autobus"
                     android:text="Autobus"
                     style="@style/stil2" />
@@ -367,11 +367,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv21"
+                    android:id="@+id/txtVP5"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv22"
+                    android:id="@+id/btnVP5"
                     android:drawableStart="@drawable/ic_laka_teretna"
                     android:text="Laka teretna"
                     style="@style/stil2"/>
@@ -386,11 +386,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv28"
+                    android:id="@+id/txtVP6"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv29"
+                    android:id="@+id/btnVP6"
                     android:drawableStart="@drawable/ic_srednja_teretna"
                     android:text="Srednja teretna"
                     style="@style/stil2" />
@@ -405,11 +405,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv34"
+                    android:id="@+id/txtVP7"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv35"
+                    android:id="@+id/btnVP7"
                     android:drawableStart="@drawable/ic_teska_teretna"
                     android:text="Teška teretna"
                     style="@style/stil2"/>
@@ -424,11 +424,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv40"
+                    android:id="@+id/txtVP8"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv41"
+                    android:id="@+id/btnVP8"
                     android:drawableStart="@drawable/ic_autovoz"
                     android:text="Autovoz"
                     style="@style/stil2" />
@@ -443,11 +443,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv46"
+                    android:id="@+id/txtVP9"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv47"
+                    android:id="@+id/btnVP9"
                     android:drawableStart="@drawable/ic_traktor"
                     android:text="Traktor"
                     style="@style/stil2"/>
@@ -462,11 +462,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv52"
+                    android:id="@+id/txtVP10"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv53"
+                    android:id="@+id/btnVP10"
                     android:drawableStart="@drawable/ic_zaprega"
                     android:text="Zaprega"
                     style="@style/stil2"/>
@@ -502,11 +502,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/txtVD1"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/textView9"
+                    android:id="@+id/btnVD1"
                     android:text="Bicikl"
                     android:drawableStart="@drawable/ic_bicikl"
                     style="@style/stil2" />
@@ -520,11 +520,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv1"
+                    android:id="@+id/txtVD2"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv2"
+                    android:id="@+id/btnVD2"
                     android:drawableStart="@drawable/ic_motor"
                     android:text="Motor"
                     style="@style/stil2"/>
@@ -538,11 +538,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv11"
+                    android:id="@+id/txtVD3"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv12"
+                    android:id="@+id/btnVD3"
                     android:drawableStart="@drawable/ic_auto"
                     android:text="Automobil"
                     style="@style/stil2" />
@@ -556,11 +556,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv17"
+                    android:id="@+id/txtVD4"
                      style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv18"
+                    android:id="@+id/btnVD4"
                     android:drawableStart="@drawable/ic_autobus"
                     android:text="Autobus"
                     style="@style/stil2"/>
@@ -574,11 +574,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv23"
+                    android:id="@+id/txtVD5"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv24"
+                    android:id="@+id/btnVD5"
                     android:drawableStart="@drawable/ic_laka_teretna"
                     android:text="Laka teretna"
                     style="@style/stil2"/>
@@ -592,11 +592,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv30"
+                    android:id="@+id/txtVD6"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv31"
+                    android:id="@+id/btnVD6"
                     android:drawableStart="@drawable/ic_srednja_teretna"
                     android:text="Srednja teretna"
                     style="@style/stil2"/>
@@ -610,11 +610,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv36"
+                    android:id="@+id/txtVD7"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv37"
+                    android:id="@+id/btnVD7"
                     android:drawableStart="@drawable/ic_teska_teretna"
                     android:text="Teška teretna"
                     style="@style/stil2"/>
@@ -628,11 +628,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv42"
+                    android:id="@+id/txtVD8"
                     style="@style/stil1"/>
 
                 <Button
-                    android:id="@+id/tv43"
+                    android:id="@+id/btnVD8"
                     android:drawableStart="@drawable/ic_autovoz"
                     android:text="Autovoz"
                     style="@style/stil2"/>
@@ -646,11 +646,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv48"
+                    android:id="@+id/txtVD9"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv49"
+                    android:id="@+id/btnVD9"
                     android:drawableStart="@drawable/ic_traktor"
                     android:text="Traktor"
                     style="@style/stil2"/>
@@ -664,11 +664,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tv54"
+                    android:id="@+id/txtVD10"
                     style="@style/stil1" />
 
                 <Button
-                    android:id="@+id/tv55"
+                    android:id="@+id/btnVD10"
                     android:drawableStart="@drawable/ic_zaprega"
                     android:text="Zaprega"
                     style="@style/stil2"/>
