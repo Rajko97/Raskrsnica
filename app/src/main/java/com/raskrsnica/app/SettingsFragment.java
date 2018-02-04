@@ -232,15 +232,12 @@ public class SettingsFragment extends Fragment {
     private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-               if(i%2==0)
-               {
-                   spinner1.setBackgroundResource(R.drawable.spinner_background2);
-                   i++;
-               }
-               else{
-                   spinner1.setBackgroundResource(R.drawable.spinner_background);
-                   i++;
-               }
+                spinner1.setBackgroundResource(R.drawable.spinner_background);
+                Toast.makeText(getContext(), "Zatvara se lista", Toast.LENGTH_SHORT).show();
+            }
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                spinner1.setBackgroundResource(R.drawable.spinner_background2);
+                Toast.makeText(getContext(), "Otvara se lista", Toast.LENGTH_SHORT).show();
             }
             return false;
         }
