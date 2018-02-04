@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -59,11 +60,11 @@ public class SettingsFragment extends Fragment {
     ToggleButton tbLevo, tbDesno, tbPravo;
 
     Spinner spinner1, spinner2;
-    TextView mesec, datum, godina;
-    TimePicker tp;
     CountDownTimer countDownTimer;
+
+    boolean OtvorenSpiner = false;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //TODO Da se ovaj niz stringova ucita iz baze
@@ -74,112 +75,116 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, raskrsnice);
         adapter1.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner1.setAdapter(adapter1);
-        spinner1.setDropDownVerticalOffset(50);
-        spinner1.setOnTouchListener(Spinner_OnTouch);
+        //spinner1.setDropDownVerticalOffset(50);
 
-        /*spinner2=(Spinner) rootView.findViewById(R.id.spinner2);
-        ArrayAdapter<String> adapter2 =new ArrayAdapter<>(rootView.getContext(),android.R.layout.simple_spinner_item,pozicije);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
-
-        LinearLayout layout=(LinearLayout) rootView.findViewById(R.id.datum_layout);
-        mesec=(TextView) rootView.findViewById(R.id.mesec);
-        datum=(TextView)rootView.findViewById(R.id.datum);
-        godina=(TextView)rootView.findViewById(R.id.godina);
-
-        mesec.setText(month + "");
-        datum.setText(day + "");
-        godina.setText(year+"");
-
-
-        layout.setOnClickListener(new View.OnClickListener() {
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(), "DatePicker");
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (OtvorenSpiner)
+                    spinner1.setBackgroundResource(R.drawable.spinner_background);
+                OtvorenSpiner=false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                if(OtvorenSpiner)
+                    spinner1.setBackgroundResource(R.drawable.spinner_background);
+                OtvorenSpiner=false;
             }
         });
-        tp = (TimePicker) rootView.findViewById(R.id.timePicker);
-        tp.setIs24HourView(true);
 
-        tbLevo=(ToggleButton)rootView.findViewById(R.id.toggleButtonLevo);
-        tbDesno=(ToggleButton)rootView.findViewById(R.id.toggleButtonDesno);
-        tbPravo=(ToggleButton)rootView.findViewById(R.id.toggleButtonPravo);
+        spinner1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(OtvorenSpiner) {
+                        spinner1.setBackgroundResource(R.drawable.spinner_background);
+                        OtvorenSpiner = false;
+                    }
+                    else {
+                        spinner1.setBackgroundResource(R.drawable.spinner_background2);
+                        OtvorenSpiner = true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        spinner1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                spinner1.setDropDownVerticalOffset(spinner1.getDropDownVerticalOffset() + spinner1.getHeight());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    spinner1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    spinner1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
 
 
-        final TextView Levo, Pravo, Desno;
-        Levo = (TextView) rootView.findViewById(R.id.textLevo);
-        Pravo = (TextView) rootView.findViewById(R.id.textPravo);
-        Desno = (TextView) rootView.findViewById(R.id.textDesno);
 
-        Button button=(Button)rootView.findViewById(R.id.btNext); //Kad se klikne next dugme
+
+        Button button=(Button)rootView.findViewById(R.id.btNext);
         button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
             @Override
             public void onClick(View view) {
-                if(!tbLevo.isChecked() && !tbDesno.isChecked() && !tbPravo.isChecked()) {
-
-                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-                    alertDialog.setTitle("Greska!");
-                    alertDialog.setMessage("Niste izabrali nijedan smer!");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
+               /* if (spinner1.getSelectedItem().equals(null)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Greska!")
+                            .setMessage("Niste izabrali raskrsnicu!")
+                            .setPositiveButton("OK", null)
+                            .show();
+                } else {*/
+                   /* final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("Vreme do brojanja");
+                    alertDialog.setMessage("00:00:00");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            countDownTimer.cancel();
+                            dialogInterface.dismiss();
+                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
                     alertDialog.show();
-                }
-                else
-                    {
-                        /*final AlertDialog alertDialog= new AlertDialog.Builder(getActivity()).create();
-                        alertDialog.setTitle("Vreme do brojanja");
-                        alertDialog.setMessage("00:00:00");
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                countDownTimer.cancel();
-                                dialogInterface.dismiss();
-                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
-                                toast.show();
+
+
+                    countDownTimer = new CountDownTimer(getRemainingTimeinMS(2), 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            try {
+                                long mills = getRemainingTimeinMS(1);
+                                int hours = 23 - (int) ((mills / (1000 * 60 * 60) % 24));
+                                int mins = 59 - (int) (mills / (1000 * 60)) % 60;
+                                int seconds = 59 - (int) (mills / 1000) % 60;
+                                String diff = hours + ":" + mins + ":" + seconds;
+                                alertDialog.setMessage(diff);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
-                        alertDialog.show();
+                        }
 
+                        @Override
+                        public void onFinish() {
+                            alertDialog.dismiss();
+                            PokreniBrojanje();
+                        }
+                    }.start();*/
+                   PokreniBrojanje();
 
-                        countDownTimer = new CountDownTimer(getRemainingTimeinMS(2), 1000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                try
-                                {
-                                    long mills = getRemainingTimeinMS(1);
-                                    int hours = 23-(int) ((mills/(1000 * 60 * 60) % 24));
-                                    int mins = 59-(int) (mills/(1000*60)) % 60;
-                                    int seconds = 59-(int) (mills/1000) % 60;
-                                    String diff = hours + ":" + mins+":"+seconds;
-                                    alertDialog.setMessage(diff);
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-                            }*/
-
-                            //@Override
-                            //public void onFinish() {
-                                //alertDialog.dismiss();
-                               // PokreniBrojanje();
-                            //}
-                        //}.start();
-
-            /*}
+                //}
+            }
 
             private long getRemainingTimeinMS(int arg) {
                 SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
                 Date d = new Date();
                 Date date2 = null;
                 try {
-                    date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
+                    //date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
+                    date2 = format.parse(("24" + ":" + "60 "+":00"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -195,55 +200,31 @@ public class SettingsFragment extends Fragment {
             }
 
             private void PokreniBrojanje() {
+
                 Intent intent = new Intent(getActivity(), CountingActivity.class);
                 Bundle b = new Bundle();
                 b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
-                b.putString("POZICIJA", spinner2.getSelectedItem().toString());
-                b.putString("DATUM", datum.getText().toString() + " " + mesec.getText().toString() + " " + godina.getText().toString());
-                b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
-                b.putString("SMER_LEVO", tbLevo.isChecked()?Levo.getText().toString():"0");
-                b.putString("SMER_PRAVO", tbPravo.isChecked()?Pravo.getText().toString():"0");
-                b.putString("SMER_DESNO", tbDesno.isChecked()?Desno.getText().toString():"0");
+                b.putString("POZICIJA", "1");
+                //b.putString("DATUM", + "datum.getText().toString()  " + mesec.getText().toString() + " " + godina.getText().toString());
+                //b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
+                b.putString("SMER_LEVO", "1");
+                b.putString("SMER_PRAVO", "1");
+                b.putString("SMER_DESNO", "0");
                 intent.putExtras(b);
                 getActivity().startActivityForResult(intent, REQ_CODE);
             }
+            private void PostaviIndekseSmerova(int pozicija) {
+                String Levo, Pravo, Desno;
+                Levo = pozicija+"."+pozicija % 4 +1;
+                Pravo = pozicija+"."+(pozicija +1)% 4 +1;
+                Desno = pozicija+"."+(pozicija +2)% 4 +1;
+            }
         });
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int x = Integer.valueOf(spinner2.getSelectedItem().toString());
-                int y = x % 4 +1;
-                Levo.setText(x+"."+y);
-                y = (x +1)% 4 +1;
-                Pravo.setText(x+"."+y);
-                y = (x +2)% 4 +1;
-                Desno.setText(x+"."+y);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
         return rootView;
 
     }
-    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                spinner1.setBackgroundResource(R.drawable.spinner_background);
-                Toast.makeText(getContext(), "Zatvara se lista", Toast.LENGTH_SHORT).show();
-            }
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                spinner1.setBackgroundResource(R.drawable.spinner_background2);
-                Toast.makeText(getContext(), "Otvara se lista", Toast.LENGTH_SHORT).show();
-            }
-            return false;
-        }
-    };
-
-
 }
 
 /*Literatura:

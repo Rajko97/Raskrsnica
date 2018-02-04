@@ -9,7 +9,11 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.media.session.ParcelableVolumeInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -79,21 +84,38 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
             // @drawable/circle
             if (Levo.equals("0")) {
-                for (int i = 0; i < textVozila[2].length; i++) {
-                    TextView ivVectorImage = (TextView) findViewById(textVozila[0][i]);
-                    ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                for (int i = 0; i < textVozila[0].length; i++) {
+                    TextView text = (TextView) findViewById(textVozila[0][i]);
+                    Button dugme = (Button) findViewById(dugmiciVozila[0][i]);
+                    ImageView img = (ImageView) findViewById(R.id.imgStrelicaLevo);
+
+                    text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                    dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                    img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
                 }
             }
                 if (Pravo.equals("0")) {
-                    for (int i = 0; i < textVozila[2].length; i++) {
-                        TextView ivVectorImage = (TextView) findViewById(textVozila[0][i]);
-                        ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    for (int i = 0; i < textVozila[1].length; i++) {
+                        TextView ivVectorImage = (TextView) findViewById(textVozila[1][i]);
+                        ivVectorImage.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
                     }
                 }
                 if (Desno.equals("0")) {
                     for (int i = 0; i < textVozila[2].length; i++) {
-                        TextView ivVectorImage = (TextView) findViewById(textVozila[2][i]);
-                        ivVectorImage.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                        TextView text = (TextView) findViewById(textVozila[2][i]);
+                        Button dugme = (Button) findViewById(dugmiciVozila[2][i]);
+                        ImageView img = (ImageView) findViewById(R.id.imgStrelicaDesno);
+
+                        Drawable mDrawable=getResources().getDrawable(R.drawable.circle_grey);
+                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                        mDrawable = DrawableCompat.wrap(mDrawable);
+                        //dugme.setCompoundDrawables(mDrawable, mDrawable, mDrawable, mDrawable);
+                        dugme.setBackgroundResource(R.drawable.circle_grey);
+                        text.setBackgroundResource(R.drawable.circle_grey);
+
+                        text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                        dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                        img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
                     }
                 }
             }
