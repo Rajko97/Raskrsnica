@@ -4,7 +4,7 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <gradient android:startColor="#8C1F3F" android:centerColor="#CE1E35" android:endColor="#EF592B"/>
+                <gradient android:startColor="#d90647" android:endColor="#eb402c"/>
             </shape>
         </clip>
     </item>
