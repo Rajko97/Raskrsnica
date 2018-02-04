@@ -51,6 +51,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDownTimer;
     private int kvantum = 0;
     private int[][][] brojVozila = new int[4][3][10]; //4 kvantuma * 3 smera * 10 vozila
+    private boolean[] ukljucenSmer = {false, false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +59,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_counting);
 
         final TextView timer = (TextView) findViewById(R.id.kvantum);
-
-        for (int[] ids: dugmiciVozila)
-            for (int id : ids) {
-                findViewById(id).setOnClickListener(this);
-                findViewById(id).setOnLongClickListener(this);
-            }
-
-        for(int i = 0; i < textVozila.length; i++)
-            for (int j = 0; j < textVozila[i].length; j++)
-                textViews[i][j] = (TextView) findViewById(textVozila[i][j]);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -83,42 +74,66 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
 
             // @drawable/circle
-            if (Levo.equals("0")) {
-                for (int i = 0; i < textVozila[0].length; i++) {
-                    TextView text = (TextView) findViewById(textVozila[0][i]);
-                    Button dugme = (Button) findViewById(dugmiciVozila[0][i]);
-                    ImageView img = (ImageView) findViewById(R.id.imgStrelicaLevo);
+            if (!Levo.equals("0")) ukljucenSmer[0] = true;
+            if (!Pravo.equals("0")) ukljucenSmer[1] = true;
+            if (!Desno.equals("0")) ukljucenSmer[2] = true;
+
+            for (int[] ids: dugmiciVozila)
+                for (int id : ids) {
+                    findViewById(id).setOnClickListener(this);
+                    findViewById(id).setOnLongClickListener(this);
+                }
+
+            for (int i = 0; i < textVozila.length; i++)
+                if (ukljucenSmer[i])
+                    for (int j = 0; j < textVozila[i].length; j++) {
+                        textViews[i][j] = (TextView) findViewById(textVozila[i][j]);
+                    }
+
+            int[] ikoniceVozila = {
+                    R.drawable.ic_bicikl, R.drawable.ic_motor, R.drawable.ic_auto, R.drawable.ic_autobus,
+                    R.drawable.ic_laka_teretna, R.drawable.ic_laka_teretna, R.drawable.ic_srednja_teretna, R.drawable.ic_teska_teretna,
+                    R.drawable.ic_autovoz, R.drawable.ic_traktor, R.drawable.ic_zaprega
+            };
+            for (int i = 0; i < 3; i++) {
+                if (ukljucenSmer[i])
+                    continue;
+                for (int j = 0; j < textVozila[i].length; j++) {
+                    TextView text = (TextView) findViewById(textVozila[i][j]);
+                    Button dugme = (Button) findViewById(dugmiciVozila[i][j]);
+                    ImageView img = null;
+                    switch (i) {
+                        case 0:
+                            img = (ImageView) findViewById(R.id.imgStrelicaLevo);
+                            break;
+                        case 1:
+                            img = (ImageView) findViewById(R.id.imgStrelicaPravo);
+                            break;
+                        case 2:
+                            img = (ImageView) findViewById(R.id.imgStrelicaDesno);
+                            break;
+                    }
+
+                    Drawable mDrawable = getResources().getDrawable(ikoniceVozila[j]);
+                    mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                    mDrawable = DrawableCompat.wrap(mDrawable);
+                    int h = mDrawable.getIntrinsicHeight();
+                    int w = mDrawable.getIntrinsicWidth();
+                    mDrawable.setBounds(0, 0, w, h); // zbog ove linije sam utrosio 6 sata
+                    dugme.setCompoundDrawablesRelative(mDrawable, null, null, null);
+
+                    dugme.setBackgroundResource(R.drawable.circle_grey);
+                    text.setBackgroundResource(R.drawable.circle_grey);
 
                     text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
                     dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
                     img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
+
+
                 }
             }
-                if (Pravo.equals("0")) {
-                    for (int i = 0; i < textVozila[1].length; i++) {
-                        TextView ivVectorImage = (TextView) findViewById(textVozila[1][i]);
-                        ivVectorImage.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
-                    }
-                }
-                if (Desno.equals("0")) {
-                    for (int i = 0; i < textVozila[2].length; i++) {
-                        TextView text = (TextView) findViewById(textVozila[2][i]);
-                        Button dugme = (Button) findViewById(dugmiciVozila[2][i]);
-                        ImageView img = (ImageView) findViewById(R.id.imgStrelicaDesno);
+        }
 
-                        Drawable mDrawable=getResources().getDrawable(R.drawable.circle_grey);
-                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                        mDrawable = DrawableCompat.wrap(mDrawable);
-                        //dugme.setCompoundDrawables(mDrawable, mDrawable, mDrawable, mDrawable);
-                        dugme.setBackgroundResource(R.drawable.circle_grey);
-                        text.setBackgroundResource(R.drawable.circle_grey);
-
-                        text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
-                        dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
-                        img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
-                    }
-                }
-            }
 
 
             //900000 default
@@ -134,8 +149,9 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     if (kvantum < 3) {
                         kvantum++;
                         for (int i = 0; i < textViews.length; i++)
-                            for (int j = 0; j < textViews[0].length; j++)
-                                textViews[i][j].setText("0");
+                            if (ukljucenSmer[i])
+                                for (int j = 0; j < textViews[0].length; j++)
+                                    textViews[i][j].setText("0");
                         start();
                     } else {
                         SacuvajPodatke();
@@ -154,24 +170,26 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onLongClick(View view) {
         for (int i = 0; i < dugmiciVozila.length; i++)
-            for (int j = 0; j < dugmiciVozila[i].length; j++)
-            if(view.getId() == dugmiciVozila[i][j])
-            {
-                showNumberPicker(i, j);
-                return true;
-            }
+            if(ukljucenSmer[i])
+                for (int j = 0; j < dugmiciVozila[i].length; j++)
+                    if(view.getId() == dugmiciVozila[i][j])
+                    {
+                        showNumberPicker(i, j);
+                        return true;
+                    }
         return false;
     }
 
     @Override
     public void onClick(View v) {
         for (int i = 0; i < dugmiciVozila.length; i++)
-            for (int j = 0; j < dugmiciVozila[i].length; j++)
-                if(v.getId() == dugmiciVozila[i][j])
-                {
-                    textViews[i][j].setText(++brojVozila[kvantum][i][j] + "");
-                    break;
-                }
+            if(ukljucenSmer[i])
+                for (int j = 0; j < dugmiciVozila[i].length; j++)
+                    if(v.getId() == dugmiciVozila[i][j])
+                    {
+                        textViews[i][j].setText(++brojVozila[kvantum][i][j] + "");
+                        break;
+                    }
     }
 
     @Override
