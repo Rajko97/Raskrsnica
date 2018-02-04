@@ -1,90 +1,220 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.raskrsnica.app.DataBaseFragment"
-    android:id="@+id/fragment_database">
+    android:id="@+id/fragment_database"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="30dp">
 
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="30dp"
         android:orientation="vertical">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.9">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="[25.1.2017 - 12:00] Raskrsnica: NazivRaskrsnice" />
-
-                    <CheckBox
-                        android:id="@+id/checkBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:text="CheckBox" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView2132131"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="[25.1.2017 - 12:00] Raskrsnica: NazivRaskrsnice" />
-
-                    <CheckBox
-                        android:id="@+id/checkBoxsdsfdsfs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:text="CheckBox" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:layout_weight="0.1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="right|center_vertical"
+            android:paddingRight="10dp"
+            android:background="@drawable/background_baza_layout">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/uploadBt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Obrisi iz memorije" />
+                android:src="@drawable/ic_upload_color"
+                android:background="#ffffff"
+                android:layout_marginRight="10dp"/>
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Prebaci na server" />
+                android:src="@drawable/ic_upload_color"
+                android:layout_marginLeft="10dp"/>
+
+
         </LinearLayout>
 
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.90">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp"
+                    android:background="@drawable/background_baza_layout">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.05"
+                        android:src="@drawable/ic_calendar_color" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.90"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="Raskrsnica:"
+                                android:textColor="#D90647"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingStart="5dp"
+                                android:text="Naziv raskrsnice"
+                                android:textColor="#000000"
+                                android:textSize="20dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:paddingStart="20dp"
+                            android:text="Datum: 25.1.2017"
+                            android:gravity="center_vertical"/>
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:text="Vreme: 12:00" />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.05" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp"
+                    android:background="@drawable/background_baza_layout">
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.05"
+                        android:src="@drawable/ic_calendar_color" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.90"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="Raskrsnica:"
+                                android:textColor="#D90647"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingStart="5dp"
+                                android:text="Naziv raskrsnice"
+                                android:textColor="#000000"
+                                android:textSize="20dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView7"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:paddingStart="20dp"
+                            android:text="Datum: 25.1.2017"
+                            android:gravity="center_vertical"/>
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.33"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:text="Vreme: 12:00" />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkBox2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.05" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
     </LinearLayout>
+
 </FrameLayout>
 
