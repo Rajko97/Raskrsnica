@@ -144,9 +144,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-
-
-
             //900000 default
             countDownTimer = new CountDownTimer(10000, 1000) {
                 @Override
