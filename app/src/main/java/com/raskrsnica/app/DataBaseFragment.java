@@ -1,7 +1,9 @@
 package com.raskrsnica.app;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -49,21 +51,63 @@ public class DataBaseFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
 
         ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+        ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
         dugmeObisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i = 0; i <brojMerenja; i++)
-                {
-                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+i);
-                    if(checkBox.isChecked()) {
-                        LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID+i);
-                        ln.setVisibility(View.GONE);
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Da li ste sigurni da želite da uklonite izabrana merenja?")
+                        .setMessage("Ukoliko potvrdite, izabrani podaci koje ste merili biće zauvek izgubljeni iz uređaja!")
+                        .setCancelable(false)
+                        .setPositiveButton("Da", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                for(int id = 0; id <brojMerenja; id++)
+                                {
+                                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
+                                    if(checkBox.isChecked()) {
+                                        LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID+id);
+                                        ln.setVisibility(View.GONE);
+                                        obrisiJSONelement(id);
+                                    }
+                                }
+                            }
+                        })
+                        .setNegativeButton("Ne", null)
+                        .show();
+            }
+
+            private void obrisiJSONelement(int position) {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+
+                try {
+                    JSONArray jsonArray = new JSONArray(sharedPref.getString("MerenjaJSON", "0"));
+                    JSONArray list = new JSONArray();
+                    int len = jsonArray.length();
+                    if(jsonArray != null) {
+                        for(int i=0; i<len; i++)
+                            if (i != position)
+                                list.put(jsonArray.get(i));
+
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("MerenjaJSON", list.toString());
+                        editor.apply();
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                //SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-                //SharedPreferences.Editor editor = sharedPref.edit();
-                //editor.putString("MerenjaJSON", "0");
-                //editor.apply();
+            }
+        });
+
+        dugmeBaza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Greska!")
+                        .setMessage("Baza trenutno nije dostupna.")
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", null)
+                        .show();
             }
         });
 
@@ -167,7 +211,7 @@ public class DataBaseFragment extends Fragment {
                         0,
                         0.33f
                 );
-                tekstDatum.setLayoutParams(tekstNazivRaskrsniceParms);
+                tekstDatum.setLayoutParams(tekstDatumParms);
                 tekstDatum.setPaddingRelative(paddingStart, 0, 0, 0);
                 tekstDatum.setText("Datum: "+merenje.getString("Datum"));
                 tekstDatum.setGravity(Gravity.CENTER_VERTICAL);
@@ -196,16 +240,7 @@ public class DataBaseFragment extends Fragment {
                 checkBox.setLayoutParams(checkBoxParms);
                 checkBox.setId(CHECKBOX_ID+i);
                 glavniLayout.addView(checkBox);
-
-
-                //tvNaziv[i].setText(merenje.getString("Naziv"));
-                //tvDatum[i].setText("Datum: "+merenje.getString("Datum"));
-                //tvVreme[i].setText("Vreme:"+merenje.getString("Vreme"));
-
             }
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
