@@ -58,6 +58,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private TextView[][] textViews = new TextView[3][10];
     private CountDownTimer countDownTimer;
     private int kvantum = 0;
+    private int trajanje = 1;
     private int[][][] brojVozila = new int[4][3][10]; //4 kvantuma * 3 smera * 10 vozila
     private boolean[] ukljucenSmer = {false, false, false};
 
@@ -73,6 +74,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         if (b != null) {
             nazivRaskrsnice = b.getString("RASKRSNICA");
             String pozicija = b.getString("POZICIJA");
+            trajanje = Integer.valueOf(b.getString("TRAJANJE"));
             datum = b.getString("DATUM");
             vreme = b.getString("VREME");
             String Levo = b.getString("SMER_LEVO");
@@ -155,7 +157,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
                 @Override
                 public void onFinish() {
-                    if (kvantum < 3) {
+                    if (kvantum < (trajanje*4-1)) {
                         kvantum++;
                         for (int i = 0; i < textViews.length; i++)
                             if (ukljucenSmer[i])

@@ -240,6 +240,7 @@ public class SettingsFragment extends Fragment {
                 b.putString("POZICIJA", podaciRaskrsnice[BR_MESTO][i]);
                 b.putString("DATUM", podaciRaskrsnice[DATUM][i]);
                 b.putString("VREME", podaciRaskrsnice[POCETAK][i]);
+                b.putString("TRAJANJE", podaciRaskrsnice[TRAJANJE][i]);
                 b.putString("SMER_LEVO", podaciRaskrsnice[SMER_LEVO][i].equals("1")?strLevo:"0");
                 b.putString("SMER_PRAVO", podaciRaskrsnice[SMER_PRAVO][i].equals("1")?strPravo:"0");
                 b.putString("SMER_DESNO", podaciRaskrsnice[SMER_DESNO][i].equals("1")?strDesno:"0");
