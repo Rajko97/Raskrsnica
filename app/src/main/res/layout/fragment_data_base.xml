@@ -36,11 +36,12 @@
                 android:background="#ffffff"
                 android:layout_marginRight="10dp"/>
 
-            <ImageView
-                android:id="@+id/imageView4"
+            <ImageButton
+                android:id="@+id/DeleteBt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_upload_color"
+                android:src="@drawable/ic_kanta"
+                android:background="#ffffff"
                 android:layout_marginLeft="10dp"/>
 
 
