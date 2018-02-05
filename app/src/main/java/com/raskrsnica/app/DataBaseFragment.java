@@ -13,7 +13,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,7 +36,9 @@ import java.util.Scanner;
  * A simple {@link Fragment} subclass.
  */
 public class DataBaseFragment extends Fragment {
+    final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000;
 
+    int brojMerenja = 0;
     LinearLayout myLayout;
     public DataBaseFragment() {
         // Required empty public constructor
@@ -42,7 +46,27 @@ public class DataBaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
+
+        ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+        dugmeObisi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i <brojMerenja; i++)
+                {
+                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+i);
+                    if(checkBox.isChecked()) {
+                        LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID+i);
+                        ln.setVisibility(View.GONE);
+                    }
+                }
+                //SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+                //SharedPreferences.Editor editor = sharedPref.edit();
+                //editor.putString("MerenjaJSON", "0");
+                //editor.apply();
+            }
+        });
+
         loadData(rootView);
         return rootView;
     }
@@ -57,7 +81,8 @@ public class DataBaseFragment extends Fragment {
             //odavde
             myLayout = (LinearLayout) view.findViewById(R.id.LayoutBaza);
 
-            for (int i = 0; i < merenja.length();  i++) {
+            brojMerenja = merenja.length();
+            for (int i = 0; i < brojMerenja;  i++) {
                 //Pravimo novi element
                 JSONObject merenje = merenja.getJSONObject(i);
 
@@ -66,8 +91,10 @@ public class DataBaseFragment extends Fragment {
                 LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, width);
                 LinearLayout glavniLayout = new LinearLayout(getContext());
                 glavniLayout.setLayoutParams(myNewLayout);
+                glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
                 glavniLayout.setPadding(0, 0,  padding, 0);
                 glavniLayout.setBackgroundResource(R.drawable.background_baza_layout);
+                glavniLayout.setId(LAYOUT_ID+i);
                 myLayout.addView(glavniLayout);
                 //Ikonica na pocetku
                 ImageView ikonica = new ImageView(getContext());
@@ -84,8 +111,8 @@ public class DataBaseFragment extends Fragment {
                 //LayoutInformacije
                 width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0
+                        width,
+                        LinearLayout.LayoutParams.MATCH_PARENT
                 );
                 layoutInformacijeParms.weight = 0.90f;
                 LinearLayout layoutInformacije = new LinearLayout(getContext());
@@ -169,6 +196,7 @@ public class DataBaseFragment extends Fragment {
                 checkBoxParms.weight = 0.05f;
                 checkBoxParms.gravity = Gravity.CENTER_VERTICAL;
                 checkBox.setLayoutParams(checkBoxParms);
+                checkBox.setId(CHECKBOX_ID+i);
                 glavniLayout.addView(checkBox);
 
 
