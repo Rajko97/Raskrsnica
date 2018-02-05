@@ -9,6 +9,8 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -26,12 +28,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,6 +61,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private int[][][] brojVozila = new int[4][3][10]; //4 kvantuma * 3 smera * 10 vozila
     private boolean[] ukljucenSmer = {false, false, false};
 
+    String nazivRaskrsnice, datum, vreme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +71,10 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
-            String nazivRaskrsnice = b.getString("RASKRSNICA");
+            nazivRaskrsnice = b.getString("RASKRSNICA");
             String pozicija = b.getString("POZICIJA");
-            String datum = b.getString("DATUM");
-            String vreme = b.getString("VREME");
+            datum = b.getString("DATUM");
+            vreme = b.getString("VREME");
             String Levo = b.getString("SMER_LEVO");
             String Pravo = b.getString("SMER_PRAVO");
             String Desno = b.getString("SMER_DESNO");
@@ -137,7 +146,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
 
             //900000 default
-            countDownTimer = new CountDownTimer(60000, 1000) {
+            countDownTimer = new CountDownTimer(10000, 1000) {
                 @Override
                 public void onTick(long l) {
                     timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
@@ -162,10 +171,36 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 }
             }.start();
         }
-
+    //cuva rezultate merenja u json fajlu
    private void SacuvajPodatke() {
-        //todo da se podaci cuvaju u lokalnoj bazi
-    }
+       SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+       try {
+           String jsonData = sharedPref.getString("MerenjaJSON", "0");
+           JSONArray merenja;
+           if(!jsonData.equals("0"))
+               merenja = new JSONArray(jsonData);
+           else
+               merenja = new JSONArray();
+
+           JSONObject merenje = new JSONObject();
+
+           try {
+               merenje.put("Naziv", nazivRaskrsnice);
+               merenje.put("Datum", datum);
+               merenje.put("Vreme", vreme);
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+           merenja.put(merenje);
+
+           SharedPreferences.Editor editor = sharedPref.edit();
+           editor.putString("MerenjaJSON", merenja.toString());
+           editor.apply();
+
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+   }
 
     @Override
     public boolean onLongClick(View view) {
@@ -242,20 +277,3 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                .show();
     }
 }
-/*Literatura:
-    CountDownTimer
-        https://developer.android.com/reference/android/os/CountDownTimer.html
-        https://stackoverflow.com/questions/17620641/countdowntimer-in-minutes-and-seconds
-    NumberPicker
-        https://developer.android.com/reference/android/widget/NumberPicker.html
-        https://stackoverflow.com/questions/17805040/how-to-create-a-number-picker-dialog
-        https://stackoverflow.com/questions/14357520/android-numberpicker-negative-numbers
-    INTENT
-        -Prosledjivanje parametara: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
-    DUGMCI
-        -Skraceni kod za puno dugmeta: https://stackoverflow.com/questions/25905086/multiple-buttons-onclicklistener-android
-        -OnLongClick event https://stackoverflow.com/questions/13382927/long-press-button-event-handler
-    NIZ
-        -obicna deklaracija -_-' https://stackoverflow.com/questions/1200621/how-do-i-declare-and-initialize-an-array-in-java
-        -niz za textView https://stackoverflow.com/questions/31623126/how-to-put-textviews-in-an-array-and-findviewbyid-them
- */

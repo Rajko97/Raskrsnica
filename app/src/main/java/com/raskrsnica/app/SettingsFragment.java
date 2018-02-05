@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
 
-    final static int REQ_CODE = 1;
+    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4;
     public int i=0;
     public SettingsFragment() {
         // Required empty public constructor
@@ -68,23 +68,38 @@ public class SettingsFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //TODO Da se ovaj niz stringova ucita iz baze
-        String[] raskrsnice=new String[]{"Raskrsnica1","Raskrsnica2", "Raskrsnica3", "Raskrsnica4"};
-        String[] pozicije=new String[]{"1","2", "3", "4"};
+        final String[][] podaciRaskrsnice=new String[][]{
+                {"Raskrsnica1","Raskrsnica2", "Raskrsnica3", "Raskrsnica4"},
+                {"4", "3", "2", "1"},
+                {"5.2.2018", "6.2.2018", "7.2.2018", "8.2.2018"},
+                {"12:00", "13:00", "6:00", "19:00"},
+                {"2", "1", "2", "3"}
+        };
 
         spinner1=(Spinner) rootView.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, raskrsnice);
+        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
         adapter1.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner1.setAdapter(adapter1);
-        //spinner1.setDropDownVerticalOffset(50);
+
+        final TextView tvNaziv, tvBrMesto, tvDatum, tvPocetak, tvTrajanje;
+        tvNaziv = (TextView) rootView.findViewById(R.id.tvNaziv);
+        tvBrMesto = (TextView) rootView.findViewById(R.id.tvBrMesto);
+        tvDatum = (TextView) rootView.findViewById(R.id.tvDatum);
+        tvPocetak = (TextView) rootView.findViewById(R.id.tvPocetak);
+        tvTrajanje = (TextView) rootView.findViewById(R.id.tvTrajanje);
 
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               tvNaziv.setText(podaciRaskrsnice[NAZIV][i]);
+               tvBrMesto.setText(podaciRaskrsnice[BR_MESTO][i]);
+               tvDatum.setText(podaciRaskrsnice[DATUM][i]);
+               tvPocetak.setText(podaciRaskrsnice[POCETAK][i]);
+               tvTrajanje.setText(podaciRaskrsnice[TRAJANJE][i]);
                 if (OtvorenSpiner)
                     spinner1.setBackgroundResource(R.drawable.spinner_background);
                 OtvorenSpiner=false;
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 if(OtvorenSpiner)
@@ -200,13 +215,12 @@ public class SettingsFragment extends Fragment {
             }
 
             private void PokreniBrojanje() {
-
                 Intent intent = new Intent(getActivity(), CountingActivity.class);
                 Bundle b = new Bundle();
                 b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
-                b.putString("POZICIJA", "1");
-                //b.putString("DATUM", + "datum.getText().toString()  " + mesec.getText().toString() + " " + godina.getText().toString());
-                //b.putString("VREME", tp.getCurrentHour() + ":" + tp.getCurrentMinute());
+                b.putString("POZICIJA", tvBrMesto.getText().toString());
+                b.putString("DATUM", tvDatum.getText().toString());
+                b.putString("VREME", tvPocetak.getText().toString());
                 b.putString("SMER_LEVO", "1");
                 b.putString("SMER_PRAVO", "1");
                 b.putString("SMER_DESNO", "0");

@@ -82,7 +82,7 @@
                     android:textColor="#D90647"/>
 
                 <TextView
-                    android:id="@+id/tvRaskrsnica"
+                    android:id="@+id/tvNaziv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
