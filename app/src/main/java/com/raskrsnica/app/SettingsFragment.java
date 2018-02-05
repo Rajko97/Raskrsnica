@@ -27,6 +27,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -45,11 +47,12 @@ import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
 
-    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4;
-    public int i=0;
+    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5, SMER_PRAVO = 6, SMER_DESNO = 7;
+    
     public SettingsFragment() {
         // Required empty public constructor
     }
+    
     Calendar c = Calendar.getInstance();
     SimpleDateFormat dateformat1 = new SimpleDateFormat("MMMM");
     String month = dateformat1.format(c.getTime());
@@ -57,12 +60,14 @@ public class SettingsFragment extends Fragment {
     String day = dateformat2.format(c.getTime());
     SimpleDateFormat dateformat3 = new SimpleDateFormat("yyy");
     String year = dateformat3.format(c.getTime());
-    ToggleButton tbLevo, tbDesno, tbPravo;
+    
 
-    Spinner spinner1, spinner2;
+    Spinner spinner;
     CountDownTimer countDownTimer;
 
     boolean OtvorenSpiner = false;
+    
+    String strLevo, strPravo, strDesno;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -70,54 +75,70 @@ public class SettingsFragment extends Fragment {
         //TODO Da se ovaj niz stringova ucita iz baze
         final String[][] podaciRaskrsnice=new String[][]{
                 {"Raskrsnica1","Raskrsnica2", "Raskrsnica3", "Raskrsnica4"},
-                {"4", "3", "2", "1"},
+                {"2", "3", "2", "1"},
                 {"5.2.2018", "6.2.2018", "7.2.2018", "8.2.2018"},
                 {"12:00", "13:00", "6:00", "19:00"},
-                {"2", "1", "2", "3"}
+                {"2", "1", "2", "3"},
+                {"1", "0", "1", "1"},
+                {"1", "1", "0", "1"},
+                {"1", "1", "1", "0"},
         };
 
-        spinner1=(Spinner) rootView.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter1= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
-        adapter1.setDropDownViewResource(R.layout.dropdownlist_style);
-        spinner1.setAdapter(adapter1);
+        spinner=(Spinner) rootView.findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
+        adapter.setDropDownViewResource(R.layout.dropdownlist_style);
+        spinner.setAdapter(adapter);
 
-        final TextView tvNaziv, tvBrMesto, tvDatum, tvPocetak, tvTrajanje;
+        final TextView tvNaziv, tvBrMesto, tvSmerovi, tvDatum, tvPocetak, tvTrajanje;
         tvNaziv = (TextView) rootView.findViewById(R.id.tvNaziv);
         tvBrMesto = (TextView) rootView.findViewById(R.id.tvBrMesto);
+        tvSmerovi = (TextView) rootView.findViewById(R.id.tvSmerovi);
         tvDatum = (TextView) rootView.findViewById(R.id.tvDatum);
         tvPocetak = (TextView) rootView.findViewById(R.id.tvPocetak);
         tvTrajanje = (TextView) rootView.findViewById(R.id.tvTrajanje);
 
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                tvNaziv.setText(podaciRaskrsnice[NAZIV][i]);
                tvBrMesto.setText(podaciRaskrsnice[BR_MESTO][i]);
                tvDatum.setText(podaciRaskrsnice[DATUM][i]);
                tvPocetak.setText(podaciRaskrsnice[POCETAK][i]);
-               tvTrajanje.setText(podaciRaskrsnice[TRAJANJE][i]);
+               tvTrajanje.setText(podaciRaskrsnice[TRAJANJE][i]+"h");
+               PostaviIndekseSmerova(Integer.parseInt(podaciRaskrsnice[BR_MESTO][i]));
+               tvSmerovi.setText((podaciRaskrsnice[SMER_LEVO][i].equals("1")? "Levo("+strLevo+") ":"")
+                       +(podaciRaskrsnice[SMER_PRAVO][i].equals("1")?"Pravo("+strPravo+") ":"")
+                       +(podaciRaskrsnice[SMER_DESNO][i].equals("1")?"Desno("+strDesno+") ":""));
+
                 if (OtvorenSpiner)
-                    spinner1.setBackgroundResource(R.drawable.spinner_background);
+                    spinner.setBackgroundResource(R.drawable.spinner_background);
                 OtvorenSpiner=false;
             }
+
+            private void PostaviIndekseSmerova(int pozicija) {
+                strLevo = pozicija+"."+(pozicija % 4 +1);
+                strPravo = pozicija+"."+((pozicija +1)% 4 +1);
+                strDesno = pozicija+"."+((pozicija +2)% 4 +1);
+            }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 if(OtvorenSpiner)
-                    spinner1.setBackgroundResource(R.drawable.spinner_background);
+                    spinner.setBackgroundResource(R.drawable.spinner_background);
                 OtvorenSpiner=false;
             }
         });
 
-        spinner1.setOnTouchListener(new View.OnTouchListener() {
+        spinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(OtvorenSpiner) {
-                        spinner1.setBackgroundResource(R.drawable.spinner_background);
+                        spinner.setBackgroundResource(R.drawable.spinner_background);
                         OtvorenSpiner = false;
                     }
                     else {
-                        spinner1.setBackgroundResource(R.drawable.spinner_background2);
+                        spinner.setBackgroundResource(R.drawable.spinner_background2);
                         OtvorenSpiner = true;
                     }
                 }
@@ -125,21 +146,18 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        spinner1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        spinner.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                spinner1.setDropDownVerticalOffset(spinner1.getDropDownVerticalOffset() + spinner1.getHeight());
+                spinner.setDropDownVerticalOffset(spinner.getDropDownVerticalOffset() + spinner.getHeight());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    spinner1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    spinner.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    spinner1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    spinner.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
             }
         });
-
-
-
-
+        
         Button button=(Button)rootView.findViewById(R.id.btNext);
         button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -217,39 +235,18 @@ public class SettingsFragment extends Fragment {
             private void PokreniBrojanje() {
                 Intent intent = new Intent(getActivity(), CountingActivity.class);
                 Bundle b = new Bundle();
-                b.putString("RASKRSNICA", spinner1.getSelectedItem().toString());
-                b.putString("POZICIJA", tvBrMesto.getText().toString());
-                b.putString("DATUM", tvDatum.getText().toString());
-                b.putString("VREME", tvPocetak.getText().toString());
-                b.putString("SMER_LEVO", "1");
-                b.putString("SMER_PRAVO", "1");
-                b.putString("SMER_DESNO", "0");
+                int i = spinner.getSelectedItemPosition();
+                b.putString("RASKRSNICA", podaciRaskrsnice[NAZIV][i]);
+                b.putString("POZICIJA", podaciRaskrsnice[BR_MESTO][i]);
+                b.putString("DATUM", podaciRaskrsnice[DATUM][i]);
+                b.putString("VREME", podaciRaskrsnice[POCETAK][i]);
+                b.putString("SMER_LEVO", podaciRaskrsnice[SMER_LEVO][i].equals("1")?strLevo:"0");
+                b.putString("SMER_PRAVO", podaciRaskrsnice[SMER_PRAVO][i].equals("1")?strPravo:"0");
+                b.putString("SMER_DESNO", podaciRaskrsnice[SMER_DESNO][i].equals("1")?strDesno:"0");
                 intent.putExtras(b);
                 getActivity().startActivityForResult(intent, REQ_CODE);
             }
-            private void PostaviIndekseSmerova(int pozicija) {
-                String Levo, Pravo, Desno;
-                Levo = pozicija+"."+pozicija % 4 +1;
-                Pravo = pozicija+"."+(pozicija +1)% 4 +1;
-                Desno = pozicija+"."+(pozicija +2)% 4 +1;
-            }
         });
-
-
         return rootView;
-
     }
 }
-
-/*Literatura:
-    SPINER
-    -Sve o spineru: https://developer.android.com/reference/android/widget/Spinner.html
-    -Kreiranje spinera sa nizom stringova: https://stackoverflow.com/questions/17311335/how-to-populate-a-spinner-from-string-array
-    -Citanje vrednosti: https://stackoverflow.com/questions/5787809/get-spinner-selected-items-text
-    -Kad se promeni vrednost - event: https://stackoverflow.com/questions/1337424/android-spinner-get-the-selected-item-change-event
-    INTENT
-        -Prosledjivanje parametara: https://stackoverflow.com/questions/3913592/start-an-activity-with-a-parameter
-    DATUM I VREME
-        -ucitavanje vrednosti: https://stackoverflow.com/questions/10346685/android-how-to-get-values-from-date-and-time-picker
-
-*/
