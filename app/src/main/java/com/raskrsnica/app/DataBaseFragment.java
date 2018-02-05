@@ -88,7 +88,9 @@ public class DataBaseFragment extends Fragment {
 
                 int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
                 int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, width);
+                LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        width);
                 LinearLayout glavniLayout = new LinearLayout(getContext());
                 glavniLayout.setLayoutParams(myNewLayout);
                 glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -98,34 +100,31 @@ public class DataBaseFragment extends Fragment {
                 myLayout.addView(glavniLayout);
                 //Ikonica na pocetku
                 ImageView ikonica = new ImageView(getContext());
-                width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams ikonicaParms = new LinearLayout.LayoutParams(
-                        width,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        0.05f
                 );
-                ikonicaParms.weight =  0.05f;
                 ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
                 ikonica.setLayoutParams(ikonicaParms);
                 ikonica.setImageResource(R.drawable.ic_calendar_color);
                 glavniLayout.addView(ikonica);
                 //LayoutInformacije
-                width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
-                        width,
-                        LinearLayout.LayoutParams.MATCH_PARENT
+                        0,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        0.90f
                 );
-                layoutInformacijeParms.weight = 0.90f;
                 LinearLayout layoutInformacije = new LinearLayout(getContext());
                 layoutInformacije.setLayoutParams(layoutInformacijeParms);
                 layoutInformacije.setOrientation(LinearLayout.VERTICAL);
                 glavniLayout.addView(layoutInformacije);
                 //Layout za Naziv Raskrsnice
-                width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams layoutNazivParms = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        width
+                        0,
+                        0.33f
                 );
-                layoutNazivParms.weight = 0.33f;
                 LinearLayout layoutNaziv = new LinearLayout(getContext());
                 layoutNaziv.setLayoutParams(layoutNazivParms);
                 layoutNaziv.setOrientation(LinearLayout.HORIZONTAL);
@@ -165,12 +164,12 @@ public class DataBaseFragment extends Fragment {
                 TextView tekstDatum = new TextView(getContext());
                 LinearLayout.LayoutParams tekstDatumParms = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        0
+                        0,
+                        0.33f
                 );
-                tekstDatumParms.weight = 0.33f;
+                tekstDatum.setLayoutParams(tekstNazivRaskrsniceParms);
                 tekstDatum.setPaddingRelative(paddingStart, 0, 0, 0);
                 tekstDatum.setText("Datum: "+merenje.getString("Datum"));
-                tekstDatum.setLayoutParams(tekstNazivRaskrsniceParms);
                 tekstDatum.setGravity(Gravity.CENTER_VERTICAL);
                 layoutInformacije.addView(tekstDatum);
                 //Tekst Vreme
@@ -178,22 +177,21 @@ public class DataBaseFragment extends Fragment {
                 TextView tekstVreme = new TextView(getContext());
                 LinearLayout.LayoutParams tekstVremeParms = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        0
+                        0,
+                        0.33f
                 );
-                tekstVremeParms.weight = 0.33f;
+                tekstVreme.setLayoutParams(tekstVremeParms);
                 tekstVreme.setPaddingRelative(paddingStart, 0, 0, 0);
                 tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
-                tekstVreme.setLayoutParams(tekstNazivRaskrsniceParms);
                 tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                 layoutInformacije.addView(tekstVreme);
                 //CheckBox
-                width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 CheckBox checkBox = new CheckBox(getContext());
                 LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(
-                        width,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        0.05f
                 );
-                checkBoxParms.weight = 0.05f;
                 checkBoxParms.gravity = Gravity.CENTER_VERTICAL;
                 checkBox.setLayoutParams(checkBoxParms);
                 checkBox.setId(CHECKBOX_ID+i);
