@@ -59,7 +59,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDownTimer;
     private int kvantum = 0;
     private int trajanje = 1;
-    private int[][][] brojVozila = new int[4][3][10]; //4 kvantuma * 3 smera * 10 vozila
+    private int[][][] brojVozila;
     private boolean[] ukljucenSmer = {false, false, false};
 
     String nazivRaskrsnice, datum, vreme;
@@ -83,7 +83,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             //TextView header = (TextView) findViewById(R.id.textHeader);
             //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
-
+            brojVozila = new int[4*trajanje][3][10]; //4 kvantuma * 3 smera * 10 vozila
             // @drawable/circle
             if (!Levo.equals("0")) ukljucenSmer[0] = true;
             if (!Pravo.equals("0")) ukljucenSmer[1] = true;

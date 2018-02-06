@@ -69,8 +69,21 @@ public class DataBaseFragment extends Fragment {
                                         LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID+id);
                                         ln.setVisibility(View.GONE);
                                         obrisiJSONelement(id);
+                                        checkBox.setId(0);
+                                        ln.setId(0);
+                                        //ToDo Optimalniji nacin je da se broji koliko je bilo brisanja i da se shiftuje za toliko mesta
+                                        for (int j = id; j < brojMerenja-1; j++) {
+                                            CheckBox checkBox1 = (CheckBox) rootView.findViewById(CHECKBOX_ID+j+1);
+                                            checkBox1.setId(CHECKBOX_ID+j);
+                                            LinearLayout ln2 = (LinearLayout) rootView.findViewById(LAYOUT_ID+j+1);
+                                            ln2.setId(LAYOUT_ID+j);
+                                        }
+                                        brojMerenja--;
+                                        if(brojMerenja == 0)
+                                            ispisiGresku(rootView);
                                     }
                                 }
+
                             }
                         })
                         .setNegativeButton("Ne", null)
@@ -94,6 +107,7 @@ public class DataBaseFragment extends Fragment {
                         editor.apply();
                     }
                 } catch (JSONException e) {
+                    ispisiGresku(rootView);
                     e.printStackTrace();
                 }
             }
@@ -243,9 +257,27 @@ public class DataBaseFragment extends Fragment {
                 checkBox.setId(CHECKBOX_ID+i);
                 cbLayout.addView(checkBox);
             }
+            if(brojMerenja == 0)
+                ispisiGresku(view);
         } catch (JSONException e) {
+            ispisiGresku(view);
             e.printStackTrace();
         }
+
+    }
+
+    private void ispisiGresku(View view) {
+        LinearLayout myLayout = (LinearLayout) view.findViewById(R.id.layoutBazaGlavni);
+        TextView tekstGreska = new TextView(getContext());
+        LinearLayout.LayoutParams tekstGreskaParms = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        );
+        tekstGreska.setLayoutParams(tekstGreskaParms);
+        tekstGreska.setText("Ooops! Nismo pronašli ništa u bazu.");
+        tekstGreska.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        tekstGreska.setTextColor(Color.parseColor("#B9B9B9"));
+        myLayout.addView(tekstGreska);
 
     }
 

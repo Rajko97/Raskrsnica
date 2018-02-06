@@ -12,10 +12,10 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
+        android:id="@+id/layoutBazaGlavni"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
 
         <LinearLayout
@@ -23,25 +23,25 @@
             android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
+            android:background="@drawable/background_baza_layout"
             android:gravity="right|center_vertical"
-            android:background="@drawable/background_baza_layout">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btUpload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_upload_color"
+                android:layout_marginRight="15dp"
                 android:background="#ffffff"
-                android:layout_marginRight="15dp"/>
+                android:src="@drawable/ic_upload_color" />
 
             <ImageButton
                 android:id="@+id/btDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_kanta"
+                android:layout_marginLeft="15dp"
                 android:background="#ffffff"
-                android:layout_marginLeft="15dp"/>
+                android:src="@drawable/ic_kanta" />
 
 
         </LinearLayout>
@@ -56,8 +56,7 @@
                 android:id="@+id/LayoutBaza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
         </ScrollView>
 
     </LinearLayout>
