@@ -138,7 +138,6 @@ public class DataBaseFragment extends Fragment {
                 LinearLayout glavniLayout = new LinearLayout(getContext());
                 glavniLayout.setLayoutParams(myNewLayout);
                 glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
-                glavniLayout.setPadding(0, 0,  padding, 0);
                 glavniLayout.setBackgroundResource(R.drawable.background_baza_layout);
                 glavniLayout.setId(LAYOUT_ID+i);
                 myLayout.addView(glavniLayout);
@@ -230,16 +229,19 @@ public class DataBaseFragment extends Fragment {
                 tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                 layoutInformacije.addView(tekstVreme);
                 //CheckBox
+                LinearLayout cbLayout=new LinearLayout(getContext());
+
+                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.05f);
+                cbLayout.setLayoutParams(layoutParams);
+                glavniLayout.addView(cbLayout);
                 CheckBox checkBox = new CheckBox(getContext());
-                LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        0.05f
-                );
-                checkBoxParms.gravity = Gravity.CENTER_VERTICAL;
+                int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
+                checkBoxParms.gravity = Gravity.CENTER;
+                checkBox.setButtonDrawable(R.drawable.checkbox_background);
                 checkBox.setLayoutParams(checkBoxParms);
                 checkBox.setId(CHECKBOX_ID+i);
-                glavniLayout.addView(checkBox);
+                cbLayout.addView(checkBox);
             }
         } catch (JSONException e) {
             e.printStackTrace();
