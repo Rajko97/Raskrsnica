@@ -7,9 +7,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,13 +49,17 @@ public class DataBaseFragment extends Fragment {
     public DataBaseFragment() {
         // Required empty public constructor
     }
-
+    int brojCekiranih = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
 
         ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
         ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
+        dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+        dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+        dugmeObisi.setClickable(false);
+        dugmeBaza.setClickable(false);
         dugmeObisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,7 +137,7 @@ public class DataBaseFragment extends Fragment {
         return rootView;
     }
 
-    private void loadData(View view) {
+    private void loadData(final View view) {
         StringBuilder builder = new StringBuilder();
 
         try {
@@ -248,13 +256,41 @@ public class DataBaseFragment extends Fragment {
                 LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.05f);
                 cbLayout.setLayoutParams(layoutParams);
                 glavniLayout.addView(cbLayout);
-                CheckBox checkBox = new CheckBox(getContext());
+                final CheckBox checkBox = new CheckBox(getContext());
                 int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
                 checkBoxParms.gravity = Gravity.CENTER;
                 checkBox.setButtonDrawable(R.drawable.checkbox_background);
                 checkBox.setLayoutParams(checkBoxParms);
                 checkBox.setId(CHECKBOX_ID+i);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(brojCekiranih == 0)
+                        {
+                            ImageButton dugmeObisi = (ImageButton) view.findViewById(R.id.btDelete);
+                            ImageButton dugmeBaza = (ImageButton) view.findViewById(R.id.btUpload);
+                            dugmeObisi.setColorFilter(Color.parseColor("#D90647"), PorterDuff.Mode.SRC_ATOP);
+                            dugmeBaza.setColorFilter(Color.parseColor("#D90647"), PorterDuff.Mode.SRC_ATOP);
+                            dugmeObisi.setClickable(true);
+                            dugmeBaza.setClickable(true);
+
+                        }
+                        if (checkBox.isChecked())
+                            brojCekiranih++;
+                        else
+                            brojCekiranih--;
+                        if(brojCekiranih == 0)
+                        {
+                            ImageButton dugmeObisi = (ImageButton) view.findViewById(R.id.btDelete);
+                            ImageButton dugmeBaza = (ImageButton) view.findViewById(R.id.btUpload);
+                            dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                            dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                            dugmeObisi.setClickable(false);
+                            dugmeBaza.setClickable(false);
+                        }
+                    }
+                });
                 cbLayout.addView(checkBox);
             }
             if(brojMerenja == 0)
