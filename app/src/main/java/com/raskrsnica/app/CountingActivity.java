@@ -163,8 +163,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                         start();
                     } else {
                         SacuvajPodatke();
-                        Intent i = getIntent();
-                        setResult(RESULT_OK, i);
+                        setResult(RESULT_OK, getIntent());
                         finish();
                     }
                 }
@@ -187,6 +186,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                merenje.put("Naziv", nazivRaskrsnice);
                merenje.put("Datum", datum);
                merenje.put("Vreme", vreme);
+               //todo Da se ubace merenja
            } catch (JSONException e) {
                e.printStackTrace();
            }

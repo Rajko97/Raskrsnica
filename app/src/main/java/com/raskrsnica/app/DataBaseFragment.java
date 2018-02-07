@@ -86,10 +86,20 @@ public class DataBaseFragment extends Fragment {
                                             ln2.setId(LAYOUT_ID+j);
                                         }
                                         brojMerenja--;
+                                        brojCekiranih--;
                                         id--;
                                         if(brojMerenja == 0)
                                             ispisiGresku(rootView);
                                     }
+                                }
+                                if(brojCekiranih == 0)
+                                {
+                                    ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+                                    ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
+                                    dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                                    dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                                    dugmeObisi.setClickable(false);
+                                    dugmeBaza.setClickable(false);
                                 }
 
                             }
