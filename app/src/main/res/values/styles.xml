@@ -19,12 +19,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
-    <style name="stil2">
+    <style name="stil2" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">0.3</item>
         <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:background">@drawable/circle</item>
+        <item name="android:background">@drawable/clicked_button_background</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">5dp</item>
