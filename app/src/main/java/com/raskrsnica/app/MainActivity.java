@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQ_CODE  && resultCode == RESULT_OK ) {
             postaviFragment(FRAGMENT_DATABASE);
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Uputstvo!")
+                    .setMessage("Merenje je završeno. Izaberite podatke i kliknite na dugme za slanje na server.")
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null)
+                    .show();
         }
     }
     private void postaviFragment(int fragmentID) {
