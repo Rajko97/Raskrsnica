@@ -58,8 +58,6 @@ public class DataBaseFragment extends Fragment {
         ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
         dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
         dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-        dugmeObisi.setClickable(false);
-        dugmeBaza.setClickable(false);
         dugmeObisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +130,8 @@ public class DataBaseFragment extends Fragment {
                         .show();
             }
         });
-
+        dugmeObisi.setClickable(false);
+        dugmeBaza.setClickable(false);
         loadData(rootView);
         return rootView;
     }
