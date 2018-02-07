@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -85,6 +86,7 @@ public class DataBaseFragment extends Fragment {
                                             ln2.setId(LAYOUT_ID+j);
                                         }
                                         brojMerenja--;
+                                        id--;
                                         if(brojMerenja == 0)
                                             ispisiGresku(rootView);
                                     }
