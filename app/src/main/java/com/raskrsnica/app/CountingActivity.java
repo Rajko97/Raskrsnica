@@ -190,10 +190,14 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
            } catch (JSONException e) {
                e.printStackTrace();
            }
-           merenja.put(merenje);
+
+           JSONArray noviJson = new JSONArray();
+           noviJson.put(merenje);
+           for(int i = 0; i < merenja.length(); i++)
+              noviJson.put(merenja.get(i));
 
            SharedPreferences.Editor editor = sharedPref.edit();
-           editor.putString("MerenjaJSON", merenja.toString());
+           editor.putString("MerenjaJSON", noviJson.toString());
            editor.apply();
 
        } catch (JSONException e) {
