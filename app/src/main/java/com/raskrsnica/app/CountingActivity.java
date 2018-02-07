@@ -148,7 +148,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             countDownTimer = new CountDownTimer(10000, 1000) {
                 @Override
                 public void onTick(long l) {
-                    timer.setText("" + String.format("%d : %d ", TimeUnit.MILLISECONDS.toMinutes(l),
+                    timer.setText("" + String.format("%02d : %02d ", TimeUnit.MILLISECONDS.toMinutes(l),
                             TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
                 }
 
