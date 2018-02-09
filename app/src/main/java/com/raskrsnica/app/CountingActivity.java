@@ -39,6 +39,9 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -156,6 +159,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 public void onFinish() {
                     if (kvantum < (trajanje*4-1)) {
                         kvantum++;
+                        if(kvantum % 4 == 0)
+                            SacuvajPodatke();
                         for (int i = 0; i < textViews.length; i++)
                             if (ukljucenSmer[i])
                                 for (int j = 0; j < textViews[0].length; j++)
@@ -175,26 +180,33 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
        try {
            String jsonData = sharedPref.getString("MerenjaJSON", "0");
            JSONArray merenja;
-           if(!jsonData.equals("0"))
+           if (!jsonData.equals("0"))
                merenja = new JSONArray(jsonData);
            else
                merenja = new JSONArray();
 
+           JSONArray noviJson = new JSONArray();
            JSONObject merenje = new JSONObject();
 
            try {
                merenje.put("Naziv", nazivRaskrsnice);
                merenje.put("Datum", datum);
                merenje.put("Vreme", vreme);
-               //todo Da se ubace merenja
+
+               SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+               Date vremePlusSat = format.parse(vreme);
+
+
+                   //todo Da se ubace merenja
            } catch (JSONException e) {
                e.printStackTrace();
+           } catch (ParseException e) {
+               e.printStackTrace();
            }
-
-           JSONArray noviJson = new JSONArray();
            noviJson.put(merenje);
-           for(int i = 0; i < merenja.length(); i++)
-              noviJson.put(merenja.get(i));
+
+           for (int i = 0; i < merenja.length(); i++)
+               noviJson.put(merenja.get(i));
 
            SharedPreferences.Editor editor = sharedPref.edit();
            editor.putString("MerenjaJSON", noviJson.toString());
