@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="520dp"
-        android:layout_height="960dp"
+        android:layout_height="940dp"
         android:orientation="vertical"
         android:paddingTop="100dp"
         android:paddingBottom="100dp"

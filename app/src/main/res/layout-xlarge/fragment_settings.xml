@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.raskrsnica.app.SettingsFragment"
-    android:paddingLeft="60dp"
-    android:paddingRight="60dp"
+    android:paddingLeft="70dp"
+    android:paddingRight="70dp"
     android:paddingBottom="10dp"
     android:orientation="vertical">
     <LinearLayout
@@ -22,7 +22,7 @@
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
                 android:popupBackground="@drawable/spinner_popup_background"
                 android:background="@drawable/spinner_background"
@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:text="Informacije:"
                     android:textColor="#D90647"
-                    android:textSize="20dp"/>
+                    android:textSize="30dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Raskrsnica:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"/>
 
                 <TextView
@@ -89,7 +89,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Brojačko mesto:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"
                     />
 
@@ -114,7 +114,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Datum merenja:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"/>
 
                 <TextView
@@ -138,7 +138,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Početak merenja:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"/>
 
                 <TextView
@@ -162,7 +162,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trajanje merenja:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"/>
 
                 <TextView
@@ -186,7 +186,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Smerovi:"
-                    android:textSize="20dp"
+                    android:textSize="30dp"
                     android:textColor="#D90647"/>
 
                 <TextView
@@ -209,7 +209,7 @@
                     android:paddingStart="5dp"
                     android:text="-"
                     android:textColor="#000000"
-                    android:textSize="20dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -223,13 +223,13 @@
 
             <Button
                 android:id="@+id/btNext"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
                 android:background="@drawable/spinner_background"
                 android:text="Start"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="25dp"
+                android:textSize="35dp"
                 />
         </LinearLayout>
     </LinearLayout>
