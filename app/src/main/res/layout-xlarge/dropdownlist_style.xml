@@ -9,8 +9,8 @@
     android:textSize="30dp"
     android:textColor="#ffffff"
     android:background="@drawable/spiner_items_background"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
     android:paddingBottom="15dp"
     android:paddingTop="15dp"
     />

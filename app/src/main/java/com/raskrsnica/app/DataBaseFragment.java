@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Dimension;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
@@ -37,6 +39,7 @@ import org.w3c.dom.Text;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.Scanner;
+import java.util.concurrent.CancellationException;
 
 
 /**
@@ -54,7 +57,6 @@ public class DataBaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
-
         ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
         ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
         dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
@@ -162,117 +164,243 @@ public class DataBaseFragment extends Fragment {
             for (int i = 0; i < brojMerenja;  i++) {
                 //Pravimo novi element
                 JSONObject merenje = merenja.getJSONObject(i);
-
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
-                int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        width);
-                LinearLayout glavniLayout = new LinearLayout(getContext());
-                glavniLayout.setLayoutParams(myNewLayout);
-                glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
-                glavniLayout.setBackgroundResource(R.drawable.background_baza_layout);
-                glavniLayout.setId(LAYOUT_ID+i);
-                myLayout.addView(glavniLayout);
-                //Ikonica na pocetku
                 ImageView ikonica = new ImageView(getContext());
-                LinearLayout.LayoutParams ikonicaParms = new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        0.05f
-                );
-                ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
-                ikonica.setLayoutParams(ikonicaParms);
-                ikonica.setImageResource(R.drawable.ic_calendar_color);
-                glavniLayout.addView(ikonica);
-                //LayoutInformacije
-                LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0.90f
-                );
+                LinearLayout glavniLayout = new LinearLayout(getContext());
                 LinearLayout layoutInformacije = new LinearLayout(getContext());
-                layoutInformacije.setLayoutParams(layoutInformacijeParms);
-                layoutInformacije.setOrientation(LinearLayout.VERTICAL);
-                glavniLayout.addView(layoutInformacije);
-                //Layout za Naziv Raskrsnice
-                LinearLayout.LayoutParams layoutNazivParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0,
-                        0.33f
-                );
                 LinearLayout layoutNaziv = new LinearLayout(getContext());
-                layoutNaziv.setLayoutParams(layoutNazivParms);
-                layoutNaziv.setOrientation(LinearLayout.HORIZONTAL);
-                int paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-                layoutNaziv.setPaddingRelative(paddingStart, 0, 0, 0);
-                layoutNaziv.setGravity(Gravity.CENTER_VERTICAL);
-                layoutInformacije.addView(layoutNaziv);
-                //Tekst "Raskrsnica:"
                 TextView tekstRaskrsnica = new TextView(getContext());
-                LinearLayout.LayoutParams tekstRaskrsnicaParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                tekstRaskrsnica.setLayoutParams(tekstRaskrsnicaParms);
-                tekstRaskrsnica.setGravity(Gravity.CENTER_VERTICAL);
-                tekstRaskrsnica.setText("Raskrsnica:");
-                tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
-                tekstRaskrsnica.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                tekstRaskrsnica.setTypeface(Typeface.DEFAULT_BOLD);
-                layoutNaziv.addView(tekstRaskrsnica);
-                //Tekst Naziv raskrsnice
-                paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
                 TextView tekstNazivRaskrsnice = new TextView(getContext());
-                LinearLayout.LayoutParams tekstNazivRaskrsniceParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                tekstNazivRaskrsnice.setLayoutParams(tekstNazivRaskrsniceParms);
-                tekstNazivRaskrsnice.setGravity(Gravity.CENTER_VERTICAL);
-                tekstNazivRaskrsnice.setPaddingRelative(paddingStart, 0, 0, 0);
-                tekstNazivRaskrsnice.setText(merenje.getString("Naziv"));
-                tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
-                tekstNazivRaskrsnice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                layoutNaziv.addView(tekstNazivRaskrsnice);
-                //Tekst Datum
-                paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
                 TextView tekstDatum = new TextView(getContext());
-                LinearLayout.LayoutParams tekstDatumParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0,
-                        0.33f
-                );
-                tekstDatum.setLayoutParams(tekstDatumParms);
-                tekstDatum.setPaddingRelative(paddingStart, 0, 0, 0);
-                tekstDatum.setText("Datum: "+merenje.getString("Datum"));
-                tekstDatum.setGravity(Gravity.CENTER_VERTICAL);
-                layoutInformacije.addView(tekstDatum);
-                //Tekst Vreme
-                paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
                 TextView tekstVreme = new TextView(getContext());
-                LinearLayout.LayoutParams tekstVremeParms = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0,
-                        0.33f
-                );
-                tekstVreme.setLayoutParams(tekstVremeParms);
-                tekstVreme.setPaddingRelative(paddingStart, 0, 0, 0);
-                tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
-                tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
-                layoutInformacije.addView(tekstVreme);
-                //CheckBox
                 LinearLayout cbLayout=new LinearLayout(getContext());
-
-                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.05f);
-                cbLayout.setLayoutParams(layoutParams);
-                glavniLayout.addView(cbLayout);
                 final CheckBox checkBox = new CheckBox(getContext());
-                int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
-                checkBoxParms.gravity = Gravity.CENTER;
-                checkBox.setButtonDrawable(R.drawable.checkbox_background);
-                checkBox.setLayoutParams(checkBoxParms);
+
+                if((getResources().getConfiguration().screenLayout &
+                        Configuration.SCREENLAYOUT_SIZE_XLARGE) ==
+                        Configuration.SCREENLAYOUT_SIZE_XLARGE){
+                    int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                    int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+                    LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            height);
+
+                    glavniLayout.setLayoutParams(myNewLayout);
+                    glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    glavniLayout.setBackgroundResource(R.drawable.background_baza_layout);
+                    glavniLayout.setId(LAYOUT_ID+i);
+                    myLayout.addView(glavniLayout);
+                    //Ikonica na pocetku
+
+                    LinearLayout.LayoutParams ikonicaParms = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            0.06f
+                    );
+                    ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
+                    ikonica.setLayoutParams(ikonicaParms);
+                    ikonica.setImageResource(R.drawable.ic_calendar_color_x);
+                    glavniLayout.addView(ikonica);
+                    //LayoutInformacije
+                    LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.86f
+                    );
+
+                    layoutInformacije.setLayoutParams(layoutInformacijeParms);
+                    layoutInformacije.setOrientation(LinearLayout.VERTICAL);
+                    glavniLayout.addView(layoutInformacije);
+                    //Layout za Naziv Raskrsnice
+                    LinearLayout.LayoutParams layoutNazivParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+
+                    layoutNaziv.setLayoutParams(layoutNazivParms);
+                    layoutNaziv.setOrientation(LinearLayout.HORIZONTAL);
+                    int paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+                    layoutNaziv.setPaddingRelative(paddingStart, 0, 0, 0);
+                    layoutNaziv.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(layoutNaziv);
+                    //Tekst "Raskrsnica:"
+
+                    LinearLayout.LayoutParams tekstRaskrsnicaParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    tekstRaskrsnica.setLayoutParams(tekstRaskrsnicaParms);
+                    tekstRaskrsnica.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstRaskrsnica.setText("Raskrsnica:");
+                    tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
+                    tekstRaskrsnica.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+                    tekstRaskrsnica.setTypeface(Typeface.DEFAULT_BOLD);
+                    layoutNaziv.addView(tekstRaskrsnica);
+                    //Tekst Naziv raskrsnice
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstNazivRaskrsniceParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    tekstNazivRaskrsnice.setLayoutParams(tekstNazivRaskrsniceParms);
+                    tekstNazivRaskrsnice.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstNazivRaskrsnice.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstNazivRaskrsnice.setText(merenje.getString("Naziv"));
+                    tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
+                    tekstNazivRaskrsnice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+                    layoutNaziv.addView(tekstNazivRaskrsnice);
+                    //Tekst Datum
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstDatumParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+                    tekstDatum.setLayoutParams(tekstDatumParms);
+                    tekstDatum.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstDatum.setText("Datum: "+merenje.getString("Datum"));
+                    tekstDatum.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    tekstDatum.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(tekstDatum);
+                    //Tekst Vreme
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstVremeParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+                    tekstVreme.setLayoutParams(tekstVremeParms);
+                    tekstVreme.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
+                    tekstDatum.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(tekstVreme);
+                    //CheckBox
+
+                    LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.08f);
+                    cbLayout.setLayoutParams(layoutParams);
+                    cbLayout.setGravity( Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+                    glavniLayout.addView(cbLayout);
+
+                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
+                    LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
+                    checkBox.setButtonDrawable(R.drawable.checkbox_background_xlarge);
+                    checkBox.setLayoutParams(checkBoxParms);
+
+                }else{
+                    int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
+                    int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+                    LinearLayout.LayoutParams myNewLayout = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,width);
+
+                    glavniLayout.setLayoutParams(myNewLayout);
+                    glavniLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    glavniLayout.setBackgroundResource(R.drawable.background_baza_layout);
+                    glavniLayout.setId(LAYOUT_ID+i);
+                    myLayout.addView(glavniLayout);
+                    //Ikonica na pocetku
+
+                    LinearLayout.LayoutParams ikonicaParms = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            0.06f
+                    );
+                    ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
+                    ikonica.setLayoutParams(ikonicaParms);
+                    ikonica.setImageResource(R.drawable.ic_calendar_color);
+                    glavniLayout.addView(ikonica);
+                    //LayoutInformacije
+                    LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.87f
+                    );
+
+                    layoutInformacije.setLayoutParams(layoutInformacijeParms);
+                    layoutInformacije.setOrientation(LinearLayout.VERTICAL);
+                    glavniLayout.addView(layoutInformacije);
+                    //Layout za Naziv Raskrsnice
+                    LinearLayout.LayoutParams layoutNazivParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+
+                    layoutNaziv.setLayoutParams(layoutNazivParms);
+                    layoutNaziv.setOrientation(LinearLayout.HORIZONTAL);
+                    int paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+                    layoutNaziv.setPaddingRelative(paddingStart, 0, 0, 0);
+                    layoutNaziv.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(layoutNaziv);
+                    //Tekst "Raskrsnica:"
+
+                    LinearLayout.LayoutParams tekstRaskrsnicaParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    tekstRaskrsnica.setLayoutParams(tekstRaskrsnicaParms);
+                    tekstRaskrsnica.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstRaskrsnica.setText("Raskrsnica:");
+                    tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
+                    tekstRaskrsnica.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    tekstRaskrsnica.setTypeface(Typeface.DEFAULT_BOLD);
+                    layoutNaziv.addView(tekstRaskrsnica);
+                    //Tekst Naziv raskrsnice
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstNazivRaskrsniceParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    tekstNazivRaskrsnice.setLayoutParams(tekstNazivRaskrsniceParms);
+                    tekstNazivRaskrsnice.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstNazivRaskrsnice.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstNazivRaskrsnice.setText(merenje.getString("Naziv"));
+                    tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
+                    tekstNazivRaskrsnice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    layoutNaziv.addView(tekstNazivRaskrsnice);
+                    //Tekst Datum
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstDatumParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+                    tekstDatum.setLayoutParams(tekstDatumParms);
+                    tekstDatum.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstDatum.setText("Datum: "+merenje.getString("Datum"));
+                    tekstDatum.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(tekstDatum);
+                    //Tekst Vreme
+                    paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+                    LinearLayout.LayoutParams tekstVremeParms = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            0.33f
+                    );
+                    tekstVreme.setLayoutParams(tekstVremeParms);
+                    tekstVreme.setPaddingRelative(paddingStart, 0, 0, 0);
+                    tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
+                    tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
+                    layoutInformacije.addView(tekstVreme);
+                    //CheckBox
+
+                    LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.07f);
+                    cbLayout.setLayoutParams(layoutParams);
+                    cbLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+                    glavniLayout.addView(cbLayout);
+
+                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+                    LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
+                    checkBox.setButtonDrawable(R.drawable.checkbox_background);
+                    checkBox.setLayoutParams(checkBoxParms);
+                }
+
                 checkBox.setId(CHECKBOX_ID+i);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
