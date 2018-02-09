@@ -8,6 +8,6 @@
     android:singleLine="true"
     android:textSize="30dp"
     android:textColor="#ffffff"
-    android:drawableRight="@drawable/ic_down_arrow"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp" />
+    android:drawableRight="@drawable/ic_down_arrow_x"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp" />
