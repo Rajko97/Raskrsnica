@@ -6,7 +6,7 @@
     tools:context="com.raskrsnica.app.SettingsFragment"
     android:paddingLeft="70dp"
     android:paddingRight="70dp"
-    android:paddingBottom="10dp"
+    android:paddingBottom="20dp"
     android:orientation="vertical">
     <LinearLayout
         android:orientation="vertical"

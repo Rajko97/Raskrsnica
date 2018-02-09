@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:background="#ffffff"
+    tools:context="com.raskrsnica.app.CountingActivity"
+    android:keepScreenOn="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:gravity="center"
+            android:background="@drawable/timer_bg"
+            android:orientation="vertical"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
+
+            >
+
+            <TextView
+                android:id="@+id/kvantum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="45dp"
+                android:textStyle="bold"
+                android:textColor="#D90647"
+                android:textAlignment="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+
+                <ImageView
+                    android:id="@+id/imgStrelicaLevo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_left_circle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL1"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVL1"
+                    style="@style/stil2_xlarge"
+                    android:drawableStart="@drawable/ic_bicikl_x"
+                    android:text="Bicikl"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL2"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL2"
+                    style="@style/stil2_xlarge"
+                    android:drawableStart="@drawable/ic_motor_x"
+                    android:text="Motor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL3"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL3"
+                    android:drawableStart="@drawable/ic_auto_x"
+                    android:text="Automobil"
+                    style="@style/stil2_xlarge"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL4"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL4"
+                    style="@style/stil2_xlarge"
+                    android:drawableStart="@drawable/ic_autobus_x"
+                    android:text="Autobus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL5"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL5"
+                    android:drawableStart="@drawable/ic_laka_teretna_x"
+                    android:text="Laka teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL6"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVL6"
+                    android:drawableStart="@drawable/ic_srednja_teretna_x"
+                    android:text="Srednja teretna"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL7"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL7"
+                    android:drawableStart="@drawable/ic_teska_teretna_x"
+                    android:text="Teška teretna"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL8"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVL8"
+                    android:drawableStart="@drawable/ic_autovoz_x"
+                    android:text="Autovoz"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL9"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL9"
+                    android:drawableStart="@drawable/ic_traktor_x"
+                    android:text="Traktor"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVL10"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVL10"
+                    android:drawableStart="@drawable/ic_zaprega_x"
+                    android:text="Zaprega"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imgStrelicaPravo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP1"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVP1"
+                    android:drawableStart="@drawable/ic_bicikl_x"
+                    android:text="Bicikl"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP2"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVP2"
+                    android:drawableStart="@drawable/ic_motor_x"
+                    android:text="Motor"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP3"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVP3"
+                    android:drawableStart="@drawable/ic_auto_x"
+                    android:text="Automobil"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP4"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVP4"
+                    android:drawableStart="@drawable/ic_autobus_x"
+                    android:text="Autobus"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP5"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVP5"
+                    android:drawableStart="@drawable/ic_laka_teretna_x"
+                    android:text="Laka teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP6"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVP6"
+                    android:drawableStart="@drawable/ic_srednja_teretna_x"
+                    android:text="Srednja teretna"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP7"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVP7"
+                    android:drawableStart="@drawable/ic_teska_teretna_x"
+                    android:text="Teška teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP8"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVP8"
+                    android:drawableStart="@drawable/ic_autovoz_x"
+                    android:text="Autovoz"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP9"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVP9"
+                    android:drawableStart="@drawable/ic_traktor_x"
+                    android:text="Traktor"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:background="@drawable/border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVP10"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVP10"
+                    android:drawableStart="@drawable/ic_zaprega_x"
+                    android:text="Zaprega"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imgStrelicaDesno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_right_circle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD1"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD1"
+                    android:text="Bicikl"
+                    android:drawableStart="@drawable/ic_bicikl_x"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD2"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD2"
+                    android:drawableStart="@drawable/ic_motor_x"
+                    android:text="Motor"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD3"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD3"
+                    android:drawableStart="@drawable/ic_auto_x"
+                    android:text="Automobil"
+                    style="@style/stil2_xlarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD4"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVD4"
+                    android:drawableStart="@drawable/ic_autobus_x"
+                    android:text="Autobus"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD5"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD5"
+                    android:drawableStart="@drawable/ic_laka_teretna_x"
+                    android:text="Laka teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD6"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD6"
+                    android:drawableStart="@drawable/ic_srednja_teretna_x"
+                    android:text="Srednja teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD7"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD7"
+                    android:drawableStart="@drawable/ic_teska_teretna_x"
+                    android:text="Teška teretna"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD8"
+                    style="@style/stil1_xlarge"/>
+
+                <Button
+                    android:id="@+id/btnVD8"
+                    android:drawableStart="@drawable/ic_autovoz_x"
+                    android:text="Autovoz"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD9"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD9"
+                    android:drawableStart="@drawable/ic_traktor_x"
+                    android:text="Traktor"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.09"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/txtVD10"
+                    style="@style/stil1_xlarge" />
+
+                <Button
+                    android:id="@+id/btnVD10"
+                    android:drawableStart="@drawable/ic_zaprega_x"
+                    android:text="Zaprega"
+                    style="@style/stil2_xlarge"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
