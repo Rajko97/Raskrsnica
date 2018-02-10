@@ -181,7 +181,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
    private void SacuvajPodatke() {
        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
        try {
-           String jsonData = sharedPref.getString("MerenjaJSON", "0");
+           String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+           String jsonData = sharedPref.getString("Merenja"+korisnik, "0");
            JSONArray merenja;
            if (!jsonData.equals("0"))
                merenja = new JSONArray(jsonData);
@@ -223,7 +224,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                noviJson.put(merenja.get(i));
 
            SharedPreferences.Editor editor = sharedPref.edit();
-           editor.putString("MerenjaJSON", noviJson.toString());
+           editor.putString("Merenja"+korisnik, noviJson.toString());
            editor.apply();
 
        } catch (JSONException e) {

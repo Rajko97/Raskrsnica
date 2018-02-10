@@ -155,8 +155,8 @@ public class DataBaseFragment extends Fragment {
 
         try {
             SharedPreferences sharedPref = this.getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-
-            JSONArray merenja = new JSONArray(sharedPref.getString("MerenjaJSON", "0"));
+            String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+            JSONArray merenja = new JSONArray(sharedPref.getString("Merenja"+korisnik, "0"));
             //odavde
             myLayout = (LinearLayout) view.findViewById(R.id.LayoutBaza);
 
