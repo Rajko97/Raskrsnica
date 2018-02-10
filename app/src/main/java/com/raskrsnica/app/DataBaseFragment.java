@@ -275,7 +275,7 @@ public class DataBaseFragment extends Fragment {
                     tekstVreme.setLayoutParams(tekstVremeParms);
                     tekstVreme.setPaddingRelative(paddingStart, 0, 0, 0);
                     tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
-                    tekstDatum.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    tekstVreme.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                     layoutInformacije.addView(tekstVreme);
                     //CheckBox
@@ -285,7 +285,7 @@ public class DataBaseFragment extends Fragment {
                     cbLayout.setGravity( Gravity.CENTER_VERTICAL|Gravity.RIGHT);
                     glavniLayout.addView(cbLayout);
 
-                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
+                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
                     LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
                     checkBox.setButtonDrawable(R.drawable.checkbox_background_xlarge);
                     checkBox.setLayoutParams(checkBoxParms);
