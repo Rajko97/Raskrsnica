@@ -41,8 +41,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
@@ -194,8 +197,19 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                merenje.put("Vreme", vreme);
 
                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-               Date vremePlusSat = format.parse(vreme);
-
+               Date pocetnoVreme = format.parse(vreme);
+               //todo getTime vraca 1 sat manje??
+               long trenutnoVreme = (pocetnoVreme.getTime()+2*1000*60*60)/1000;
+               int hours = (int) (trenutnoVreme / 3600)%24;
+               vreme = hours+":00";
+               if(vreme.equals("0:00"))
+               {
+                   format = new SimpleDateFormat("d.M.yyyy");
+                   Calendar cal = Calendar.getInstance();
+                   cal.setTime(format.parse(datum));
+                   cal.add(Calendar.DATE, 1);
+                   datum = format.format(cal.getTime());
+               }
 
                    //todo Da se ubace merenja
            } catch (JSONException e) {
