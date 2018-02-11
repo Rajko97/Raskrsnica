@@ -7,12 +7,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -74,6 +78,7 @@ public class SettingsFragment extends Fragment {
     
     String strLevo, strPravo, strDesno;
     String[][] podaciRaskrsnice;
+    Boolean greska = false;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -95,6 +100,9 @@ public class SettingsFragment extends Fragment {
                 podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
             }
         } catch (JSONException e) {
+            greska = true;
+            podaciRaskrsnice = new String[1][1];
+            podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
             e.printStackTrace();
         }
 
@@ -123,55 +131,57 @@ public class SettingsFragment extends Fragment {
         tvPocetak = (TextView) rootView.findViewById(R.id.tvPocetak);
         tvTrajanje = (TextView) rootView.findViewById(R.id.tvTrajanje);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-               tvNaziv.setText(podaciRaskrsnice[NAZIV][i]);
-               tvBrMesto.setText(podaciRaskrsnice[BR_MESTO][i]);
-               tvDatum.setText(podaciRaskrsnice[DATUM][i]);
-               tvPocetak.setText(podaciRaskrsnice[POCETAK][i]);
-               tvTrajanje.setText(podaciRaskrsnice[TRAJANJE][i]+"h");
-               PostaviIndekseSmerova(Integer.parseInt(podaciRaskrsnice[BR_MESTO][i]));
-               tvSmerovi.setText((podaciRaskrsnice[SMER_LEVO][i].equals("1")? "Levo("+strLevo+") ":"")
-                       +(podaciRaskrsnice[SMER_PRAVO][i].equals("1")?"Pravo("+strPravo+") ":"")
-                       +(podaciRaskrsnice[SMER_DESNO][i].equals("1")?"Desno("+strDesno+") ":""));
+        if(!greska) {
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    tvNaziv.setText(podaciRaskrsnice[NAZIV][i]);
+                    tvBrMesto.setText(podaciRaskrsnice[BR_MESTO][i]);
+                    tvDatum.setText(podaciRaskrsnice[DATUM][i]);
+                    tvPocetak.setText(podaciRaskrsnice[POCETAK][i]);
+                    tvTrajanje.setText(podaciRaskrsnice[TRAJANJE][i] + "h");
+                    PostaviIndekseSmerova(Integer.parseInt(podaciRaskrsnice[BR_MESTO][i]));
+                    tvSmerovi.setText((podaciRaskrsnice[SMER_LEVO][i].equals("1") ? "Levo(" + strLevo + ") " : "")
+                            + (podaciRaskrsnice[SMER_PRAVO][i].equals("1") ? "Pravo(" + strPravo + ") " : "")
+                            + (podaciRaskrsnice[SMER_DESNO][i].equals("1") ? "Desno(" + strDesno + ") " : ""));
 
-                if (OtvorenSpiner)
-                    spinner.setBackgroundResource(R.drawable.spinner_background);
-                OtvorenSpiner=false;
-            }
-
-            private void PostaviIndekseSmerova(int pozicija) {
-                strLevo = pozicija+"."+(pozicija % 4 +1);
-                strPravo = pozicija+"."+((pozicija +1)% 4 +1);
-                strDesno = pozicija+"."+((pozicija +2)% 4 +1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                if(OtvorenSpiner)
-                    spinner.setBackgroundResource(R.drawable.spinner_background);
-                OtvorenSpiner=false;
-            }
-        });
-
-        spinner.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if(OtvorenSpiner) {
+                    if (OtvorenSpiner)
                         spinner.setBackgroundResource(R.drawable.spinner_background);
-                        OtvorenSpiner = false;
-                    }
-                    else {
-                        spinner.setBackgroundResource(R.drawable.spinner_background2);
-                        OtvorenSpiner = true;
-                    }
+                    OtvorenSpiner = false;
                 }
-                return false;
-            }
-        });
 
+                private void PostaviIndekseSmerova(int pozicija) {
+                    strLevo = pozicija + "." + (pozicija % 4 + 1);
+                    strPravo = pozicija + "." + ((pozicija + 1) % 4 + 1);
+                    strDesno = pozicija + "." + ((pozicija + 2) % 4 + 1);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    if (OtvorenSpiner)
+                        spinner.setBackgroundResource(R.drawable.spinner_background);
+                    OtvorenSpiner = false;
+                }
+            });
+
+            spinner.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        if (OtvorenSpiner) {
+                            spinner.setBackgroundResource(R.drawable.spinner_background);
+                            OtvorenSpiner = false;
+                        } else {
+                            spinner.setBackgroundResource(R.drawable.spinner_background2);
+                            OtvorenSpiner = true;
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+        else
+            spinner.setEnabled(false);
         spinner.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -185,10 +195,21 @@ public class SettingsFragment extends Fragment {
         });
         
         Button button=(Button)rootView.findViewById(R.id.btNext);
-        button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-            @Override
-            public void onClick(View view) {
+        if (greska)
+        {
+            Drawable mDrawable = getResources().getDrawable(R.drawable.spinner_background);
+            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+            mDrawable = DrawableCompat.wrap(mDrawable);
+            int h = mDrawable.getIntrinsicHeight();
+            int w = mDrawable.getIntrinsicWidth();
+            mDrawable.setBounds(0, 0, w, h);
+            button.setBackground(mDrawable);
+        }
+        else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+                @Override
+                public void onClick(View view) {
                /* if (spinner1.getSelectedItem().equals(null)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Greska!")
@@ -232,48 +253,49 @@ public class SettingsFragment extends Fragment {
                             PokreniBrojanje();
                         }
                     }.start();*/
-                   PokreniBrojanje();
+                    PokreniBrojanje();
 
-                //}
-            }
-
-            private long getRemainingTimeinMS(int arg) {
-                SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-                Date d = new Date();
-                Date date2 = null;
-                try {
-                    //date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
-                    date2 = format.parse(("24" + ":" + "60 "+":00"));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    //}
                 }
-                long mills = d.getTime()-date2.getTime();
-                if (arg == 1)
-                    return mills;
-                else {
-                    int hours = 23-(int) ((mills/(1000 * 60 * 60) % 24));
-                    int mins = 59-(int) (mills/(1000*60)) % 60;
-                    int seconds = 59-(int) (mills/1000) % 60;
-                    return (long) (hours*60*60+mins*60+seconds)*1000;
-                }
-            }
 
-            private void PokreniBrojanje() {
-                Intent intent = new Intent(getActivity(), CountingActivity.class);
-                Bundle b = new Bundle();
-                int i = spinner.getSelectedItemPosition();
-                b.putString("RASKRSNICA", podaciRaskrsnice[NAZIV][i]);
-                b.putString("POZICIJA", podaciRaskrsnice[BR_MESTO][i]);
-                b.putString("DATUM", podaciRaskrsnice[DATUM][i]);
-                b.putString("VREME", podaciRaskrsnice[POCETAK][i]);
-                b.putString("TRAJANJE", podaciRaskrsnice[TRAJANJE][i]);
-                b.putString("SMER_LEVO", podaciRaskrsnice[SMER_LEVO][i].equals("1")?strLevo:"0");
-                b.putString("SMER_PRAVO", podaciRaskrsnice[SMER_PRAVO][i].equals("1")?strPravo:"0");
-                b.putString("SMER_DESNO", podaciRaskrsnice[SMER_DESNO][i].equals("1")?strDesno:"0");
-                intent.putExtras(b);
-                getActivity().startActivityForResult(intent, REQ_CODE);
-            }
-        });
+                private long getRemainingTimeinMS(int arg) {
+                    SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
+                    Date d = new Date();
+                    Date date2 = null;
+                    try {
+                        //date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
+                        date2 = format.parse(("24" + ":" + "60 " + ":00"));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long mills = d.getTime() - date2.getTime();
+                    if (arg == 1)
+                        return mills;
+                    else {
+                        int hours = 23 - (int) ((mills / (1000 * 60 * 60) % 24));
+                        int mins = 59 - (int) (mills / (1000 * 60)) % 60;
+                        int seconds = 59 - (int) (mills / 1000) % 60;
+                        return (long) (hours * 60 * 60 + mins * 60 + seconds) * 1000;
+                    }
+                }
+
+                private void PokreniBrojanje() {
+                    Intent intent = new Intent(getActivity(), CountingActivity.class);
+                    Bundle b = new Bundle();
+                    int i = spinner.getSelectedItemPosition();
+                    b.putString("RASKRSNICA", podaciRaskrsnice[NAZIV][i]);
+                    b.putString("POZICIJA", podaciRaskrsnice[BR_MESTO][i]);
+                    b.putString("DATUM", podaciRaskrsnice[DATUM][i]);
+                    b.putString("VREME", podaciRaskrsnice[POCETAK][i]);
+                    b.putString("TRAJANJE", podaciRaskrsnice[TRAJANJE][i]);
+                    b.putString("SMER_LEVO", podaciRaskrsnice[SMER_LEVO][i].equals("1") ? strLevo : "0");
+                    b.putString("SMER_PRAVO", podaciRaskrsnice[SMER_PRAVO][i].equals("1") ? strPravo : "0");
+                    b.putString("SMER_DESNO", podaciRaskrsnice[SMER_DESNO][i].equals("1") ? strDesno : "0");
+                    intent.putExtras(b);
+                    getActivity().startActivityForResult(intent, REQ_CODE);
+                }
+            });
+        }
         return rootView;
     }
 }

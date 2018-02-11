@@ -38,7 +38,7 @@ public class SplashScreen extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                //ucitajKorisnike();
+                ucitajKorisnike();
                 startApp();
                 finish();
             }
