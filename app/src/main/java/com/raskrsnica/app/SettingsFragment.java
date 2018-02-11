@@ -3,8 +3,10 @@ package com.raskrsnica.app;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,6 +29,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
@@ -68,11 +73,32 @@ public class SettingsFragment extends Fragment {
     boolean OtvorenSpiner = false;
     
     String strLevo, strPravo, strDesno;
+    String[][] podaciRaskrsnice;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        //TODO Da se ovaj niz stringova ucita iz baze
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+        String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+        try {
+            JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci"+korisnik, ""));
+            podaciRaskrsnice = new String[9][zadaci.length()];
+            for (int i = 0; i < zadaci.length(); i++) {
+                JSONObject zadatak = new JSONObject(zadaci.get(i).toString());
+                podaciRaskrsnice[NAZIV][i] = zadatak.getString("Raskrsnica");
+                podaciRaskrsnice[BR_MESTO][i] = zadatak.getString("BrMesto");
+                podaciRaskrsnice[DATUM][i] = zadatak.getString("Datum");
+                podaciRaskrsnice[POCETAK][i] = zadatak.getString("Vreme");
+                podaciRaskrsnice[TRAJANJE][i] = zadatak.getString("Trajanje");
+                podaciRaskrsnice[SMER_LEVO][i] = zadatak.getString("SmerLevo");
+                podaciRaskrsnice[SMER_PRAVO][i] = zadatak.getString("SmerPravo");
+                podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+       /*
         final String[][] podaciRaskrsnice=new String[][]{
                 {"Raskrsnica1","Raskrsnica2", "Raskrsnica3", "Raskrsnica4"},
                 {"2", "3", "2", "1"},
@@ -82,7 +108,7 @@ public class SettingsFragment extends Fragment {
                 {"1", "0", "1", "1"},
                 {"1", "1", "0", "1"},
                 {"1", "1", "1", "0"},
-        };
+        };*/
 
         spinner=(Spinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);

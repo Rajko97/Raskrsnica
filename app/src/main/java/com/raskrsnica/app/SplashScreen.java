@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -27,9 +28,9 @@ public class SplashScreen extends AppCompatActivity {
 
         new Thread(new Runnable(){
             public void run(){
+                //todo Da se uskladi progress bar
                 for(int i=0;i<100;i+=10) {
                     try{
-
                         Thread.sleep(150);
                         pb.setProgress(i);
                     }
@@ -37,7 +38,7 @@ public class SplashScreen extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                ucitajKorisnike();
+                //ucitajKorisnike();
                 startApp();
                 finish();
             }
@@ -52,9 +53,12 @@ public class SplashScreen extends AppCompatActivity {
         while (scanner.hasNextLine()) {
             builder.append(scanner.nextLine());
         }
-        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+        sacuvajKorisnike(builder.toString());
+    }
+    private void sacuvajKorisnike(String podaci) {
         try {
-            JSONArray korisnici = new JSONArray(builder.toString());
+            SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+            JSONArray korisnici = new JSONArray(podaci);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("Korisnici", korisnici.toString());
             editor.apply();
@@ -62,11 +66,36 @@ public class SplashScreen extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        startApp();
     }
 
     private void ucitajZadatke(JSONArray korisnici) {
+        Resources res = getResources();
+        InputStream is = res.openRawResource(R.raw.zadaci);
+        Scanner scanner = new Scanner(is);
+        StringBuilder builder = new StringBuilder();
 
+        while (scanner.hasNextLine()) {
+            builder.append(scanner.nextLine());
+        }
+        sacuvajZadatke(korisnici, builder.toString());
+    }
+
+    private void sacuvajZadatke(JSONArray korisnici, String  s) {
+        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+        try {
+            JSONObject sviZadaci = new JSONObject(s);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            for(int i = 0; i < korisnici.length(); i++) {
+                JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
+                String ime = korisnik.getString("username");
+                JSONArray zadaci = sviZadaci.getJSONArray("korisnik"+ime);
+                editor.putString("Zadaci"+ime, zadaci.toString());
+                editor.apply();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startApp(){

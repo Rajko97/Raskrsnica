@@ -1,5 +1,6 @@
 {
-	"korisnikMilan": [
+	"korisnikMilan":
+	[
 		{
 			"Raskrsnica":"Raskrsnica1",
 			"BrMesto":"2",
@@ -44,7 +45,7 @@
 	"korisnikSandra":
 	[
 		{
-			"Raskrsnica":"Raskrsnica1",
+			"Raskrsnica":"Raskrsnica5",
 			"BrMesto":"2",
 			"Datum":"5.2.2018",
 			"Vreme":"12:00",
@@ -54,7 +55,7 @@
 			"SmerDesno":"1"
 		},
 		{
-			"Raskrsnica":"Raskrsnica2",
+			"Raskrsnica":"Raskrsnica6",
 			"BrMesto":"3",
 			"Datum":"6.2.2018",
 			"Vreme":"13:00",
@@ -64,7 +65,7 @@
 			"SmerDesno":"1"
 		},
 		{
-			"Raskrsnica":"Raskrsnica3",
+			"Raskrsnica":"Raskrsnica7",
 			"BrMesto":"2",
 			"Datum":"7.2.2018",
 			"Vreme":"6:00",
@@ -74,7 +75,7 @@
 			"SmerDesno":"1"
 		},
 		{
-			"Raskrsnica":"Raskrsnica4",
+			"Raskrsnica":"Raskrsnica8",
 			"BrMesto":"1",
 			"Datum":"8.2.2018",
 			"Vreme":"23:00",
