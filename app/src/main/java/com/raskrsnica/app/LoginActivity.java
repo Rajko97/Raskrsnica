@@ -19,6 +19,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putString("UlogovanKorisnik", username.getText().toString());
                                 editor.apply();
+                                sortirajZadatke("Zadaci"+korisnik.getString("username"));
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -65,6 +74,69 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void sortirajZadatke(String bazaID) {
+        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+        try {
+            JSONArray zadaci = new JSONArray(sharedPref.getString(bazaID, ""));
+            SharedPreferences.Editor editor = sharedPref.edit();
+            JSONArray sortedJsonArray = new JSONArray();
+
+            List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+            for (int i = 0; i <zadaci.length(); i++)
+                jsonValues.add(zadaci.getJSONObject(i));
+
+            Collections.sort(jsonValues, new Comparator<JSONObject>() {
+                private static final String KEY_NAME = "Datum";
+                @Override
+                public int compare(JSONObject a, JSONObject b) {
+                    String valA = new String();
+                    String valB = new String();
+
+                    try {
+                        valA = (String) a.get(KEY_NAME);
+                        valB = (String) b.get(KEY_NAME);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (valA.equals(valB)) {
+                        try {
+                            valA = a.getString("Vreme");
+                            valB = b.getString("Vreme");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        try {
+                            Date dateA = format.parse(valA);
+                            Date dateB = format.parse(valB);
+                            return dateA.compareTo(dateB);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                    SimpleDateFormat format = new SimpleDateFormat("d.M.yyyy");
+                    Calendar calA = Calendar.getInstance();
+                    Calendar calB = Calendar.getInstance();
+                    try {
+                        calA.setTime(format.parse(valA));
+                        calB.setTime(format.parse(valB));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return calA.compareTo(calB);
+                }
+            });
+            for (int i = 0; i < zadaci.length(); i++)
+                sortedJsonArray.put(jsonValues.get(i));
+            editor.putString(bazaID, sortedJsonArray.toString());
+            editor.apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void ucitajBazu() {
