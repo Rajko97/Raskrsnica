@@ -105,23 +105,11 @@ public class SettingsFragment extends Fragment {
             podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
             e.printStackTrace();
         }
-
-       /*
-        final String[][] podaciRaskrsnice=new String[][]{
-                {"Raskrsnica1","Raskrsnica2", "Raskrsnica3", "Raskrsnica4"},
-                {"2", "3", "2", "1"},
-                {"5.2.2018", "6.2.2018", "7.2.2018", "8.2.2018"},
-                {"12:00", "13:00", "6:00", "23:00"},
-                {"2", "1", "2", "3"},
-                {"1", "0", "1", "1"},
-                {"1", "1", "0", "1"},
-                {"1", "1", "1", "0"},
-        };*/
-
         spinner=(Spinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
         adapter.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner.setAdapter(adapter);
+        postaviDefaultVrednost(spinner);
 
         final TextView tvNaziv, tvBrMesto, tvSmerovi, tvDatum, tvPocetak, tvTrajanje;
         tvNaziv = (TextView) rootView.findViewById(R.id.tvNaziv);
@@ -130,6 +118,8 @@ public class SettingsFragment extends Fragment {
         tvDatum = (TextView) rootView.findViewById(R.id.tvDatum);
         tvPocetak = (TextView) rootView.findViewById(R.id.tvPocetak);
         tvTrajanje = (TextView) rootView.findViewById(R.id.tvTrajanje);
+
+        final Button button=(Button)rootView.findViewById(R.id.btNext);
 
         if(!greska) {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -148,6 +138,18 @@ public class SettingsFragment extends Fragment {
                     if (OtvorenSpiner)
                         spinner.setBackgroundResource(R.drawable.spinner_background);
                     OtvorenSpiner = false;
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
+                    try {
+                        Date zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
+                        Date now = Calendar.getInstance().getTime();
+                        if(zadatak.after(now))
+                            ukljuciDugme(button);
+                        else
+                            iskljuciDugme(button);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 private void PostaviIndekseSmerova(int pozicija) {
@@ -193,20 +195,8 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
-        
-        Button button=(Button)rootView.findViewById(R.id.btNext);
-        if (greska)
-        {
-            Drawable mDrawable = getResources().getDrawable(R.drawable.spinner_background);
-            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-            mDrawable = DrawableCompat.wrap(mDrawable);
-            int h = mDrawable.getIntrinsicHeight();
-            int w = mDrawable.getIntrinsicWidth();
-            mDrawable.setBounds(0, 0, w, h);
-            button.setBackground(mDrawable);
-        }
-        else {
-            button.setOnClickListener(new View.OnClickListener() {
+
+        button.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
                 @Override
                 public void onClick(View view) {
@@ -295,7 +285,39 @@ public class SettingsFragment extends Fragment {
                     getActivity().startActivityForResult(intent, REQ_CODE);
                 }
             });
-        }
+        if (greska)
+            iskljuciDugme(button);
         return rootView;
+    }
+
+    private void postaviDefaultVrednost(Spinner spinner) {
+        SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
+        Date now = Calendar.getInstance().getTime();
+
+        for(int i = 0; i < podaciRaskrsnice[0].length; i++)
+        try {
+            Date zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
+            if(zadatak.after(now)) {
+                spinner.setSelection(Integer.valueOf(i));
+                break;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void iskljuciDugme(Button dugme) {
+        Drawable mDrawable = getResources().getDrawable(R.drawable.spinner_background);
+        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+        mDrawable = DrawableCompat.wrap(mDrawable);
+        int h = mDrawable.getIntrinsicHeight();
+        int w = mDrawable.getIntrinsicWidth();
+        mDrawable.setBounds(0, 0, w, h);
+        dugme.setBackground(mDrawable);
+        dugme.setClickable(false);
+    }
+    private void ukljuciDugme(Button dugme) {
+        dugme.setBackground(getResources().getDrawable(R.drawable.spinner_background));
+        dugme.setClickable(true);
     }
 }
