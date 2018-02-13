@@ -114,7 +114,8 @@ public class DataBaseFragment extends Fragment {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
 
                 try {
-                    JSONArray jsonArray = new JSONArray(sharedPref.getString("MerenjaJSON", "0"));
+                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
                     JSONArray list = new JSONArray();
                     int len = jsonArray.length();
                     if(jsonArray != null) {
@@ -123,7 +124,7 @@ public class DataBaseFragment extends Fragment {
                                 list.put(jsonArray.get(i));
 
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("MerenjaJSON", list.toString());
+                        editor.putString("Merenja"+korisnik, list.toString());
                         editor.apply();
                     }
                 } catch (JSONException e) {
