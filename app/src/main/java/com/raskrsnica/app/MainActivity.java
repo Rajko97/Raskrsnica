@@ -86,9 +86,3 @@ public class MainActivity extends AppCompatActivity{
     }
 
 }
-
-/*
-OnActivityResult
-    http://android-er.blogspot.rs/2011/08/return-result-to-onactivityresult.html
-    https://stackoverflow.com/questions/5302085/onactivityresult-never-called
-  */

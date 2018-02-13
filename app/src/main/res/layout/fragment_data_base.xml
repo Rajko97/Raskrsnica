@@ -9,8 +9,6 @@
     android:paddingRight="30dp"
     android:paddingBottom="30dp">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:id="@+id/layoutBazaGlavni"
         android:layout_width="match_parent"

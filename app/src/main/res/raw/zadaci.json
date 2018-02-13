@@ -14,7 +14,7 @@
 		{
 			"Raskrsnica":"Raskrsnica2",
 			"BrMesto":"3",
-			"Datum":"11.2.2018",
+			"Datum":"14.2.2018",
 			"Vreme":"13:00",
 			"Trajanje":"1",
 			"SmerLevo":"0",
@@ -24,7 +24,7 @@
 		{
 			"Raskrsnica":"Raskrsnica3",
 			"BrMesto":"2",
-			"Datum":"12.2.2018",
+			"Datum":"13.2.2018",
 			"Vreme":"6:00",
 			"Trajanje":"2",
 			"SmerLevo":"1",
@@ -35,7 +35,7 @@
 			"Raskrsnica":"Raskrsnica4",
 			"BrMesto":"1",
 			"Datum":"12.2.2018",
-			"Vreme":"23:00",
+			"Vreme":"00:00",
 			"Trajanje":"3",
 			"SmerLevo":"1",
 			"SmerPravo":"1",

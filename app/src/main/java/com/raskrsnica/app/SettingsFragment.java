@@ -7,17 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,33 +23,19 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static android.app.Activity.RESULT_OK;
-
-
-/**
- * A simple {@link Fragment} subclass.
- */
+import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment {
 
@@ -61,24 +44,14 @@ public class SettingsFragment extends Fragment {
     public SettingsFragment() {
         // Required empty public constructor
     }
-    
-    Calendar c = Calendar.getInstance();
-    SimpleDateFormat dateformat1 = new SimpleDateFormat("MMMM");
-    String month = dateformat1.format(c.getTime());
-    SimpleDateFormat dateformat2 = new SimpleDateFormat("dd");
-    String day = dateformat2.format(c.getTime());
-    SimpleDateFormat dateformat3 = new SimpleDateFormat("yyy");
-    String year = dateformat3.format(c.getTime());
-    
 
     Spinner spinner;
     CountDownTimer countDownTimer;
-
-    boolean OtvorenSpiner = false;
-    
     String strLevo, strPravo, strDesno;
     String[][] podaciRaskrsnice;
+    Boolean OtvorenSpiner = false;
     Boolean greska = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -105,6 +78,7 @@ public class SettingsFragment extends Fragment {
             podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
             e.printStackTrace();
         }
+
         spinner=(Spinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
         adapter.setDropDownViewResource(R.layout.dropdownlist_style);
@@ -200,73 +174,68 @@ public class SettingsFragment extends Fragment {
                 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
                 @Override
                 public void onClick(View view) {
-               /* if (spinner1.getSelectedItem().equals(null)) {
-                    new AlertDialog.Builder(getActivity())
+                    final int i = spinner.getSelectedItemPosition();
+                    if (istekloVreme(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i])) {
+                        new AlertDialog.Builder(getActivity())
                             .setTitle("Greska!")
-                            .setMessage("Niste izabrali raskrsnicu!")
+                            .setMessage("Zakasnili ste za ovo merenje!")
                             .setPositiveButton("OK", null)
                             .show();
-                } else {*/
-                   /* final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-                    alertDialog.setTitle("Vreme do brojanja");
-                    alertDialog.setMessage("00:00:00");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            countDownTimer.cancel();
-                            dialogInterface.dismiss();
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    });
-                    alertDialog.show();
-
-
-                    countDownTimer = new CountDownTimer(getRemainingTimeinMS(2), 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            try {
-                                long mills = getRemainingTimeinMS(1);
-                                int hours = 23 - (int) ((mills / (1000 * 60 * 60) % 24));
-                                int mins = 59 - (int) (mills / (1000 * 60)) % 60;
-                                int seconds = 59 - (int) (mills / 1000) % 60;
-                                String diff = hours + ":" + mins + ":" + seconds;
-                                alertDialog.setMessage(diff);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        iskljuciDugme(button);
+                    }
+                    else {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                        alertDialog.setCancelable(false);
+                        alertDialog.setTitle("Vreme do brojanja");
+                        alertDialog.setMessage("00:00:00");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                countDownTimer.cancel();
+                                dialogInterface.dismiss();
+                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
+                                toast.show();
                             }
-                        }
+                         });
+                        alertDialog.show();
+                        final long mills = getRemainingTimeinMS(i);
+                        countDownTimer = new CountDownTimer(mills, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                try {
+                                    long mills = getRemainingTimeinMS(i);
+                                    int dani = (int) TimeUnit.MILLISECONDS.toDays(mills);
+                                    int sati = (int) TimeUnit.MILLISECONDS.toHours(mills) % 24;
+                                    int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
+                                    int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
+                                    String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
+                                    alertDialog.setMessage(diff);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
 
-                        @Override
-                        public void onFinish() {
-                            alertDialog.dismiss();
-                            PokreniBrojanje();
-                        }
-                    }.start();*/
-                    PokreniBrojanje();
+                            @Override
+                            public void onFinish() {
+                                alertDialog.dismiss();
+                                PokreniBrojanje();
+                            }
+                        }.start();
 
-                    //}
+                    }
                 }
 
-                private long getRemainingTimeinMS(int arg) {
-                    SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-                    Date d = new Date();
-                    Date date2 = null;
+                private long getRemainingTimeinMS(int i) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
+                    //sdf.setTimeZone(TimeZone.getTimeZone("UCT"));
+                    Date now = Calendar.getInstance().getTime();
+                    Date zadatak = null;
                     try {
-                        //date2 = format.parse((tp.getCurrentHour() + ":" + tp.getCurrentMinute()+":00"));
-                        date2 = format.parse(("24" + ":" + "60 " + ":00"));
+                        zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    long mills = d.getTime() - date2.getTime();
-                    if (arg == 1)
-                        return mills;
-                    else {
-                        int hours = 23 - (int) ((mills / (1000 * 60 * 60) % 24));
-                        int mins = 59 - (int) (mills / (1000 * 60)) % 60;
-                        int seconds = 59 - (int) (mills / 1000) % 60;
-                        return (long) (hours * 60 * 60 + mins * 60 + seconds) * 1000;
-                    }
+                    return zadatak.getTime()-now.getTime();
                 }
 
                 private void PokreniBrojanje() {
@@ -284,26 +253,32 @@ public class SettingsFragment extends Fragment {
                     intent.putExtras(b);
                     getActivity().startActivityForResult(intent, REQ_CODE);
                 }
-            });
+        });
         if (greska)
             iskljuciDugme(button);
         return rootView;
     }
 
     private void postaviDefaultVrednost(Spinner spinner) {
-        SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
-        Date now = Calendar.getInstance().getTime();
-
         for(int i = 0; i < podaciRaskrsnice[0].length; i++)
-        try {
-            Date zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
-            if(zadatak.after(now)) {
+            if(!istekloVreme(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i])) {
                 spinner.setSelection(Integer.valueOf(i));
                 break;
+            }
+    }
+
+    private boolean istekloVreme(String datum) {
+        SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
+        Date now = Calendar.getInstance().getTime();
+        try {
+            Date zadatak = sdf.parse(datum);
+            if(zadatak.after(now)) {
+                return false;
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     private void iskljuciDugme(Button dugme) {
@@ -316,6 +291,7 @@ public class SettingsFragment extends Fragment {
         dugme.setBackground(mDrawable);
         dugme.setClickable(false);
     }
+
     private void ukljuciDugme(Button dugme) {
         dugme.setBackground(getResources().getDrawable(R.drawable.spinner_background));
         dugme.setClickable(true);
