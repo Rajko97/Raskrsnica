@@ -83,7 +83,8 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
         adapter.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner.setAdapter(adapter);
-        postaviDefaultVrednost(spinner);
+        if(!greska)
+            postaviDefaultVrednost(spinner);
 
         final TextView tvNaziv, tvBrMesto, tvSmerovi, tvDatum, tvPocetak, tvTrajanje;
         tvNaziv = (TextView) rootView.findViewById(R.id.tvNaziv);

@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
     private void ucitajBazu() {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         try {
-            korisnici = new JSONArray(sharedPref.getString("Korisnici", "[]"));
+            korisnici = new JSONArray(sharedPref.getString("Korisnici", ""));
         } catch (JSONException e) {
             new android.app.AlertDialog.Builder(LoginActivity.this)
                     .setTitle("Greška!")

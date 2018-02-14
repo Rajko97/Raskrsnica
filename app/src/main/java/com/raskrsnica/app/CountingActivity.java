@@ -1,51 +1,30 @@
 package com.raskrsnica.app;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.media.session.ParcelableVolumeInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
@@ -62,7 +41,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
     };
     private TextView[][] textViews = new TextView[3][10];
-    private CountDownTimer countDownTimer;
     private int kvantum = 0;
     private int trajanje = 1;
     private int[][][] brojVozila;
@@ -145,40 +123,36 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
                     dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
                     img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
-
-
                 }
             }
         }
-            //900000 default
-            countDownTimer = new CountDownTimer(10000, 1000) {
-                @Override
-                public void onTick(long l) {
-                    timer.setText("" + String.format("%02d : %02d", TimeUnit.MILLISECONDS.toMinutes(l),
-                            TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
-                }
+        //900000 default
+        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) {
+            @Override
+            public void onTick(long l) {
+                timer.setText("" + String.format("%02d : %02d", TimeUnit.MILLISECONDS.toMinutes(l), TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
+            }
 
-                @Override
-                public void onFinish() {
-                    if (kvantum < (trajanje*4-1)) {
-                        kvantum++;
-                        if(kvantum % 4 == 0)
-                            SacuvajPodatke();
-                        for (int i = 0; i < textViews.length; i++)
-                            if (ukljucenSmer[i])
-                                for (int j = 0; j < textViews[0].length; j++)
-                                    textViews[i][j].setText("0");
-                        start();
-                    } else {
+            @Override
+            public void onFinish() {
+                if (kvantum < (trajanje * 4 - 1)) {
+                    kvantum++;
+                    if (kvantum % 4 == 0)
                         SacuvajPodatke();
-                        setResult(RESULT_OK, getIntent());
-                        finish();
-                    }
+                    for (int i = 0; i < textViews.length; i++)
+                        if (ukljucenSmer[i])
+                            for (int j = 0; j < textViews[0].length; j++)
+                                textViews[i][j].setText("0");
+                    start();
+                } else {
+                    SacuvajPodatke();
+                    setResult(RESULT_OK, getIntent());
+                    finish();
                 }
-            }.start();
-        }
-    //cuva rezultate merenja u json fajlu
-   private void SacuvajPodatke() {
+            }
+        }.start();
+    }
+    private void SacuvajPodatke() {
        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
        try {
            String korisnik = sharedPref.getString("UlogovanKorisnik", "");
