@@ -22,8 +22,6 @@ public class RestClient {
      * https://developers.google.com/maps/documentation/geocoding/
      * https://developers.google.com/url-shortener/v1/getting_started?csw=1#shorten
      */
-    String REST_SERVER_HTTPS_GET_URI_KORISNICI = "https://api.myjson.com/bins/g2lx9";
-    String REST_SERVER_HTTPS_GET_URI_ZADACI = "https://api.myjson.com/bins/1afprx";
     String REST_SERVER_HTTPS_POST_URI = "https://api.myjson.com/bins/g2lx9";
 
     private RestClient(){
@@ -36,24 +34,26 @@ public class RestClient {
         return instance;
     }
 
-    public String postRequest() {
+    public String postRequest(String url, JSONObject data) {
         String responseString = "";
-        HttpClient httpClient = HTTPUtils.getNewHttpClient(REST_SERVER_HTTPS_POST_URI.startsWith(HTTPS_STRING));
+        HttpClient httpClient = HTTPUtils.getNewHttpClient(url.startsWith(HTTPS_STRING));
         HttpResponse response = null;
         InputStream in;
-        URI newURI = URI.create(REST_SERVER_HTTPS_POST_URI);
+        URI newURI = URI.create(url);
         HttpPost postMethod = new HttpPost(newURI);
 
         try {
-            JSONObject postJSON = new JSONObject();
-            postJSON.put("longUrl", "http://www.google.com/");
+            //JSONObject postJSON = new JSONObject();
+            //postJSON.put("longUrl", "http://www.google.com/");
 
-            postMethod.setEntity(new StringEntity(postJSON.toString(), HTTP.UTF_8));
+            postMethod.setEntity(new StringEntity(data.toString(), HTTP.UTF_8));
             postMethod.setHeader("Content-Type", "application/json");
             response = httpClient.execute(postMethod);
             in = response.getEntity().getContent();
             responseString = convertStreamToString(in);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            responseString = "-1";
+        }
         return responseString;
     }
 

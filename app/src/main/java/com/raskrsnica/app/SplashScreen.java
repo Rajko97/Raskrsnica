@@ -54,7 +54,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class SplashScreen extends AppCompatActivity {
     private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
-    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/1afprx";
+    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/7mie5";
 
     private ProgressBar pb;
     RestClient restClient;
@@ -71,7 +71,7 @@ public class SplashScreen extends AppCompatActivity {
                 //todo Da se uskladi progress bar
                 for (int i = 0; i < 100; i += 10) {
                     try {
-                        Thread.sleep(150);
+                        //Thread.sleep(150);
                         pb.setProgress(i);
                     } catch (Exception e) {
                         e.printStackTrace();

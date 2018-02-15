@@ -46,6 +46,9 @@ import java.util.concurrent.CancellationException;
  * A simple {@link Fragment} subclass.
  */
 public class DataBaseFragment extends Fragment {
+    private static String URL_ZA_SLANJE = "https://api.myjson.com/bins/1afprx";
+    RestClient restClient;
+
     final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000;
 
     int brojMerenja = 0;
@@ -57,6 +60,7 @@ public class DataBaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
+        restClient = RestClient.getInstance();
         ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
         ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
         dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
@@ -105,11 +109,99 @@ public class DataBaseFragment extends Fragment {
                                 }
 
                             }
+                            private void obrisiJSONelement(int position) {
+                                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+
+                                try {
+                                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+                                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
+                                    JSONArray list = new JSONArray();
+                                    int len = jsonArray.length();
+                                    if(jsonArray != null) {
+                                        for(int i=0; i<len; i++)
+                                            if (i != position)
+                                                list.put(jsonArray.get(i));
+
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putString("Merenja"+korisnik, list.toString());
+                                        editor.apply();
+                                    }
+                                } catch (JSONException e) {
+                                    ispisiGresku(rootView);
+                                    e.printStackTrace();
+                                }
+                            }
                         })
                         .setNegativeButton("Ne", null)
                         .show();
             }
+        });
 
+        dugmeBaza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int id = 0; id <brojMerenja; id++)
+                {
+                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
+                    if(checkBox.isChecked()) {
+                        if(uploaduj(id)) {
+                            LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
+                            ln.setVisibility(View.GONE);
+                            //ToDo Ucitaj element i pokreni metodu
+                            obrisiJSONelement(id);
+                            checkBox.setId(0);
+                            ln.setId(0);
+                            //ToDo Optimalniji nacin je da se broji koliko je bilo brisanja i da se shiftuje za toliko mesta
+                            for (int j = id; j < brojMerenja - 1; j++) {
+                                CheckBox checkBox1 = (CheckBox) rootView.findViewById(CHECKBOX_ID + j + 1);
+                                checkBox1.setId(CHECKBOX_ID + j);
+                                LinearLayout ln2 = (LinearLayout) rootView.findViewById(LAYOUT_ID + j + 1);
+                                ln2.setId(LAYOUT_ID + j);
+                            }
+                            brojMerenja--;
+                            brojCekiranih--;
+                            id--;
+                            if (brojMerenja == 0)
+                                ispisiGresku(rootView);
+                        }
+                        else {
+                            new AlertDialog.Builder(getContext())
+                                    .setTitle("Greska!")
+                                    .setMessage("Baza trenutno nije dostupna.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Ok", null)
+                                    .show();
+                            break;
+                        }
+                    }
+                }
+                if(brojCekiranih == 0)
+                {
+                    ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+                    ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
+                    dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                    dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                    dugmeObisi.setClickable(false);
+                    dugmeBaza.setClickable(false);
+                }
+            }
+            private boolean uploaduj(int position) {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+                try {
+                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
+                    JSONObject data = jsonArray.getJSONObject(position);
+                    String response = restClient.postRequest(URL_ZA_SLANJE, data);
+                    if (response.equals("-1"))
+                        return false;
+
+                } catch (JSONException e) {
+                    ispisiGresku(rootView);
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
             private void obrisiJSONelement(int position) {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
 
@@ -134,20 +226,10 @@ public class DataBaseFragment extends Fragment {
             }
         });
 
-        dugmeBaza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Greska!")
-                        .setMessage("Baza trenutno nije dostupna.")
-                        .setCancelable(false)
-                        .setPositiveButton("Ok", null)
-                        .show();
-            }
-        });
         dugmeObisi.setClickable(false);
         dugmeBaza.setClickable(false);
         loadData(rootView);
+
         return rootView;
     }
 

@@ -46,6 +46,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private int[][][] brojVozila;
     private boolean[] ukljucenSmer = {false, false, false};
 
+    String smerID[] = new String[3];
     String nazivRaskrsnice, datum, vreme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +62,17 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             trajanje = Integer.valueOf(b.getString("TRAJANJE"));
             datum = b.getString("DATUM");
             vreme = b.getString("VREME");
-            String Levo = b.getString("SMER_LEVO");
-            String Pravo = b.getString("SMER_PRAVO");
-            String Desno = b.getString("SMER_DESNO");
+            smerID[0] = b.getString("SMER_LEVO");
+            smerID[1] = b.getString("SMER_PRAVO");
+            smerID[2] = b.getString("SMER_DESNO");
             //TextView header = (TextView) findViewById(R.id.textHeader);
             //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
             brojVozila = new int[4*trajanje][3][10]; //4 kvantuma * 3 smera * 10 vozila
             // @drawable/circle
-            if (!Levo.equals("0")) ukljucenSmer[0] = true;
-            if (!Pravo.equals("0")) ukljucenSmer[1] = true;
-            if (!Desno.equals("0")) ukljucenSmer[2] = true;
+            if (!smerID[0].equals("0")) ukljucenSmer[0] = true;
+            if (!smerID[1].equals("0")) ukljucenSmer[1] = true;
+            if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
 
             for (int[] ids: dugmiciVozila)
                 for (int id : ids) {
@@ -170,6 +171,25 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                merenje.put("Naziv", nazivRaskrsnice);
                merenje.put("Datum", datum);
                merenje.put("Vreme", vreme);
+
+               for (int iKvantum = 1; iKvantum < 5; iKvantum++) {
+                   JSONObject jsonKvantum = new JSONObject();
+                   JSONArray jsonSmer = new JSONArray();
+                   for (int iSmer = 0; iSmer < 3; iSmer++) {
+                       if (!ukljucenSmer[iSmer])
+                           continue;
+
+                       JSONObject jsonSmerVrednost = new JSONObject();
+                       JSONArray jsonVrednosti = new JSONArray();
+                       for (int iVozilo = 0; iVozilo < 10; iVozilo++) {
+                           jsonVrednosti.put(brojVozila[iKvantum-1][iSmer][iVozilo]);
+                       }
+                       jsonSmerVrednost.put(smerID[iSmer], jsonVrednosti);
+                       jsonSmer.put(jsonSmerVrednost);
+                   }
+                   jsonKvantum.put("Smer", jsonSmer);
+                   merenje.put("Kvantum"+iKvantum, jsonKvantum);
+               }
 
                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                Date pocetnoVreme = format.parse(vreme);
