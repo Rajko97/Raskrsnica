@@ -205,8 +205,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                    cal.add(Calendar.DATE, 1);
                    datum = format.format(cal.getTime());
                }
-
-                   //todo Da se ubace merenja
            } catch (JSONException e) {
                e.printStackTrace();
            } catch (ParseException e) {

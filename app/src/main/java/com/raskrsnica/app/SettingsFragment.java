@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -23,6 +24,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +42,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment {
 
-    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5, SMER_PRAVO = 6, SMER_DESNO = 7;
+    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
+            SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8;
     
     public SettingsFragment() {
         // Required empty public constructor
@@ -71,6 +75,7 @@ public class SettingsFragment extends Fragment {
                 podaciRaskrsnice[SMER_LEVO][i] = zadatak.getString("SmerLevo");
                 podaciRaskrsnice[SMER_PRAVO][i] = zadatak.getString("SmerPravo");
                 podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
+                podaciRaskrsnice[SLIKA][i] = zadatak.getString("Slika");
             }
         } catch (JSONException e) {
             greska = true;
@@ -109,6 +114,23 @@ public class SettingsFragment extends Fragment {
                     tvSmerovi.setText((podaciRaskrsnice[SMER_LEVO][i].equals("1") ? "Levo(" + strLevo + ") " : "")
                             + (podaciRaskrsnice[SMER_PRAVO][i].equals("1") ? "Pravo(" + strPravo + ") " : "")
                             + (podaciRaskrsnice[SMER_DESNO][i].equals("1") ? "Desno(" + strDesno + ") " : ""));
+
+                    String imagename = "";
+                    for (int j = podaciRaskrsnice[SLIKA][i].length()-1; j >= 0; j--) {
+                        if(podaciRaskrsnice[SLIKA][i].charAt(j) == '/') {
+                            imagename = podaciRaskrsnice[SLIKA][i].substring(j+1, podaciRaskrsnice[SLIKA][i].length()-4);
+                            break;
+                        }
+                    }
+                    ImageView imageView = (ImageView) rootView.findViewById(R.id.imageView2);
+                    String path = Environment.getExternalStorageDirectory()+"/.Raskrsnica/"+imagename+".jpg";
+                    File imgFile = new  File(path);
+                    if(imgFile.exists())
+                    {
+                        imageView.setImageDrawable(Drawable.createFromPath(path));
+                    }
+                    else
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.img_w));
 
                     if (OtvorenSpiner)
                         spinner.setBackgroundResource(R.drawable.spinner_background);
@@ -260,6 +282,7 @@ public class SettingsFragment extends Fragment {
         return rootView;
     }
 
+    //defaut vrednost je prvi zadatak koji nailazi
     private void postaviDefaultVrednost(Spinner spinner) {
         for(int i = 0; i < podaciRaskrsnice[0].length; i++)
             if(!istekloVreme(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i])) {

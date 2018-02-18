@@ -1,60 +1,36 @@
 package com.raskrsnica.app;
 
-import android.app.VoiceInteractor;
+import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ProgressBar;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Scanner;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
+import java.net.URLConnection;
 
 public class SplashScreen extends AppCompatActivity {
     private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
-    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/7mie5";
+    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/12zgd9";
 
     private ProgressBar pb;
     RestClient restClient;
@@ -63,6 +39,12 @@ public class SplashScreen extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{}, 1000);
+            }
+
         restClient = RestClient.getInstance();
         pb = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -85,39 +67,8 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void ucitajKorisnike() {
-            //URL url = new URL("https://api.myjson.com/bins/g2lx9");
             String response = restClient.getRequest(URL_ZA_KORISNIKE);
             sacuvajKorisnike(response);
-
-
-
-    ;/*
-        final RequestQueue requestQueue = Volley.newRequestQueue(SplashScreen.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        sacuvajKorisnike(response);
-                        requestQueue.stop();
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                requestQueue.stop();
-            }
-        });
-        requestQueue.add(stringRequest);*/
-       /* Resources res = getResources();
-        InputStream is = res.openRawResource(R.raw.korisnici);
-        Scanner scanner = new Scanner(is);
-        StringBuilder builder = new StringBuilder();
-
-        while (scanner.hasNextLine()) {
-            builder.append(scanner.nextLine());
-        }
-        sacuvajKorisnike(builder.toString());*/
     }
 
     private void sacuvajKorisnike(String podaci) {
@@ -133,37 +84,29 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
-    private void ucitajZadatke(final JSONArray korisnici) {
-        /*Resources res = getResources();
-        InputStream is = res.openRawResource(R.raw.zadaci);
-        Scanner scanner = new Scanner(is);
-        StringBuilder builder = new StringBuilder();
-
-        while (scanner.hasNextLine()) {
-            builder.append(scanner.nextLine());
-        }
-        sacuvajZadatke(korisnici, builder.toString());*/
-        /*
-        String server_url = "https://api.myjson.com/bins/1afprx";
-        final RequestQueue requestQueue = Volley.newRequestQueue(SplashScreen.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        sacuvajZadatke(korisnici, response);
-                        requestQueue.stop();
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                requestQueue.stop();
-            }
-        });
-        requestQueue.add(stringRequest);*/
+    private void ucitajZadatke(JSONArray korisnici) {
         String response = restClient.getRequest(URL_ZA_ZADATKE);
         sacuvajZadatke(korisnici, response);
+    }
+
+    private void ucitajSlike(JSONArray zadaci) {
+        try {
+            for (int i = 0; i < zadaci.length(); i++) {
+                JSONObject zadatak = new JSONObject(zadaci.get(i).toString());
+                String url_slike = zadatak.getString("Slika");
+
+                String imagename = null;
+                for (int j = url_slike.length()-1; j >= 0; j--) {
+                    if(url_slike.charAt(j) == '/') {
+                        imagename = url_slike.substring(j+1, url_slike.length()-4);
+                        break;
+                    }
+                }
+                downloadFile(url_slike, imagename);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sacuvajZadatke(JSONArray korisnici, String s) {
@@ -176,6 +119,7 @@ public class SplashScreen extends AppCompatActivity {
                 JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
                 String ime = korisnik.getString("username");
                 JSONArray zadaci = sviZadaci.getJSONArray("korisnik" + ime);
+                ucitajSlike(zadaci);
                 editor.putString("Zadaci" + ime, zadaci.toString());
                 editor.apply();
             }
@@ -187,5 +131,71 @@ public class SplashScreen extends AppCompatActivity {
     private void startApp() {
         Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
         startActivity(intent);
+    }
+    public void downloadFile(String uRl, String filename) {
+        DownloadTask downloadTask = new DownloadTask();
+        downloadTask.execute(uRl, filename);
+    }
+
+    class DownloadTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String path = params[0];
+            int file_length = 0;
+            try {
+                URL url = new URL(path);
+                URLConnection urlConnection = url.openConnection();
+                urlConnection.connect();
+                file_length = urlConnection.getContentLength();
+                //
+                String pathOnSd = Environment.getExternalStorageDirectory()+"/.Raskrsnica/";
+                File new_folder = new File(pathOnSd);
+                if(!new_folder.exists()) {
+                    new_folder.mkdir();
+                }
+
+
+                File input_file = new File(new_folder, params[1]+".jpg");
+                if (!input_file.exists()) {
+                    InputStream inputStream = new BufferedInputStream(url.openStream(), 8192);
+                    byte[] data = new byte[1024];
+                    int total = 0;
+                    int count = 0;
+                    OutputStream outputStream = new FileOutputStream(input_file);
+                    while ((count = inputStream.read(data)) != -1) {
+                        total += count;
+                        outputStream.write(data, 0, count);
+                    /*int progress = (int) total*100/file_length;
+                    */
+                    }
+                    inputStream.close();
+                    outputStream.close();
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "Download success";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            //progressDialog.setProgress(values[0]);
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            //proressDialog.hide();
+            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            /*String path = "sdcard/Raskrsnica/downloaded_image.jpg";
+            imageView.setImageDrawable(Drawable.createFromPath(path));*/
+        }
     }
 }
