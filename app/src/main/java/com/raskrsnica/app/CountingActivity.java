@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
@@ -48,12 +50,11 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
     String smerID[] = new String[3];
     String nazivRaskrsnice, datum, vreme;
+    CountDownTimer countDownTimer2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counting);
-
-        final TextView timer = (TextView) findViewById(R.id.kvantum);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -68,11 +69,64 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             //TextView header = (TextView) findViewById(R.id.textHeader);
             //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
-            brojVozila = new int[4*trajanje][3][10]; //4 kvantuma * 3 smera * 10 vozila
+            brojVozila = new int[4 * trajanje][3][10]; //4 kvantuma * 3 smera * 10 vozila
             // @drawable/circle
             if (!smerID[0].equals("0")) ukljucenSmer[0] = true;
             if (!smerID[1].equals("0")) ukljucenSmer[1] = true;
             if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
+        }
+        final AlertDialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Vreme do brojanja");
+        alertDialog.setMessage("00:00:00");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                countDownTimer2.cancel();
+                dialogInterface.dismiss();
+                Toast.makeText(getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+        alertDialog.show();
+        final long mills = getRemainingTimeinMS();
+        countDownTimer2 = new CountDownTimer(mills, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                try {
+                    long mills = getRemainingTimeinMS();
+                    int dani = (int) TimeUnit.MILLISECONDS.toDays(mills);
+                    int sati = (int) TimeUnit.MILLISECONDS.toHours(mills) % 24;
+                    int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
+                    int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
+                    String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
+                    alertDialog.setMessage(diff);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                alertDialog.dismiss();
+                pocniBrojanje();
+            }
+        }.start();
+    }
+    private long getRemainingTimeinMS() {
+        SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
+        //sdf.setTimeZone(TimeZone.getTimeZone("UCT"));
+        Date now = Calendar.getInstance().getTime();
+        Date zadatak = null;
+        try {
+            zadatak = sdf.parse(datum+" "+vreme);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return zadatak.getTime()-now.getTime();
+    }
+    protected void pocniBrojanje() {
+        final TextView timer = (TextView) findViewById(R.id.kvantum);
 
             for (int[] ids: dugmiciVozila)
                 for (int id : ids) {
@@ -126,7 +180,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
                 }
             }
-        }
         //900000 default
         CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) {
             @Override

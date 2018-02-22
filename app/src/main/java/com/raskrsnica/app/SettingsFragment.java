@@ -40,7 +40,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinnerEventsListener{
 
     final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
             SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8;
@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    Spinner spinner;
+    CustomSpinner spinner;
     CountDownTimer countDownTimer;
     String strLevo, strPravo, strDesno;
     String[][] podaciRaskrsnice;
@@ -84,7 +84,7 @@ public class SettingsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        spinner=(Spinner) rootView.findViewById(R.id.spinner1);
+        spinner=(CustomSpinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
         adapter.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner.setAdapter(adapter);
@@ -132,8 +132,8 @@ public class SettingsFragment extends Fragment {
                     else
                         imageView.setImageDrawable(getResources().getDrawable(R.drawable.img_w));
 
-                    if (OtvorenSpiner)
-                        spinner.setBackgroundResource(R.drawable.spinner_background);
+                    //if (OtvorenSpiner)
+                     //   spinner.setBackgroundResource(R.drawable.spinner_background);
                     OtvorenSpiner = false;
 
                     SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
@@ -158,11 +158,11 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
                     if (OtvorenSpiner)
-                        spinner.setBackgroundResource(R.drawable.spinner_background);
+                        //spinner.setBackgroundResource(R.drawable.spinner_background);
                     OtvorenSpiner = false;
                 }
             });
-
+/*
             spinner.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -177,10 +177,11 @@ public class SettingsFragment extends Fragment {
                     }
                     return false;
                 }
-            });
+            });*/
         }
         else
             spinner.setEnabled(false);
+
         spinner.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -207,7 +208,7 @@ public class SettingsFragment extends Fragment {
                         iskljuciDugme(button);
                     }
                     else {
-                        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                        /*final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                         alertDialog.setCancelable(false);
                         alertDialog.setTitle("Vreme do brojanja");
                         alertDialog.setMessage("00:00:00");
@@ -240,11 +241,10 @@ public class SettingsFragment extends Fragment {
 
                             @Override
                             public void onFinish() {
-                                alertDialog.dismiss();
-                                PokreniBrojanje();
+                                alertDialog.dismiss();*/
+                                PokreniBrojanje();/*
                             }
-                        }.start();
-
+                        }.start();*/
                     }
                 }
 
@@ -319,5 +319,15 @@ public class SettingsFragment extends Fragment {
     private void ukljuciDugme(Button dugme) {
         dugme.setBackground(getResources().getDrawable(R.drawable.spinner_background));
         dugme.setClickable(true);
+    }
+
+    @Override
+    public void onSpinnerOpened() {
+        spinner.setBackgroundResource(R.drawable.spinner_background);
+    }
+
+    @Override
+    public void onSpinnerClosed() {
+        spinner.setBackgroundResource(R.drawable.spinner_background2);
     }
 }
