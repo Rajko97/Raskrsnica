@@ -162,6 +162,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                     OtvorenSpiner = false;
                 }
             });
+            spinner.setSpinnerEventsListener(this);
 /*
             spinner.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -323,11 +324,11 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
 
     @Override
     public void onSpinnerOpened() {
-        spinner.setBackgroundResource(R.drawable.spinner_background);
+        spinner.setBackgroundResource(R.drawable.spinner_background2);
     }
 
     @Override
     public void onSpinnerClosed() {
-        spinner.setBackgroundResource(R.drawable.spinner_background2);
+        spinner.setBackgroundResource(R.drawable.spinner_background);
     }
 }
