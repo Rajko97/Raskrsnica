@@ -75,12 +75,17 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             if (!smerID[1].equals("0")) ukljucenSmer[1] = true;
             if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
         }
-        final AlertDialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
+        final Dialog d = new Dialog(CountingActivity.this);
+        d.setTitle("NumberPicker");
+        d.setContentView(R.layout.timer);
+        d.show();
+
+/*        final Dialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
         alertDialog.setCancelable(false);
         alertDialog.setContentView(R.layout.timer);
-        alertDialog.setTitle("Vreme do brojanja");
-        alertDialog.setMessage("00:00:00");
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
+        //alertDialog.setTitle("Vreme do brojanja");
+        //alertDialog.setMessage("00:00:00");
+        /*alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 countDownTimer2.cancel();
@@ -89,7 +94,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 finish();
             }
         });
-        alertDialog.show();
+        alertDialog.show();*/
         final long mills = getRemainingTimeinMS();
         countDownTimer2 = new CountDownTimer(mills, 1000) {
             @Override
@@ -101,7 +106,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
                     int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
                     String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
-                    alertDialog.setMessage(diff);
+                    //alertDialog.setMessage(diff);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -109,7 +114,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFinish() {
-                alertDialog.dismiss();
+                //alertDialog.dismiss();
                 pocniBrojanje();
             }
         }.start();
