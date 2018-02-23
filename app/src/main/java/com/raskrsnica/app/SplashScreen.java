@@ -25,7 +25,7 @@ import java.net.URLConnection;
 
 public class SplashScreen extends AppCompatActivity {
     private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
-    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/12zgd9";
+    private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/16f685";
 
     private ProgressBar pb;
     RestClient restClient;
