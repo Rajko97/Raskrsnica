@@ -30,6 +30,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"/>
     </application>
 
