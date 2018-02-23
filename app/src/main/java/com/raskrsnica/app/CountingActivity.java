@@ -77,6 +77,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
         final AlertDialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
         alertDialog.setCancelable(false);
+        alertDialog.setContentView(R.layout.timer);
         alertDialog.setTitle("Vreme do brojanja");
         alertDialog.setMessage("00:00:00");
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
