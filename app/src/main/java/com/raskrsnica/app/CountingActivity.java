@@ -76,8 +76,9 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
         }
         final Dialog d = new Dialog(CountingActivity.this);
-        d.setTitle("NumberPicker");
         d.setContentView(R.layout.timer);
+        final TextView tv1=(TextView)findViewById(R.id.tv1);
+
         d.show();
 
 /*        final Dialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
@@ -106,6 +107,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
                     int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
                     String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
+                    tv1.setText(diff);
                     //alertDialog.setMessage(diff);
                 } catch (Exception e) {
                     e.printStackTrace();
