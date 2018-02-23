@@ -368,7 +368,7 @@ public class DataBaseFragment extends Fragment {
                     cbLayout.setGravity( Gravity.CENTER_VERTICAL|Gravity.RIGHT);
                     glavniLayout.addView(cbLayout);
 
-                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
+                    int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
                     LinearLayout.LayoutParams checkBoxParms = new LinearLayout.LayoutParams(size,size);
                     checkBox.setButtonDrawable(R.drawable.checkbox_background_xlarge);
                     checkBox.setLayoutParams(checkBoxParms);
