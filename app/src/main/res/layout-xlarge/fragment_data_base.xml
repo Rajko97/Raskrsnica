@@ -6,7 +6,6 @@
     tools:context="com.raskrsnica.app.DataBaseFragment"
     android:id="@+id/fragment_database"
     android:paddingLeft="40dp"
-    android:paddingRight="40dp"
     android:paddingBottom="40dp">
 
     <LinearLayout
@@ -20,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="bottom"
+            android:layout_marginRight="40dp"
             android:layout_weight="0.1"
             android:background="@drawable/background_baza_layout"
             android:gravity="right|center_vertical"
@@ -47,6 +47,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingRight="40dp"
             android:layout_weight="0.90">
 
             <LinearLayout
