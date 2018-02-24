@@ -1,53 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="600dp"
-    android:layout_height="230dp"
+    android:layout_height="250dp"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
-    android:orientation="vertical"
-    android:paddingRight="60dp"
-    android:paddingLeft="60dp"
+    android:paddingLeft="50dp"
+    android:paddingRight="30dp"
     android:paddingBottom="20dp">
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/timer_background"
-        android:paddingTop="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView"
+        android:paddingTop="25dp"
+        android:paddingRight="25dp">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:text="Preostalo vreme do početka merenja:"
-            android:textColor="#ffffff"
-            android:textSize="18dp"
-            android:gravity="center"
-            />
+            android:layout_height="match_parent"
+            android:background="@drawable/timer_background"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="#ffffff"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="Preostalo vreme do početka merenja:"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+                android:gravity="center"
+                />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:textSize="60dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="00 : 00 : 00"/>
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:text="TextView" />
-    </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="0.2"
+               android:orientation="horizontal">
 
-</LinearLayout>
+               <TextView
+                   android:id="@+id/textView8"
+                   android:layout_width="170dp"
+                   android:layout_height="match_parent"
+                   android:text="SATA"
+                   android:textSize="18dp"
+                   android:textColor="#ffffff"
+                   android:paddingRight="15dp"
+                   android:gravity="end|center_vertical"/>
+
+               <TextView
+                   android:id="@+id/textView10"
+                   android:layout_width="155dp"
+                   android:layout_height="match_parent"
+                   android:text="MINUTA"
+                   android:textColor="#ffffff"
+                   android:textSize="18dp"
+                   android:gravity="center"/>
+
+               <TextView
+                   android:id="@+id/textView9"
+                   android:layout_width="175dp"
+                   android:layout_height="match_parent"
+                   android:text="SEKUNDI"
+                   android:textSize="18dp"
+                   android:textColor="#ffffff"
+                   android:gravity="start|center"/>
+           </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="Molimo sačekajte!"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
+    <ImageButton
+        android:id="@+id/imgb"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="top|right"
+        app:srcCompat="@drawable/x"
+        android:scaleType="fitCenter"
+        android:background="@drawable/circle_white"/>
+
+</FrameLayout>
