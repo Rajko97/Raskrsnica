@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="600dp"
-    android:layout_height="270dp"
+    android:layout_width="800dp"
+    android:layout_height="350dp"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
     android:paddingLeft="50dp"
@@ -27,7 +27,7 @@
                 android:layout_weight="0.2"
                 android:text="Preostalo vreme do početka merenja:"
                 android:textColor="#ffffff"
-                android:textSize="18dp"
+                android:textSize="22dp"
                 android:gravity="center"
                 />
 
@@ -36,46 +36,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.4"
-                android:textSize="60dp"
+                android:textSize="70dp"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:gravity="center"
                 android:text="00 : 00 : 00"/>
 
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="0dp"
-               android:layout_weight="0.2"
-               android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:orientation="horizontal">
 
-               <TextView
-                   android:id="@+id/textView8"
-                   android:layout_width="170dp"
-                   android:layout_height="match_parent"
-                   android:text="SATA"
-                   android:textSize="18dp"
-                   android:textColor="#ffffff"
-                   android:paddingRight="17dp"
-                   android:gravity="end|center_vertical"/>
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="240dp"
+                    android:layout_height="match_parent"
+                    android:text="SATA"
+                    android:textSize="22dp"
+                    android:textColor="#ffffff"
+                    android:gravity="end|center_vertical"/>
 
-               <TextView
-                   android:id="@+id/textView10"
-                   android:layout_width="155dp"
-                   android:layout_height="match_parent"
-                   android:text="MINUTA"
-                   android:textColor="#ffffff"
-                   android:textSize="18dp"
-                   android:gravity="center"/>
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:text="MINUTA"
+                    android:textColor="#ffffff"
+                    android:textSize="22dp"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="12dp"/>
 
-               <TextView
-                   android:id="@+id/textView9"
-                   android:layout_width="175dp"
-                   android:layout_height="match_parent"
-                   android:text="SEKUNDI"
-                   android:textSize="18dp"
-                   android:textColor="#ffffff"
-                   android:gravity="start|center"/>
-           </LinearLayout>
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:text="SEKUNDI"
+                    android:textSize="22dp"
+                    android:textColor="#ffffff"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="35dp"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView6"
@@ -83,15 +84,15 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.2"
                 android:text="Molimo sačekajte!"
-                android:textSize="18dp"
+                android:textSize="22dp"
                 android:textColor="#ffffff"
                 android:gravity="center"/>
         </LinearLayout>
     </FrameLayout>
     <ImageButton
         android:id="@+id/imgb"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="top|right"
         app:srcCompat="@drawable/x"
         android:scaleType="fitCenter"
