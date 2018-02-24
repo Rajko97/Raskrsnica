@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:gravity="center"
-    tools:context="com.raskrsnica.app.LoginActivity"
-    android:background="@drawable/background">
+    tools:context="com.raskrsnica.app.LoginActivity">
 
     <LinearLayout
         android:layout_width="520dp"
         android:layout_height="940dp"
         android:orientation="vertical"
-        android:paddingTop="100dp"
         android:paddingBottom="100dp"
         android:paddingLeft="40dp"
-        android:paddingRight="40dp">
+        android:paddingRight="40dp"
+        android:paddingTop="100dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -25,18 +25,23 @@
             android:layout_weight="0.2"
             android:contentDescription="Logo"
             app:srcCompat="@drawable/logo_white" />
-
-        <TextView
-            android:id="@+id/textView4"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
-            android:gravity="center"
             android:layout_margin="10dp"
-            android:text="Prijavite se da bi ste nastavili."
-            android:textColor="#ffffff"
-            android:textSize="30dp" />
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Prijavite se da bi ste nastavili."
+                android:textColor="#ffffff"
+                android:textSize="30dp" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/etKorisnickoIme"
@@ -48,16 +53,16 @@
             android:layout_marginTop="10dp"
             android:layout_weight="0.1"
             android:background="@drawable/edittext_background"
+            android:drawablePadding="20dp"
+            android:drawableStart="@drawable/ic_ussername_icon_xlarge"
             android:ems="10"
             android:gravity="center_vertical"
-            android:drawableStart="@drawable/ic_ussername_icon_xlarge"
-            android:drawablePadding="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:hint="Korisničko ime"
             android:inputType="textPersonName"
-            android:textColorHint="#ffffff"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp"
             android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
             android:textSize="30dp" />
 
         <EditText
@@ -71,34 +76,33 @@
             android:layout_marginTop="15dp"
             android:layout_weight="0.1"
             android:background="@drawable/edittext_background"
-            android:ems="10"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:drawablePadding="20dp"
-            android:gravity="center_vertical"
             android:drawableStart="@drawable/ic_password_xlarge"
+            android:ems="10"
+            android:gravity="center_vertical"
             android:hint="Lozinka"
+            android:inputType="textPassword"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp"
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
-            android:textSize="30dp"
-            android:inputType="textPassword" />
+            android:textSize="30dp" />
 
         <Button
             android:id="@+id/loginbutton"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
             android:layout_weight="0.1"
             android:background="@drawable/loginbutton_background"
-            android:text="Prijavi se"
-            android:textSize="30dp"
             android:gravity="center"
+            android:text="Prijavi se"
             android:textColor="#d90647"
-            />
+            android:textSize="30dp" />
 
     </LinearLayout>
 

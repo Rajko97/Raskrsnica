@@ -65,7 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
                             else
-                                Toast.makeText(LoginActivity.this, "Netačna lozinka!", Toast.LENGTH_SHORT).show();
+                                tv.setText("Netačna lozinka!");
+                                tv.setTextColor(Color.rgb(217,6,71));
+                                tv.setBackgroundResource(R.drawable.loginbutton_background);
+                                //Toast.makeText(LoginActivity.this, "Netačna lozinka!", Toast.LENGTH_SHORT).show();
                             break;
                         }
 
@@ -75,8 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(i == korisnici.length()-1) {
                         tv.setText("Korisničko ime nije pronađeno");
                         tv.setTextColor(Color.rgb(217,6,71));
-                        tv.setBackgroundResource(R.drawable.edittext_background);
-                        Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
+                        tv.setBackgroundResource(R.drawable.loginbutton_background);
+                       // Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
