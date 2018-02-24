@@ -49,13 +49,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.90"
-            android:paddingRight="30dp">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:id="@+id/LayoutBaza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"
+                android:paddingRight="15dp"></LinearLayout>
         </ScrollView>
 
     </LinearLayout>

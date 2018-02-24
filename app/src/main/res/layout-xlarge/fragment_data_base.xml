@@ -47,14 +47,15 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingRight="40dp"
+            android:paddingRight="20dp"
             android:layout_weight="0.90">
 
             <LinearLayout
                 android:id="@+id/LayoutBaza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"
+                android:paddingRight="20dp"></LinearLayout>
         </ScrollView>
 
     </LinearLayout>

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,9 +78,19 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
         }
         final Dialog d = new Dialog(CountingActivity.this);
+        d.setCancelable(false);
         d.setContentView(R.layout.timer);
-        final TextView tv1=(TextView)d.findViewById(R.id.tv1);
-
+        final TextView tv1=d.findViewById(R.id.tv1);
+        d.setCancelable(false);
+        ImageButton img=d.findViewById(R.id.imgb);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countDownTimer2.cancel();
+                Toast.makeText(getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
         d.show();
 
 /*        final Dialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
@@ -102,11 +114,12 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             public void onTick(long millisUntilFinished) {
                 try {
                     long mills = getRemainingTimeinMS();
-                    int dani = (int) TimeUnit.MILLISECONDS.toDays(mills);
-                    int sati = (int) TimeUnit.MILLISECONDS.toHours(mills) % 24;
+                    //int dani = (int) TimeUnit.MILLISECONDS.toDays(mills);
+                    int sati = (int) TimeUnit.MILLISECONDS.toHours(mills);
                     int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
                     int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
-                    String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
+                    DecimalFormat f=new DecimalFormat("00");
+                    String diff = f.format(sati)+" : "+f.format(minuti)+" : "+f.format(sekunde);
                     tv1.setText(diff);
                     //alertDialog.setMessage(diff);
                 } catch (Exception e) {
@@ -116,7 +129,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFinish() {
-                //alertDialog.dismiss();
+                d.dismiss();
                 pocniBrojanje();
             }
         }.start();
