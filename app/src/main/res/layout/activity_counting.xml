@@ -33,10 +33,11 @@
                 android:id="@+id/kvantum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="35dp"
-                android:textStyle="bold"
+                android:text="15:00"
+                android:textAlignment="center"
                 android:textColor="#D90647"
-                android:textAlignment="center"/>
+                android:textSize="35dp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

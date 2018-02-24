@@ -61,7 +61,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         Bundle b = getIntent().getExtras();
         if (b != null) {
             nazivRaskrsnice = b.getString("RASKRSNICA");
-            String pozicija = b.getString("POZICIJA");
+            //String pozicija = b.getString("POZICIJA");
             trajanje = Integer.valueOf(b.getString("TRAJANJE"));
             datum = b.getString("DATUM");
             vreme = b.getString("VREME");
@@ -72,11 +72,11 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
             brojVozila = new int[4 * trajanje][3][10]; //4 kvantuma * 3 smera * 10 vozila
-            // @drawable/circle
             if (!smerID[0].equals("0")) ukljucenSmer[0] = true;
             if (!smerID[1].equals("0")) ukljucenSmer[1] = true;
             if (!smerID[2].equals("0")) ukljucenSmer[2] = true;
         }
+        podesiIzgled();
         final Dialog d = new Dialog(CountingActivity.this);
         d.setCancelable(false);
         d.setContentView(R.layout.timer);
@@ -87,29 +87,12 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View view) {
                 countDownTimer2.cancel();
-                Toast.makeText(getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
         d.show();
 
-/*        final Dialog alertDialog = new AlertDialog.Builder(CountingActivity.this).create();
-        alertDialog.setCancelable(false);
-        alertDialog.setContentView(R.layout.timer);
-        //alertDialog.setTitle("Vreme do brojanja");
-        //alertDialog.setMessage("00:00:00");
-        /*alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                countDownTimer2.cancel();
-                dialogInterface.dismiss();
-                Toast.makeText(getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-        alertDialog.show();*/
-        final long mills = getRemainingTimeinMS();
-        countDownTimer2 = new CountDownTimer(mills, 1000) {
+        countDownTimer2 = new CountDownTimer(getRemainingTimeinMS(), 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 try {
@@ -121,7 +104,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                     DecimalFormat f=new DecimalFormat("00");
                     String diff = f.format(sati)+" : "+f.format(minuti)+" : "+f.format(sekunde);
                     tv1.setText(diff);
-                    //alertDialog.setMessage(diff);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -146,68 +128,67 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
         return zadatak.getTime()-now.getTime();
     }
+    protected void podesiIzgled() {
+        for (int[] ids: dugmiciVozila)
+            for (int id : ids) {
+                findViewById(id).setOnClickListener(this);
+                findViewById(id).setOnLongClickListener(this);
+            }
+
+        for (int i = 0; i < textVozila.length; i++)
+            if (ukljucenSmer[i])
+                for (int j = 0; j < textVozila[i].length; j++) {
+                    textViews[i][j] = (TextView) findViewById(textVozila[i][j]);
+                }
+
+        int[] ikoniceVozila = {
+                R.drawable.ic_bicikl, R.drawable.ic_motor, R.drawable.ic_auto, R.drawable.ic_autobus,
+                R.drawable.ic_laka_teretna, R.drawable.ic_laka_teretna, R.drawable.ic_srednja_teretna, R.drawable.ic_teska_teretna,
+                R.drawable.ic_autovoz, R.drawable.ic_traktor, R.drawable.ic_zaprega
+        };
+        for (int i = 0; i < 3; i++) {
+            if (ukljucenSmer[i])
+                continue;
+            for (int j = 0; j < textVozila[i].length; j++) {
+                TextView text = (TextView) findViewById(textVozila[i][j]);
+                Button dugme = (Button) findViewById(dugmiciVozila[i][j]);
+                ImageView img = null;
+                switch (i) {
+                    case 0:
+                        img = (ImageView) findViewById(R.id.imgStrelicaLevo);
+                        break;
+                    case 1:
+                        img = (ImageView) findViewById(R.id.imgStrelicaPravo);
+                        break;
+                    case 2:
+                        img = (ImageView) findViewById(R.id.imgStrelicaDesno);
+                        break;
+                }
+
+                Drawable mDrawable = getResources().getDrawable(ikoniceVozila[j]);
+                mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                mDrawable = DrawableCompat.wrap(mDrawable);
+                int h = mDrawable.getIntrinsicHeight();
+                int w = mDrawable.getIntrinsicWidth();
+                mDrawable.setBounds(0, 0, w, h);
+                dugme.setCompoundDrawablesRelative(mDrawable, null, null, null);
+
+                dugme.setBackgroundResource(R.drawable.circle_grey);
+                text.setBackgroundResource(R.drawable.circle_grey);
+
+                text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
+                img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
+            }
+        }
+    }
     protected void pocniBrojanje() {
         final TextView timer = (TextView) findViewById(R.id.kvantum);
-
-            for (int[] ids: dugmiciVozila)
-                for (int id : ids) {
-                    findViewById(id).setOnClickListener(this);
-                    findViewById(id).setOnLongClickListener(this);
-                }
-
-            for (int i = 0; i < textVozila.length; i++)
-                if (ukljucenSmer[i])
-                    for (int j = 0; j < textVozila[i].length; j++) {
-                        textViews[i][j] = (TextView) findViewById(textVozila[i][j]);
-                    }
-
-            int[] ikoniceVozila = {
-                    R.drawable.ic_bicikl, R.drawable.ic_motor, R.drawable.ic_auto, R.drawable.ic_autobus,
-                    R.drawable.ic_laka_teretna, R.drawable.ic_laka_teretna, R.drawable.ic_srednja_teretna, R.drawable.ic_teska_teretna,
-                    R.drawable.ic_autovoz, R.drawable.ic_traktor, R.drawable.ic_zaprega
-            };
-            for (int i = 0; i < 3; i++) {
-                if (ukljucenSmer[i])
-                    continue;
-                for (int j = 0; j < textVozila[i].length; j++) {
-                    TextView text = (TextView) findViewById(textVozila[i][j]);
-                    Button dugme = (Button) findViewById(dugmiciVozila[i][j]);
-                    ImageView img = null;
-                    switch (i) {
-                        case 0:
-                            img = (ImageView) findViewById(R.id.imgStrelicaLevo);
-                            break;
-                        case 1:
-                            img = (ImageView) findViewById(R.id.imgStrelicaPravo);
-                            break;
-                        case 2:
-                            img = (ImageView) findViewById(R.id.imgStrelicaDesno);
-                            break;
-                    }
-
-                    Drawable mDrawable = getResources().getDrawable(ikoniceVozila[j]);
-                    mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                    mDrawable = DrawableCompat.wrap(mDrawable);
-                    int h = mDrawable.getIntrinsicHeight();
-                    int w = mDrawable.getIntrinsicWidth();
-                    mDrawable.setBounds(0, 0, w, h); // zbog ove linije sam utrosio 6 sata
-                    dugme.setCompoundDrawablesRelative(mDrawable, null, null, null);
-
-                    dugme.setBackgroundResource(R.drawable.circle_grey);
-                    text.setBackgroundResource(R.drawable.circle_grey);
-
-                    text.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
-                    dugme.setTextColor(getResources().getColor(R.color.colorDisabledGrey));
-                    img.setColorFilter(getResources().getColor(R.color.colorDisabledGrey));
-                }
-            }
-        //900000 default
-        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { //900000 default
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%02d : %02d", TimeUnit.MILLISECONDS.toMinutes(l), TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
             }
-
             @Override
             public void onFinish() {
                 if (kvantum < (trajanje * 4 - 1)) {
@@ -256,7 +237,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                        JSONObject jsonSmerVrednost = new JSONObject();
                        JSONArray jsonVrednosti = new JSONArray();
                        for (int iVozilo = 0; iVozilo < 10; iVozilo++) {
-                           jsonVrednosti.put(brojVozila[iKvantum-1][iSmer][iVozilo]);
+                           jsonVrednosti.put(brojVozila[4*(kvantum / 4 - 1)+(iKvantum-1)][iSmer][iVozilo]);
                        }
                        jsonSmerVrednost.put(smerID[iSmer], jsonVrednosti);
                        jsonSmer.put(jsonSmerVrednost);

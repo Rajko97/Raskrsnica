@@ -33,6 +33,7 @@
                 android:id="@+id/kvantum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="15:00"
                 android:textSize="45dp"
                 android:textStyle="bold"
                 android:textColor="#D90647"

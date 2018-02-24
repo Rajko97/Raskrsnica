@@ -46,15 +46,13 @@ public class SplashScreen extends AppCompatActivity {
         new Thread(new Runnable() {
             public void run() {
                 //todo Da se uskladi progress bar
-                for (int i = 0; i < 100; i += 10) {
-                    try {
-                        //Thread.sleep(150);
-                        pb.setProgress(i);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 ucitajKorisnike();
+                pb.setProgress(100);
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 startApp();
                 finish();
             }
