@@ -77,7 +77,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
         final Dialog d = new Dialog(CountingActivity.this);
         d.setContentView(R.layout.timer);
-        final TextView tv1=(TextView)findViewById(R.id.tv1);
+        final TextView tv1=(TextView)d.findViewById(R.id.tv1);
 
         d.show();
 
