@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.loginbutton);
         final EditText username = (EditText) findViewById(R.id.etKorisnickoIme);
         final EditText password = (EditText) findViewById(R.id.etSifra);
+        final TextView tv=(TextView)findViewById(R.id.tvError);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +72,12 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(i == korisnici.length()-1)
+                    if(i == korisnici.length()-1) {
+                        tv.setText("Korisničko ime nije pronađeno");
+                        tv.setTextColor(Color.rgb(217,6,71));
+                        tv.setBackgroundResource(R.drawable.edittext_background);
                         Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
