@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import org.json.JSONArray;
@@ -26,7 +29,7 @@ import java.net.URLConnection;
 public class SplashScreen extends AppCompatActivity {
     private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
     private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/16f685";
-
+    private ImageView logo;
     private ProgressBar pb;
     RestClient restClient;
     @Override
@@ -39,6 +42,10 @@ public class SplashScreen extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             }*/
+
+        logo=(ImageView)findViewById(R.id.imageView);
+        Animation animation=AnimationUtils.loadAnimation(this,R.anim.fade_in);
+        logo.startAnimation(animation);
 
         restClient = RestClient.getInstance();
         pb = (ProgressBar) findViewById(R.id.progressBar);

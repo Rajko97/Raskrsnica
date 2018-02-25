@@ -68,4 +68,4 @@
     <style name="MatchSpinnerTheme" parent="AppTheme">
         <item name="android:dropDownListViewStyle">@style/MatchSpinnerStyle</item>
     </style>
-</resources>
+  </resources>
