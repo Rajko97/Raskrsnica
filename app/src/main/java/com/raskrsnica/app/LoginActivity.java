@@ -10,9 +10,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +45,32 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         
         ucitajBazu();
-        
+        final TextView tv=(TextView)findViewById(R.id.tvError);
+        ImageView img=(ImageView)findViewById(R.id.imageView);
         Button button = (Button) findViewById(R.id.loginbutton);
         final EditText username = (EditText) findViewById(R.id.etKorisnickoIme);
         final EditText password = (EditText) findViewById(R.id.etSifra);
-        final TextView tv=(TextView)findViewById(R.id.tvError);
+
+        Animation a= AnimationUtils.loadAnimation(this,R.anim.fade_in);
+        img.startAnimation(a);
+        tv.startAnimation(a);
+
+        Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        animation1.setDuration(600);
+        animation1.setFillAfter(true);
+        Animation animation2=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        animation2.setStartOffset(300);
+        animation2.setDuration(600);
+        animation2.setFillAfter(true);
+        Animation animation3=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        animation3.setStartOffset(600);
+        animation3.setDuration(600);
+        animation3.setFillAfter(true);
+        username.startAnimation(animation1);
+        password.startAnimation(animation2);
+        button.startAnimation(animation3);
+
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
