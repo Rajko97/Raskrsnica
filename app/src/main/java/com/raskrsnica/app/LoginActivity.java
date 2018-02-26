@@ -46,10 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         
         ucitajBazu();
         final TextView tv=(TextView)findViewById(R.id.tvError);
+        TextView tv2=(TextView)findViewById(R.id.tv);
         ImageView img=(ImageView)findViewById(R.id.imageView);
         Button button = (Button) findViewById(R.id.loginbutton);
         final EditText username = (EditText) findViewById(R.id.etKorisnickoIme);
         final EditText password = (EditText) findViewById(R.id.etSifra);
+        tv.setVisibility(View.INVISIBLE);
 
         Animation a= AnimationUtils.loadAnimation(this,R.anim.fade_in);
         img.startAnimation(a);
@@ -70,6 +72,9 @@ public class LoginActivity extends AppCompatActivity {
         password.startAnimation(animation2);
         button.startAnimation(animation3);
 
+        final Animation animation4=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,Animation.ABSOLUTE,50);
+        animation4.setDuration(300);
+        animation4.setFillAfter(true);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +96,10 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             else
                                 tv.setText("Netačna lozinka!");
-                                tv.setTextColor(Color.rgb(217,6,71));
-                                tv.setBackgroundResource(R.drawable.loginbutton_background);
+                                tv.setBackgroundColor(Color.rgb(255,255,255));
+                                tv.startAnimation(animation4);
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
+
                                 //Toast.makeText(LoginActivity.this, "Netačna lozinka!", Toast.LENGTH_SHORT).show();
                             break;
                         }
@@ -102,9 +109,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if(i == korisnici.length()-1) {
                         tv.setText("Korisničko ime nije pronađeno");
-                        tv.setTextColor(Color.rgb(217,6,71));
-                        tv.setBackgroundResource(R.drawable.loginbutton_background);
-                       // Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
+                        tv.setBackgroundColor(Color.rgb(255,255,255));
+                        tv.startAnimation(animation4);
+                        tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
+
+                        // Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
