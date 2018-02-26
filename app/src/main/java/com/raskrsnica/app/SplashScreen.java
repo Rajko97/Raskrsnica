@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +69,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private void ucitajKorisnike() {
             String response = restClient.getRequest(URL_ZA_KORISNIKE);
+            pb.setSecondaryProgress(20);
             sacuvajKorisnike(response);
     }
 
@@ -78,6 +80,7 @@ public class SplashScreen extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("Korisnici", korisnici.toString());
             editor.apply();
+            pb.setProgress(20);
             ucitajZadatke(korisnici);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -86,6 +89,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private void ucitajZadatke(JSONArray korisnici) {
         String response = restClient.getRequest(URL_ZA_ZADATKE);
+        pb.setSecondaryProgress(40);
         sacuvajZadatke(korisnici, response);
     }
 
@@ -114,14 +118,17 @@ public class SplashScreen extends AppCompatActivity {
         try {
             JSONObject sviZadaci = new JSONObject(s);
             SharedPreferences.Editor editor = sharedPref.edit();
-
+            //20 40
+            float procenatPoKorisniku = 80/korisnici.length();
             for (int i = 0; i < korisnici.length(); i++) {
                 JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
                 String ime = korisnik.getString("username");
                 JSONArray zadaci = sviZadaci.getJSONArray("korisnik" + ime);
-                ucitajSlike(zadaci);
                 editor.putString("Zadaci" + ime, zadaci.toString());
                 editor.apply();
+                pb.incrementProgressBy((int) (80.0/korisnici.length()));
+                pb.incrementSecondaryProgressBy((int) (60.0/korisnici.length()));
+                ucitajSlike(zadaci);
             }
         } catch (JSONException e) {
             e.printStackTrace();
