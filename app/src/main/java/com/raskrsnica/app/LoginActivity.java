@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
+                                break;
                             }
                             else
                                 tv.setText("Netačna lozinka!");

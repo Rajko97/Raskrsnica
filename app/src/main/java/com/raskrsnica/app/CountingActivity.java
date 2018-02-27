@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -286,7 +287,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 for (int j = 0; j < dugmiciVozila[i].length; j++)
                     if(view.getId() == dugmiciVozila[i][j])
                     {
-                        showNumberPicker(i, j);
+                        prikaziTastaturu(i, j);
                         return true;
                     }
         return false;
@@ -307,6 +308,34 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
        // Log.i("value is",""+newVal);
+    }
+    public void prikaziTastaturu(final int voziloSmer, final int voziloID) {
+        final Dialog d = new Dialog(CountingActivity.this);
+        d.setContentView(R.layout.keyboard);
+        final TextView ekran = (TextView) d.findViewById(R.id.tvEkran);
+        int buttons[] = {R.id.btnAdd0, R.id.btnAdd1, R.id.btnAdd2, R.id.btnAdd3, R.id.btnAdd4,
+                R.id.btnAdd5, R.id.btnAdd6, R.id.btnAdd7, R.id.btnAdd8, R.id.btnAdd9, R.id.btnConfirm};
+        for (int i = 0; i < 11; i++) {
+            Button button = (Button) d.findViewById(buttons[i]);
+            final int finalI = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (finalI == 10) {
+                        brojVozila[kvantum][voziloSmer][voziloID]+= Integer.parseInt(ekran.getText().toString());
+                        textViews[voziloSmer][voziloID].setText(brojVozila[kvantum][voziloSmer][voziloID]+"");
+                        d.dismiss();
+                    }
+                    else {
+                        if (ekran.getText().toString().equals("0"))
+                            ekran.setText(""+finalI);
+                        else
+                            ekran.append("" + finalI);
+                    }
+                }
+            });
+        }
+        d.show();
     }
     public void showNumberPicker(final int voziloSmer, final int voziloID) {
         final Dialog d = new Dialog(CountingActivity.this);
