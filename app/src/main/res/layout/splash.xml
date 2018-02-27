@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9">
+        android:layout_weight="0.95">
 
         <LinearLayout
             android:layout_marginBottom="50dp"
@@ -64,7 +64,7 @@
         android:id="@+id/imgAppsLogo"
         android:layout_width="250dp"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.05"
         app:srcCompat="@drawable/apps_team" />
 
 

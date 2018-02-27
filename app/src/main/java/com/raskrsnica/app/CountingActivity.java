@@ -81,6 +81,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
         podesiIzgled();
         final Dialog d = new Dialog(CountingActivity.this);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.setCancelable(false);
         d.setContentView(R.layout.timer);
         d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -188,6 +189,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     }
     protected void pocniBrojanje() {
         final TextView timer = (TextView) findViewById(R.id.kvantum);
+
         CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { //900000 default
             @Override
             public void onTick(long l) {
@@ -314,6 +316,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     }
     public void prikaziTastaturu(final int voziloSmer, final int voziloID) {
         final Dialog d = new Dialog(CountingActivity.this);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.setContentView(R.layout.keyboard);
         final TextView ekran = (TextView) d.findViewById(R.id.tvEkran);
         int buttons[] = {R.id.btnAdd0, R.id.btnAdd1, R.id.btnAdd2, R.id.btnAdd3, R.id.btnAdd4,

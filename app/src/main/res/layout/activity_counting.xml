@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="15:00"
                 android:textAlignment="center"
-                android:textColor="#D90647"
+                android:textColor="#d90647"
                 android:textSize="35dp"
                 android:textStyle="bold" />
         </LinearLayout>
