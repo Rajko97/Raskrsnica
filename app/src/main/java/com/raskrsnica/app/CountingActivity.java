@@ -185,6 +185,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     }
     protected void pocniBrojanje() {
         final TextView timer = (TextView) findViewById(R.id.kvantum);
+
         CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { //900000 default
             @Override
             public void onTick(long l) {
