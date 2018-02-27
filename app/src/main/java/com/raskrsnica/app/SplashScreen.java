@@ -30,8 +30,9 @@ import java.net.URLConnection;
 public class SplashScreen extends AppCompatActivity {
     private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
     private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/16f685";
-    private ImageView logo;
+    private ImageView logo,logo2;
     private ProgressBar pb;
+    private TextView tv;
     RestClient restClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,12 @@ public class SplashScreen extends AppCompatActivity {
             }*/
 
         logo=(ImageView)findViewById(R.id.imageView);
+        logo2=(ImageView)findViewById(R.id.imgAppsLogo);
+        tv=(TextView)findViewById(R.id.tvLoading);
         Animation animation=AnimationUtils.loadAnimation(this,R.anim.fade_in);
         logo.startAnimation(animation);
+        tv.startAnimation(animation);
+        logo2.startAnimation(animation);
 
         restClient = RestClient.getInstance();
         pb = (ProgressBar) findViewById(R.id.progressBar);
