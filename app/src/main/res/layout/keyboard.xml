@@ -2,24 +2,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="400dp"
     android:layout_height="300dp"
-    android:background="#fff"
+    android:background="@drawable/white_backround"
     android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
+        android:background="@drawable/white_backround"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tvEkran"
             android:text="0"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:textSize="32dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.2"
             android:gravity="right|center_vertical"
             android:paddingRight="20dp"
-            android:textColor="#D90647"/>
+            android:textColor="#D90647"
+            android:background="@drawable/red_frame"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
