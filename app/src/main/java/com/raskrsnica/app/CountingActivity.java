@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -79,6 +81,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         }
         podesiIzgled();
         final Dialog d = new Dialog(CountingActivity.this);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.setCancelable(false);
         d.setContentView(R.layout.timer);
         final TextView tv1=d.findViewById(R.id.tv1);
@@ -312,6 +315,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     }
     public void prikaziTastaturu(final int voziloSmer, final int voziloID) {
         final Dialog d = new Dialog(CountingActivity.this);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.setContentView(R.layout.keyboard);
         final TextView ekran = (TextView) d.findViewById(R.id.tvEkran);
         int buttons[] = {R.id.btnAdd0, R.id.btnAdd1, R.id.btnAdd2, R.id.btnAdd3, R.id.btnAdd4,
