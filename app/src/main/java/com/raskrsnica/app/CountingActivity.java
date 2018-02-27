@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -81,6 +83,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         final Dialog d = new Dialog(CountingActivity.this);
         d.setCancelable(false);
         d.setContentView(R.layout.timer);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         final TextView tv1=d.findViewById(R.id.tv1);
         d.setCancelable(false);
         ImageButton img=d.findViewById(R.id.imgb);
@@ -325,6 +328,11 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                         brojVozila[kvantum][voziloSmer][voziloID]+= Integer.parseInt(ekran.getText().toString());
                         textViews[voziloSmer][voziloID].setText(brojVozila[kvantum][voziloSmer][voziloID]+"");
                         d.dismiss();
+                    }
+                    else if (finalI == 11) {
+                        String str = ekran.getText().toString();
+                        if(str != null && str.length() > 0)
+                            ekran.setText(str.substring(0, str.length()-1));
                     }
                     else {
                         if (ekran.getText().toString().equals("0"))
