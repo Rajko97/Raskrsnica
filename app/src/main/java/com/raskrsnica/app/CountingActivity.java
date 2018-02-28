@@ -321,7 +321,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         final TextView ekran = (TextView) d.findViewById(R.id.tvEkran);
         int buttons[] = {R.id.btnAdd0, R.id.btnAdd1, R.id.btnAdd2, R.id.btnAdd3, R.id.btnAdd4,
                 R.id.btnAdd5, R.id.btnAdd6, R.id.btnAdd7, R.id.btnAdd8, R.id.btnAdd9, R.id.btnConfirm};
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < buttons.length; i++) {
             Button button = (Button) d.findViewById(buttons[i]);
             final int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
@@ -332,11 +332,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                         textViews[voziloSmer][voziloID].setText(brojVozila[kvantum][voziloSmer][voziloID]+"");
                         d.dismiss();
                     }
-                    else if (finalI == 11) {
-                        String str = ekran.getText().toString();
-                        if(str != null && str.length() > 0)
-                            ekran.setText(str.substring(0, str.length()-1));
-                    }
                     else {
                         if (ekran.getText().toString().equals("0"))
                             ekran.setText(""+finalI);
@@ -346,6 +341,15 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
+        ImageButton button = (ImageButton) d.findViewById(R.id.btnDelete);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    String str = ekran.getText().toString();
+                    if(str.length() > 0)
+                        ekran.setText(str.substring(0, str.length()-1));
+            }
+        });
         d.show();
     }
     public void showNumberPicker(final int voziloSmer, final int voziloID) {
