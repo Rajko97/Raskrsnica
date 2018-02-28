@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="400dp"
-    android:layout_height="300dp"
+    android:layout_width="450dp"
+    android:layout_height="350dp"
     android:background="@drawable/white_backround"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
