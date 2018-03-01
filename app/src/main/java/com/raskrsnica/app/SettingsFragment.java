@@ -4,20 +4,21 @@ package com.raskrsnica.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -27,7 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinnerEventsListener{
 
@@ -53,7 +52,6 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
     CountDownTimer countDownTimer;
     String strLevo, strPravo, strDesno;
     String[][] podaciRaskrsnice;
-    Boolean OtvorenSpiner = false;
     Boolean greska = false;
 
     @Override
@@ -83,9 +81,18 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
             podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
             e.printStackTrace();
         }
-
         spinner=(CustomSpinner) rootView.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]) {
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+               View v = null;
+               v = super.getDropDownView(position, null, parent);
+               if(position == podaciRaskrsnice[0].length-1) {
+                   v.setBackgroundResource(R.drawable.spiner_last_item_backgrounds);
+               }
+               return v;
+            }
+        };
         adapter.setDropDownViewResource(R.layout.dropdownlist_style);
         spinner.setAdapter(adapter);
         if(!greska)
@@ -132,10 +139,6 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                     else
                         imageView.setImageDrawable(getResources().getDrawable(R.drawable.img_w));
 
-                    //if (OtvorenSpiner)
-                     //   spinner.setBackgroundResource(R.drawable.spinner_background);
-                    OtvorenSpiner = false;
-
                     SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
                     try {
                         Date zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
@@ -157,28 +160,9 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    if (OtvorenSpiner)
-                        //spinner.setBackgroundResource(R.drawable.spinner_background);
-                    OtvorenSpiner = false;
                 }
             });
             spinner.setSpinnerEventsListener(this);
-/*
-            spinner.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        if (OtvorenSpiner) {
-                            spinner.setBackgroundResource(R.drawable.spinner_background);
-                            OtvorenSpiner = false;
-                        } else {
-                            spinner.setBackgroundResource(R.drawable.spinner_background2);
-                            OtvorenSpiner = true;
-                        }
-                    }
-                    return false;
-                }
-            });*/
         }
         else
             spinner.setEnabled(false);
@@ -209,59 +193,9 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                         iskljuciDugme(button);
                     }
                     else {
-                        /*final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-                        alertDialog.setCancelable(false);
-                        alertDialog.setTitle("Vreme do brojanja");
-                        alertDialog.setMessage("00:00:00");
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Otkazi", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                countDownTimer.cancel();
-                                dialogInterface.dismiss();
-                                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Otkazali ste brojanje", Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                         });
-                        alertDialog.show();
-                        final long mills = getRemainingTimeinMS(i);
-                        countDownTimer = new CountDownTimer(mills, 1000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                try {
-                                    long mills = getRemainingTimeinMS(i);
-                                    int dani = (int) TimeUnit.MILLISECONDS.toDays(mills);
-                                    int sati = (int) TimeUnit.MILLISECONDS.toHours(mills) % 24;
-                                    int minuti = (int) TimeUnit.MILLISECONDS.toMinutes(mills) % 60;
-                                    int sekunde = (int) TimeUnit.MILLISECONDS.toSeconds(mills) % 60;
-                                    String diff = (dani>0?"Za "+dani+" dana i ":"")+sati+":"+minuti+":"+sekunde;
-                                    alertDialog.setMessage(diff);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                alertDialog.dismiss();*/
-                                PokreniBrojanje();/*
-                            }
-                        }.start();*/
+                        PokreniBrojanje();
                     }
                 }
-
-                private long getRemainingTimeinMS(int i) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
-                    //sdf.setTimeZone(TimeZone.getTimeZone("UCT"));
-                    Date now = Calendar.getInstance().getTime();
-                    Date zadatak = null;
-                    try {
-                        zadatak = sdf.parse(podaciRaskrsnice[DATUM][i]+" "+podaciRaskrsnice[POCETAK][i]);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    return zadatak.getTime()-now.getTime();
-                }
-
                 private void PokreniBrojanje() {
                     Intent intent = new Intent(getActivity(), CountingActivity.class);
                     Bundle b = new Bundle();

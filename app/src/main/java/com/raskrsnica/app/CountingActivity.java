@@ -97,7 +97,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         });
         d.show();
 
-        countDownTimer2 = new CountDownTimer(getRemainingTimeinMS(), 1000) {
+        countDownTimer2 = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 try {
@@ -199,15 +199,16 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             public void onFinish() {
                 if (kvantum < (trajanje * 4 - 1)) {
                     kvantum++;
-                    if (kvantum % 4 == 0)
-                        SacuvajPodatke();
+                    if (kvantum % 4 == 0) {
+                    //    SacuvajPodatke();
+                    }
                     for (int i = 0; i < textViews.length; i++)
                         if (ukljucenSmer[i])
                             for (int j = 0; j < textViews[0].length; j++)
                                 textViews[i][j].setText("0");
                     start();
                 } else {
-                    SacuvajPodatke();
+                    //SacuvajPodatke();
                     setResult(RESULT_OK, getIntent());
                     finish();
                 }
@@ -328,7 +329,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(View view) {
                     if (finalI == 10) {
-                        brojVozila[kvantum][voziloSmer][voziloID]+= Integer.parseInt(ekran.getText().toString());
+                        if(!ekran.getText().toString().equals(""))
+                            brojVozila[kvantum][voziloSmer][voziloID]+= Integer.parseInt(ekran.getText().toString());
                         textViews[voziloSmer][voziloID].setText(brojVozila[kvantum][voziloSmer][voziloID]+"");
                         d.dismiss();
                     }
