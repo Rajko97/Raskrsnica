@@ -28,7 +28,6 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:listSelector="@android:color/transparent"
            />
         <activity
             android:name=".LoginActivity"

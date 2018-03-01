@@ -2,7 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_activated="true" android:drawable="@drawable/spinner_item_bg_last"/>
-    <item android:state_selected="true" android:drawable="@drawable/spinner_last_item_onfocus"/>
     <item android:state_pressed="true" android:drawable="@drawable/spinner_last_item_onfocus"/>
     <item android:drawable="@android:color/transparent"/>
 </selector>
