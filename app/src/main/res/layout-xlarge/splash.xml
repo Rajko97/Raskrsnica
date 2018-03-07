@@ -64,7 +64,8 @@
         android:layout_height="0dp"
         android:layout_weight="0.05"
         app:srcCompat="@drawable/apps_team"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"/>
 
 
 </LinearLayout>
