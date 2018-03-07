@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                 sortirajZadatke("Zadaci"+korisnik.getString("username"));
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.transition_in, R.anim.transition_out);
+                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();
                                 break;
                             }
