@@ -9,7 +9,8 @@
 			"Trajanje":"2",
 			"SmerLevo":"1",
 			"SmerPravo":"1",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica1.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica2",
@@ -19,7 +20,8 @@
 			"Trajanje":"1",
 			"SmerLevo":"0",
 			"SmerPravo":"1",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica2.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica3",
@@ -29,7 +31,8 @@
 			"Trajanje":"2",
 			"SmerLevo":"1",
 			"SmerPravo":"0",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica3.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica4",
@@ -39,7 +42,8 @@
 			"Trajanje":"3",
 			"SmerLevo":"1",
 			"SmerPravo":"1",
-			"SmerDesno":"0"
+			"SmerDesno":"0",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica1.JPG"
 		}
 	],
 	"korisnikSandra":
@@ -52,7 +56,8 @@
 			"Trajanje":"2",
 			"SmerLevo":"1",
 			"SmerPravo":"1",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica1.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica6",
@@ -62,7 +67,8 @@
 			"Trajanje":"1",
 			"SmerLevo":"0",
 			"SmerPravo":"1",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica2.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica7",
@@ -72,7 +78,8 @@
 			"Trajanje":"2",
 			"SmerLevo":"1",
 			"SmerPravo":"0",
-			"SmerDesno":"1"
+			"SmerDesno":"1",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica3.JPG"
 		},
 		{
 			"Raskrsnica":"Raskrsnica8",
@@ -82,7 +89,8 @@
 			"Trajanje":"3",
 			"SmerLevo":"1",
 			"SmerPravo":"1",
-			"SmerDesno":"0"
+			"SmerDesno":"0",
+			"Slika":"http://www.rajko.esy.es/Raskrsnice/Raskrsnica1.JPG"
 		}
 	]
 }

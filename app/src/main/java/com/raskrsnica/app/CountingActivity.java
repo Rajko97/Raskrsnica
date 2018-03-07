@@ -200,7 +200,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                 if (kvantum < (trajanje * 4 - 1)) {
                     kvantum++;
                     if (kvantum % 4 == 0) {
-                    //    SacuvajPodatke();
+                        SacuvajPodatke();
                     }
                     for (int i = 0; i < textViews.length; i++)
                         if (ukljucenSmer[i])
@@ -208,7 +208,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                                 textViews[i][j].setText("0");
                     start();
                 } else {
-                    //SacuvajPodatke();
+                    kvantum++;
+                    SacuvajPodatke();
                     setResult(RESULT_OK, getIntent());
                     finish();
                 }

@@ -1,10 +1,16 @@
 package com.raskrsnica.app;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
@@ -40,11 +46,6 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        /*if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            }*/
-
         logo=(ImageView)findViewById(R.id.imageView);
         logo2=(ImageView)findViewById(R.id.imgAppsLogo);
         tv=(TextView)findViewById(R.id.tvLoading);
@@ -58,7 +59,6 @@ public class SplashScreen extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                //todo Da se uskladi progress bar
                 ucitajKorisnike();
                 pb.setProgress(100);
                 try {
@@ -123,8 +123,6 @@ public class SplashScreen extends AppCompatActivity {
         try {
             JSONObject sviZadaci = new JSONObject(s);
             SharedPreferences.Editor editor = sharedPref.edit();
-            //20 40
-            float procenatPoKorisniku = 80/korisnici.length();
             for (int i = 0; i < korisnici.length(); i++) {
                 JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
                 String ime = korisnik.getString("username");
