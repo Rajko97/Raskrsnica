@@ -197,6 +197,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onFinish() {
+                timer.setText("00:10");
                 if (kvantum < (trajanje * 4 - 1)) {
                     kvantum++;
                     if (kvantum % 4 == 0) {
