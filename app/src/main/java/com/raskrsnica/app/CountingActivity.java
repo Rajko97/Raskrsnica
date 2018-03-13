@@ -19,19 +19,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
@@ -84,7 +81,6 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.setCancelable(false);
         d.setContentView(R.layout.timer);
-        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         final TextView tv1=d.findViewById(R.id.tv1);
         d.setCancelable(false);
         ImageButton img=d.findViewById(R.id.imgb);
@@ -388,17 +384,29 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-       new AlertDialog.Builder(this)
-               .setTitle("Da li ste sigurni da želite da otkažete brojanje?")
-               .setMessage("Ukoliko potvrdite, podaci koje ste merili neće biti sačuvani!")
-               .setCancelable(false)
-               .setPositiveButton("Da", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialogInterface, int i) {
-                       CountingActivity.this.finish();
-                   }
-               })
-               .setNegativeButton("Ne", null)
-               .show();
+        final Dialog dialog = new Dialog(CountingActivity.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.alert_dialog1);
+        final TextView tv1=dialog.findViewById(R.id.tv1);
+        tv1.setText("Da li ste sigurni da želite da otkažete brojanje?");
+        final TextView tv2=dialog.findViewById(R.id.tv2);
+        tv2.setText("Ukoliko potvrdite, podaci koje ste merili neće biti sačuvani!");
+        dialog.setCancelable(false);
+        Button btDa=dialog.findViewById(R.id.btDa);
+        btDa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CountingActivity.this.finish();
+            }
+        });
+        Button btNe=dialog.findViewById(R.id.btNe);
+        btNe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

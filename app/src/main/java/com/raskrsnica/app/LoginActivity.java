@@ -1,12 +1,12 @@
 package com.raskrsnica.app;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,16 +15,13 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -55,16 +51,16 @@ public class LoginActivity extends AppCompatActivity {
 
         Animation a= AnimationUtils.loadAnimation(this,R.anim.fade_in);
         img.startAnimation(a);
-        tv.startAnimation(a);
+        tv2.startAnimation(a);
 
-        Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
         animation1.setDuration(600);
         animation1.setFillAfter(true);
-        Animation animation2=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        Animation animation2=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
         animation2.setStartOffset(300);
         animation2.setDuration(600);
         animation2.setFillAfter(true);
-        Animation animation3=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,150,Animation.ABSOLUTE);
+        Animation animation3=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
         animation3.setStartOffset(600);
         animation3.setDuration(600);
         animation3.setFillAfter(true);
@@ -72,9 +68,26 @@ public class LoginActivity extends AppCompatActivity {
         password.startAnimation(animation2);
         button.startAnimation(animation3);
 
+        final Animation animation5=AnimationUtils.loadAnimation(this,R.anim.fade_out);
+        animation5.setStartOffset(2500);
         final Animation animation4=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,Animation.ABSOLUTE,50);
-        animation4.setDuration(300);
-        animation4.setFillAfter(true);
+        animation4.setDuration(500);
+        animation4.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                tv.startAnimation(animation5);
+            }
+
+
+        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                                 sortirajZadatke("Zadaci"+korisnik.getString("username"));
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();
                                 break;
                             }
@@ -101,7 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                                 tv.startAnimation(animation4);
                                 tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
 
-                                //Toast.makeText(LoginActivity.this, "Netačna lozinka!", Toast.LENGTH_SHORT).show();
                             break;
                         }
 
@@ -114,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                         tv.startAnimation(animation4);
                         tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
 
-                        // Toast.makeText(LoginActivity.this, "Korisničko ime nije pronađeno", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -188,18 +200,24 @@ public class LoginActivity extends AppCompatActivity {
         try {
             korisnici = new JSONArray(sharedPref.getString("Korisnici", ""));
         } catch (JSONException e) {
-            new android.app.AlertDialog.Builder(LoginActivity.this)
-                    .setTitle("Greška!")
-                    .setMessage("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
-                            "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!")
-                    .setCancelable(false)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            LoginActivity.this.finish();
-                        }
-                    })
-                    .show();
+            final Dialog dialog = new Dialog(LoginActivity.this);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.alert_dialog2);
+            final TextView tv1=dialog.findViewById(R.id.tv1);
+            tv1.setText("Greška!");
+            final TextView tv2=dialog.findViewById(R.id.tv2);
+            tv2.setText("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
+                    "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!");
+            dialog.setCancelable(false);
+            Button btOk=dialog.findViewById(R.id.btOk);
+            btOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginActivity.this.finish();
+                }
+            });
+            dialog.show();
         }
     }
 }

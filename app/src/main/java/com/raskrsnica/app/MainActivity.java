@@ -2,9 +2,11 @@ package com.raskrsnica.app;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,12 +55,23 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQ_CODE  && resultCode == RESULT_OK ) {
             postaviFragment(FRAGMENT_DATABASE);
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Uputstvo!")
-                    .setMessage("Merenje je završeno. Izaberite podatke i kliknite na dugme za slanje na server.")
-                    .setCancelable(false)
-                    .setPositiveButton("Ok", null)
-                    .show();
+            final Dialog dialog = new Dialog(MainActivity.this);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.alert_dialog2);
+            final TextView tv1=dialog.findViewById(R.id.tv1);
+            tv1.setText("Uputstvo!");
+            final TextView tv2=dialog.findViewById(R.id.tv2);
+            tv2.setText("Merenje je završeno. Izaberite podatke i kliknite na dugme za slanje na server.");
+            dialog.setCancelable(false);
+            Button btOk=dialog.findViewById(R.id.btOk);
+            btOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+            dialog.show();
         }
     }
     private void postaviFragment(int fragmentID) {
