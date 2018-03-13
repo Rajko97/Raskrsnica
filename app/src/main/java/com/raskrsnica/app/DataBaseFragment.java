@@ -153,6 +153,7 @@ public class DataBaseFragment extends Fragment {
         dugmeBaza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean success = false;
                 for(int id = 0; id <brojMerenja; id++)
                 {
                     CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
@@ -176,46 +177,36 @@ public class DataBaseFragment extends Fragment {
                             id--;
                             if (brojMerenja == 0)
                                 ispisiGresku(rootView);
-                            final Dialog dialog = new Dialog(getContext());
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.setCancelable(false);
-                            dialog.setContentView(R.layout.alert_dialog2);
-                            final TextView tv2=dialog.findViewById(R.id.tv2);
-                            tv2.setText("Merenja su uspesno poslata na server.");
-                            dialog.setCancelable(false);
-                            Button btOk=dialog.findViewById(R.id.btOk);
-                            btOk.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            dialog.show();
+                            success = true;
                         }
                         else {
-                            final Dialog dialog = new Dialog(getContext());
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.setCancelable(false);
-                            dialog.setContentView(R.layout.alert_dialog2);
-                            final TextView tv1=dialog.findViewById(R.id.tv1);
-                            tv1.setText("Greska!");
-                            final TextView tv2=dialog.findViewById(R.id.tv2);
-                            tv2.setText("Baza trenutno nije dostupna.");
-                            dialog.setCancelable(false);
-                            Button btOk=dialog.findViewById(R.id.btOk);
-                            btOk.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            dialog.show();
-
+                           success = false;
+                           break;
                         }
                     }
                 }
+                final Dialog dialog = new Dialog(getContext());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.alert_dialog2);
+                final TextView tv1 = dialog.findViewById(R.id.tv1);
+                final TextView tv2 = dialog.findViewById(R.id.tv2);
+                dialog.setCancelable(false);
+                Button btOk = dialog.findViewById(R.id.btOk);
+                btOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
+                if (success) {
+                    tv1.setText("");
+                    tv2.setText("Merenja su uspesno poslata na server.");
+                } else {
+                    tv1.setText("Greska!");
+                    tv2.setText("Baza trenutno nije dostupna.");
+                }
+                dialog.show();
                 if(brojCekiranih == 0)
                 {
                     ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
