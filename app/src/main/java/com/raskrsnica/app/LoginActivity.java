@@ -1,10 +1,12 @@
 package com.raskrsnica.app;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -198,18 +200,24 @@ public class LoginActivity extends AppCompatActivity {
         try {
             korisnici = new JSONArray(sharedPref.getString("Korisnici", ""));
         } catch (JSONException e) {
-            new android.app.AlertDialog.Builder(LoginActivity.this)
-                    .setTitle("Greška!")
-                    .setMessage("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
-                            "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!")
-                    .setCancelable(false)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            LoginActivity.this.finish();
-                        }
-                    })
-                    .show();
+            final Dialog dialog = new Dialog(LoginActivity.this);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.alert_dialog2);
+            final TextView tv1=dialog.findViewById(R.id.tv1);
+            tv1.setText("Greška!");
+            final TextView tv2=dialog.findViewById(R.id.tv2);
+            tv2.setText("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
+                    "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!");
+            dialog.setCancelable(false);
+            Button btOk=dialog.findViewById(R.id.btOk);
+            btOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoginActivity.this.finish();
+                }
+            });
+            dialog.show();
         }
     }
 }

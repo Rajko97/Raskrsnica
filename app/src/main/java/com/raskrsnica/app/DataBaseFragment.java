@@ -2,6 +2,7 @@ package com.raskrsnica.app;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Dimension;
@@ -70,72 +72,81 @@ public class DataBaseFragment extends Fragment {
         dugmeObisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Da li ste sigurni da želite da uklonite izabrana merenja?")
-                        .setMessage("Ukoliko potvrdite, izabrani podaci koje ste merili biće zauvek izgubljeni iz uređaja!")
-                        .setCancelable(false)
-                        .setPositiveButton("Da", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                for(int id = 0; id <brojMerenja; id++)
-                                {
-                                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
-                                    if(checkBox.isChecked()) {
-                                        LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID+id);
-                                        ln.setVisibility(View.GONE);
-                                        obrisiJSONelement(id);
-                                        checkBox.setId(0);
-                                        ln.setId(0);
-                                        //ToDo Optimalniji nacin je da se broji koliko je bilo brisanja i da se shiftuje za toliko mesta
-                                        for (int j = id; j < brojMerenja-1; j++) {
-                                            CheckBox checkBox1 = (CheckBox) rootView.findViewById(CHECKBOX_ID+j+1);
-                                            checkBox1.setId(CHECKBOX_ID+j);
-                                            LinearLayout ln2 = (LinearLayout) rootView.findViewById(LAYOUT_ID+j+1);
-                                            ln2.setId(LAYOUT_ID+j);
-                                        }
-                                        brojMerenja--;
-                                        brojCekiranih--;
-                                        id--;
-                                        if(brojMerenja == 0)
-                                            ispisiGresku(rootView);
-                                    }
+                final Dialog dialog = new Dialog(getContext());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.alert_dialog1);
+                final TextView tv1 = dialog.findViewById(R.id.tv1);
+                tv1.setText("Da li ste sigurni da želite da uklonite izabrana merenja?");
+                final TextView tv2 = dialog.findViewById(R.id.tv2);
+                tv2.setText("Ukoliko potvrdite, izabrani podaci koje ste merili biće zauvek izgubljeni iz uređaja!");
+                dialog.setCancelable(false);
+                Button btDa = dialog.findViewById(R.id.btDa);
+                btDa.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        for (int id = 0; id < brojMerenja; id++) {
+                            CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID + id);
+                            if (checkBox.isChecked()) {
+                                LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
+                                ln.setVisibility(View.GONE);
+                                obrisiJSONelement(id);
+                                checkBox.setId(0);
+                                ln.setId(0);
+                                for (int j = id; j < brojMerenja - 1; j++) {
+                                    CheckBox checkBox1 = (CheckBox) rootView.findViewById(CHECKBOX_ID + j + 1);
+                                    checkBox1.setId(CHECKBOX_ID + j);
+                                    LinearLayout ln2 = (LinearLayout) rootView.findViewById(LAYOUT_ID + j + 1);
+                                    ln2.setId(LAYOUT_ID + j);
                                 }
-                                if(brojCekiranih == 0)
-                                {
-                                    ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
-                                    ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
-                                    dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                                    dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                                    dugmeObisi.setClickable(false);
-                                    dugmeBaza.setClickable(false);
-                                }
-
-                            }
-                            private void obrisiJSONelement(int position) {
-                                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-
-                                try {
-                                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
-                                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
-                                    JSONArray list = new JSONArray();
-                                    int len = jsonArray.length();
-                                    if(jsonArray != null) {
-                                        for(int i=0; i<len; i++)
-                                            if (i != position)
-                                                list.put(jsonArray.get(i));
-
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putString("Merenja"+korisnik, list.toString());
-                                        editor.apply();
-                                    }
-                                } catch (JSONException e) {
+                                brojMerenja--;
+                                brojCekiranih--;
+                                id--;
+                                if (brojMerenja == 0)
                                     ispisiGresku(rootView);
-                                    e.printStackTrace();
-                                }
                             }
-                        })
-                        .setNegativeButton("Ne", null)
-                        .show();
+                        }
+                        if (brojCekiranih == 0) {
+                            ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+                            ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
+                            dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                            dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                            dugmeObisi.setClickable(false);
+                            dugmeBaza.setClickable(false);
+                        }
+                        dialog.cancel();
+                    }
+                });
+                Button btNe=dialog.findViewById(R.id.btNe);
+                btNe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
+            }
+            private void obrisiJSONelement(int position) {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+
+                try {
+                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
+                    JSONArray list = new JSONArray();
+                    int len = jsonArray.length();
+                    if(jsonArray != null) {
+                        for(int i=0; i<len; i++)
+                            if (i != position)
+                                list.put(jsonArray.get(i));
+
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Merenja"+korisnik, list.toString());
+                        editor.apply();
+                    }
+                } catch (JSONException e) {
+                    ispisiGresku(rootView);
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -165,15 +176,43 @@ public class DataBaseFragment extends Fragment {
                             id--;
                             if (brojMerenja == 0)
                                 ispisiGresku(rootView);
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.alert_dialog2);
+                            final TextView tv2=dialog.findViewById(R.id.tv2);
+                            tv2.setText("Merenja su uspesno poslata na server.");
+                            dialog.setCancelable(false);
+                            Button btOk=dialog.findViewById(R.id.btOk);
+                            btOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                            dialog.show();
                         }
                         else {
-                            new AlertDialog.Builder(getContext())
-                                    .setTitle("Greska!")
-                                    .setMessage("Baza trenutno nije dostupna.")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Ok", null)
-                                    .show();
-                            break;
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.alert_dialog2);
+                            final TextView tv1=dialog.findViewById(R.id.tv1);
+                            tv1.setText("Greska!");
+                            final TextView tv2=dialog.findViewById(R.id.tv2);
+                            tv2.setText("Baza trenutno nije dostupna.");
+                            dialog.setCancelable(false);
+                            Button btOk=dialog.findViewById(R.id.btOk);
+                            btOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                            dialog.show();
+
                         }
                     }
                 }
