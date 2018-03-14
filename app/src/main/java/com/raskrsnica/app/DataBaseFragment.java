@@ -54,6 +54,7 @@ public class DataBaseFragment extends Fragment {
     RestClient restClient;
 
     final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000;
+    final static int TEXTBOX1_ID = 1500, TEXTBOX2_ID = 2000;
 
     int brojMerenja = 0;
     LinearLayout myLayout;
@@ -159,7 +160,7 @@ public class DataBaseFragment extends Fragment {
                     CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
                     if(checkBox.isChecked()) {
                         if(uploaduj(id)) {
-                            LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
+                            /*LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
                             ln.setVisibility(View.GONE);
                             //ToDo Ucitaj element i pokreni metodu
                             obrisiJSONelement(id);
@@ -176,7 +177,7 @@ public class DataBaseFragment extends Fragment {
                             brojCekiranih--;
                             id--;
                             if (brojMerenja == 0)
-                                ispisiGresku(rootView);
+                                ispisiGresku(rootView);*/
                             success = true;
                         }
                         else {
@@ -224,15 +225,24 @@ public class DataBaseFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
                     JSONObject data = jsonArray.getJSONObject(position);
                     String response = restClient.postRequest(URL_ZA_SLANJE, data);
-                    if (response.equals("-1"))
+                   /* if (response.equals("-1"))
                         return false;
+                    else {*/
+                        //todo Update prikaz
+                        data.put("Otpremljeno", "true");
+                        jsonArray.put(position, data);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Merenja" + korisnik, jsonArray.toString());
+                        editor.apply();
+                        return true; // test
+                   // }
 
                 } catch (JSONException e) {
                     ispisiGresku(rootView);
                     e.printStackTrace();
                     return false;
                 }
-                return true;
+                //return true;
             }
             private void obrisiJSONelement(int position) {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
@@ -274,7 +284,7 @@ public class DataBaseFragment extends Fragment {
             JSONArray merenja = new JSONArray(sharedPref.getString("Merenja"+korisnik, "0"));
             //odavde
             myLayout = (LinearLayout) view.findViewById(R.id.LayoutBaza);
-
+            //todo if(merenje.getString("Otpremljeno").isEqual("false"))
             brojMerenja = merenja.length();
             for (int i = 0; i < brojMerenja;  i++) {
                 //Pravimo novi element
@@ -313,7 +323,17 @@ public class DataBaseFragment extends Fragment {
                     );
                     ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
                     ikonica.setLayoutParams(ikonicaParms);
-                    ikonica.setImageResource(R.drawable.ic_calendar_color_x);
+                    if(merenje.getString("Otpremljeno").equals("true")) {
+                        Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                        mDrawable = DrawableCompat.wrap(mDrawable);
+                        int h = mDrawable.getIntrinsicHeight();
+                        int w = mDrawable.getIntrinsicWidth();
+                        mDrawable.setBounds(0, 0, w, h);
+                        ikonica.setImageDrawable(mDrawable);
+                    }
+                    else
+                        ikonica.setImageResource(R.drawable.ic_calendar_color_x);
                     glavniLayout.addView(ikonica);
                     //LayoutInformacije
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
@@ -425,7 +445,17 @@ public class DataBaseFragment extends Fragment {
                     );
                     ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
                     ikonica.setLayoutParams(ikonicaParms);
-                    ikonica.setImageResource(R.drawable.ic_calendar_color);
+                    if(merenje.getString("Otpremljeno").equals("true")) {
+                        Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                        mDrawable = DrawableCompat.wrap(mDrawable);
+                        int h = mDrawable.getIntrinsicHeight();
+                        int w = mDrawable.getIntrinsicWidth();
+                        mDrawable.setBounds(0, 0, w, h);
+                        ikonica.setImageDrawable(mDrawable);
+                    }
+                    else
+                        ikonica.setImageResource(R.drawable.ic_calendar_color);
                     glavniLayout.addView(ikonica);
                     //LayoutInformacije
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(

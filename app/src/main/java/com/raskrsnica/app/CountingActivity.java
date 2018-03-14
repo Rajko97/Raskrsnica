@@ -231,6 +231,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                merenje.put("Naziv", nazivRaskrsnice);
                merenje.put("Datum", datum);
                merenje.put("Vreme", vreme);
+               merenje.put("Otpremljeno", "false");
 
                for (int iKvantum = 1; iKvantum < 5; iKvantum++) {
                    JSONObject jsonKvantum = new JSONObject();
