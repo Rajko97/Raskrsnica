@@ -287,6 +287,7 @@ public class DataBaseFragment extends Fragment {
                 TextView tekstNazivRaskrsnice = new TextView(getContext());
                 TextView tekstDatum = new TextView(getContext());
                 TextView tekstVreme = new TextView(getContext());
+                TextView otpremljeno= new TextView(getContext());
                 LinearLayout cbLayout=new LinearLayout(getContext());
                 final CheckBox checkBox = new CheckBox(getContext());
 
@@ -319,7 +320,7 @@ public class DataBaseFragment extends Fragment {
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
                             0,
                             LinearLayout.LayoutParams.MATCH_PARENT,
-                            0.86f
+                            0.71f
                     );
 
                     layoutInformacije.setLayoutParams(layoutInformacijeParms);
@@ -393,6 +394,18 @@ public class DataBaseFragment extends Fragment {
                     tekstVreme.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                     layoutInformacije.addView(tekstVreme);
+
+                    LinearLayout.LayoutParams tekstOtpremljeno = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.15f
+                    );
+                    otpremljeno.setLayoutParams(tekstOtpremljeno);
+                    otpremljeno.setText("Otpremljeno!");
+                    otpremljeno.setTextColor(Color.parseColor("#D90647"));
+                    otpremljeno.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                    otpremljeno.setGravity(Gravity.CENTER);
+                    glavniLayout.addView(otpremljeno);
                     //CheckBox
 
                     LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.08f);
@@ -431,7 +444,7 @@ public class DataBaseFragment extends Fragment {
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
                             0,
                             LinearLayout.LayoutParams.MATCH_PARENT,
-                            0.87f
+                            0.72f
                     );
 
                     layoutInformacije.setLayoutParams(layoutInformacijeParms);
@@ -503,6 +516,18 @@ public class DataBaseFragment extends Fragment {
                     tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
                     tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                     layoutInformacije.addView(tekstVreme);
+
+                    LinearLayout.LayoutParams tekstOtpremljeno = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.16f
+                    );
+                    otpremljeno.setLayoutParams(tekstOtpremljeno);
+                    otpremljeno.setText("Otpremljeno!");
+                    otpremljeno.setTextColor(Color.parseColor("#D90647"));
+                    otpremljeno.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                    otpremljeno.setGravity(Gravity.CENTER);
+                    glavniLayout.addView(otpremljeno);
                     //CheckBox
 
                     LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.07f);
