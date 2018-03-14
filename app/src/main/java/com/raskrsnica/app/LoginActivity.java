@@ -54,12 +54,13 @@ public class LoginActivity extends AppCompatActivity {
         tv2.startAnimation(a);
 
 
-        Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
+        /*Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
         username.setAnimation(downtoup);
         password.setAnimation(downtoup);
-        button.setAnimation(downtoup);
+        button.setAnimation(downtoup);*/
 
         Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
+        animation1.setStartOffset(100);
         animation1.setDuration(600);
         animation1.setFillAfter(true);
         animation1.setZAdjustment(Animation.ZORDER_TOP);

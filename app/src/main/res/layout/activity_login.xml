@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.raskrsnica.app.LoginActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <TextView
         android:id="@+id/tvError"
@@ -29,7 +31,9 @@
         android:paddingBottom="100dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <ImageView
             android:id="@+id/imageView"
@@ -44,7 +48,9 @@
             android:layout_height="0dp"
             android:layout_weight="0.2"
             android:layout_margin="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false">
             <TextView
                 android:id="@+id/tv"
                 android:layout_width="match_parent"
