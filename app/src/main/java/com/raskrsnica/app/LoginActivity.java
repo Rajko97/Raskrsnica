@@ -53,17 +53,26 @@ public class LoginActivity extends AppCompatActivity {
         img.startAnimation(a);
         tv2.startAnimation(a);
 
-        Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
+        /*
+        Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
+        username.setAnimation(downtoup);
+        password.setAnimation(downtoup);
+        button.setAnimation(downtoup);
+        */
+        Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
         animation1.setDuration(600);
         animation1.setFillAfter(true);
-        Animation animation2=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
+        animation1.setZAdjustment(Animation.ZORDER_TOP);
+        Animation animation2=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
         animation2.setStartOffset(300);
         animation2.setDuration(600);
         animation2.setFillAfter(true);
-        Animation animation3=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,500,Animation.ABSOLUTE);
+        animation2.setZAdjustment(Animation.ZORDER_TOP);
+        Animation animation3=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
         animation3.setStartOffset(600);
         animation3.setDuration(600);
         animation3.setFillAfter(true);
+        animation3.setZAdjustment(Animation.ZORDER_TOP);
         username.startAnimation(animation1);
         password.startAnimation(animation2);
         button.startAnimation(animation3);
