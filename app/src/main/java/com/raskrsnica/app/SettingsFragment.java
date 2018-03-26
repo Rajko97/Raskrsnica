@@ -63,7 +63,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
         SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         String korisnik = sharedPref.getString("UlogovanKorisnik", "");
         try {
-            JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci"+korisnik, ""));
+            JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci", ""));
             podaciRaskrsnice = new String[9][zadaci.length()];
             for (int i = 0; i < zadaci.length(); i++) {
                 JSONObject zadatak = new JSONObject(zadaci.get(i).toString());

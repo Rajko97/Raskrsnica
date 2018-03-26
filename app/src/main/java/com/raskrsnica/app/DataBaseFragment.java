@@ -53,7 +53,8 @@ public class DataBaseFragment extends Fragment {
     private static String URL_ZA_SLANJE = "https://api.myjson.com/bins/1afprx";
     RestClient restClient;
 
-    final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000;
+    final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000, IKONICA_ID = 3000;
+    final static int TEXTBOX1_ID = 1500, TEXTBOX2_ID = 2000, TEXTBOX3_ID = 2500;
 
     int brojMerenja = 0;
     LinearLayout myLayout;
@@ -159,7 +160,24 @@ public class DataBaseFragment extends Fragment {
                     CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
                     if(checkBox.isChecked()) {
                         if(uploaduj(id)) {
-                            LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
+                            checkBox.setChecked(false);
+                            TextView tv1 = (TextView) rootView.findViewById(TEXTBOX1_ID+id);
+                            TextView tv2 = (TextView) rootView.findViewById(TEXTBOX2_ID+id);
+                            TextView tv3 = (TextView) rootView.findViewById(TEXTBOX3_ID+id);
+                            ImageView ikonica = (ImageView) rootView.findViewById(IKONICA_ID+id);
+
+                            tv1.setTextColor(Color.parseColor("#727272"));
+                            tv2.setTextColor(Color.parseColor("#727272"));
+                            tv3.setText("Otpremljeno");
+
+                            Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                            mDrawable = DrawableCompat.wrap(mDrawable);
+                            int h = mDrawable.getIntrinsicHeight();
+                            int w = mDrawable.getIntrinsicWidth();
+                            mDrawable.setBounds(0, 0, w, h);
+                            ikonica.setImageDrawable(mDrawable);
+                            /*LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
                             ln.setVisibility(View.GONE);
                             //ToDo Ucitaj element i pokreni metodu
                             obrisiJSONelement(id);
@@ -176,7 +194,7 @@ public class DataBaseFragment extends Fragment {
                             brojCekiranih--;
                             id--;
                             if (brojMerenja == 0)
-                                ispisiGresku(rootView);
+                                ispisiGresku(rootView);*/
                             success = true;
                         }
                         else {
@@ -207,15 +225,13 @@ public class DataBaseFragment extends Fragment {
                     tv2.setText("Baza trenutno nije dostupna.");
                 }
                 dialog.show();
-                if(brojCekiranih == 0)
-                {
-                    ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
-                    ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
-                    dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                    dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                    dugmeObisi.setClickable(false);
-                    dugmeBaza.setClickable(false);
-                }
+
+                ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
+                ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
+                dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                dugmeBaza.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                dugmeObisi.setClickable(false);
+                dugmeBaza.setClickable(false);
             }
             private boolean uploaduj(int position) {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
@@ -224,15 +240,25 @@ public class DataBaseFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
                     JSONObject data = jsonArray.getJSONObject(position);
                     String response = restClient.postRequest(URL_ZA_SLANJE, data);
-                    if (response.equals("-1"))
+                    //todo Provera da li je istekla sesija
+                    //todo provera da li je uspesno
+                   /* if (response.equals("-1"))
                         return false;
+                    else {*/
+                        data.put("Otpremljeno", "true");
+                        jsonArray.put(position, data);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Merenja" + korisnik, jsonArray.toString());
+                        editor.apply();
+                        return true; // test
+                   // }
 
                 } catch (JSONException e) {
                     ispisiGresku(rootView);
                     e.printStackTrace();
                     return false;
                 }
-                return true;
+                //return true;
             }
             private void obrisiJSONelement(int position) {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
@@ -274,7 +300,7 @@ public class DataBaseFragment extends Fragment {
             JSONArray merenja = new JSONArray(sharedPref.getString("Merenja"+korisnik, "0"));
             //odavde
             myLayout = (LinearLayout) view.findViewById(R.id.LayoutBaza);
-
+            //todo if(merenje.getString("Otpremljeno").isEqual("false"))
             brojMerenja = merenja.length();
             for (int i = 0; i < brojMerenja;  i++) {
                 //Pravimo novi element
@@ -287,6 +313,7 @@ public class DataBaseFragment extends Fragment {
                 TextView tekstNazivRaskrsnice = new TextView(getContext());
                 TextView tekstDatum = new TextView(getContext());
                 TextView tekstVreme = new TextView(getContext());
+                TextView otpremljeno= new TextView(getContext());
                 LinearLayout cbLayout=new LinearLayout(getContext());
                 final CheckBox checkBox = new CheckBox(getContext());
 
@@ -313,13 +340,24 @@ public class DataBaseFragment extends Fragment {
                     );
                     ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
                     ikonica.setLayoutParams(ikonicaParms);
-                    ikonica.setImageResource(R.drawable.ic_calendar_color_x);
+                    ikonica.setId(IKONICA_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true")) {
+                        Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                        mDrawable = DrawableCompat.wrap(mDrawable);
+                        int h = mDrawable.getIntrinsicHeight();
+                        int w = mDrawable.getIntrinsicWidth();
+                        mDrawable.setBounds(0, 0, w, h);
+                        ikonica.setImageDrawable(mDrawable);
+                    }
+                    else
+                        ikonica.setImageResource(R.drawable.ic_calendar_color_x);
                     glavniLayout.addView(ikonica);
                     //LayoutInformacije
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
                             0,
                             LinearLayout.LayoutParams.MATCH_PARENT,
-                            0.86f
+                            0.71f
                     );
 
                     layoutInformacije.setLayoutParams(layoutInformacijeParms);
@@ -346,8 +384,12 @@ public class DataBaseFragment extends Fragment {
                     );
                     tekstRaskrsnica.setLayoutParams(tekstRaskrsnicaParms);
                     tekstRaskrsnica.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstRaskrsnica.setId(TEXTBOX1_ID+i);
                     tekstRaskrsnica.setText("Raskrsnica:");
-                    tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        tekstRaskrsnica.setTextColor(Color.parseColor("#727272"));
+                    else
+                        tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
                     tekstRaskrsnica.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
                     tekstRaskrsnica.setTypeface(Typeface.DEFAULT_BOLD);
                     layoutNaziv.addView(tekstRaskrsnica);
@@ -362,7 +404,11 @@ public class DataBaseFragment extends Fragment {
                     tekstNazivRaskrsnice.setGravity(Gravity.CENTER_VERTICAL);
                     tekstNazivRaskrsnice.setPaddingRelative(paddingStart, 0, 0, 0);
                     tekstNazivRaskrsnice.setText(merenje.getString("Naziv"));
-                    tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
+                    tekstNazivRaskrsnice.setId(TEXTBOX2_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        tekstNazivRaskrsnice.setTextColor(Color.parseColor("#727272"));
+                    else
+                        tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
                     tekstNazivRaskrsnice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
                     layoutNaziv.addView(tekstNazivRaskrsnice);
                     //Tekst Datum
@@ -393,6 +439,22 @@ public class DataBaseFragment extends Fragment {
                     tekstVreme.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                     layoutInformacije.addView(tekstVreme);
+
+                    LinearLayout.LayoutParams tekstOtpremljeno = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.15f
+                    );
+                    otpremljeno.setLayoutParams(tekstOtpremljeno);
+                    otpremljeno.setId(TEXTBOX3_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        otpremljeno.setText("Otpremljeno!");
+                    else
+                        otpremljeno.setText("");
+                    otpremljeno.setTextColor(Color.parseColor("#D90647"));
+                    otpremljeno.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                    otpremljeno.setGravity(Gravity.CENTER);
+                    glavniLayout.addView(otpremljeno);
                     //CheckBox
 
                     LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.08f);
@@ -425,13 +487,24 @@ public class DataBaseFragment extends Fragment {
                     );
                     ikonicaParms.gravity = Gravity.CENTER_VERTICAL;
                     ikonica.setLayoutParams(ikonicaParms);
-                    ikonica.setImageResource(R.drawable.ic_calendar_color);
+                    ikonica.setId(IKONICA_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true")) {
+                        Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                        mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                        mDrawable = DrawableCompat.wrap(mDrawable);
+                        int h = mDrawable.getIntrinsicHeight();
+                        int w = mDrawable.getIntrinsicWidth();
+                        mDrawable.setBounds(0, 0, w, h);
+                        ikonica.setImageDrawable(mDrawable);
+                    }
+                    else
+                        ikonica.setImageResource(R.drawable.ic_calendar_color);
                     glavniLayout.addView(ikonica);
                     //LayoutInformacije
                     LinearLayout.LayoutParams layoutInformacijeParms = new LinearLayout.LayoutParams(
                             0,
                             LinearLayout.LayoutParams.MATCH_PARENT,
-                            0.87f
+                            0.72f
                     );
 
                     layoutInformacije.setLayoutParams(layoutInformacijeParms);
@@ -458,8 +531,12 @@ public class DataBaseFragment extends Fragment {
                     );
                     tekstRaskrsnica.setLayoutParams(tekstRaskrsnicaParms);
                     tekstRaskrsnica.setGravity(Gravity.CENTER_VERTICAL);
+                    tekstRaskrsnica.setText(TEXTBOX1_ID+i);
                     tekstRaskrsnica.setText("Raskrsnica:");
-                    tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        tekstRaskrsnica.setTextColor(Color.parseColor("#727272"));
+                    else
+                        tekstRaskrsnica.setTextColor(Color.parseColor("#D90647"));
                     tekstRaskrsnica.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     tekstRaskrsnica.setTypeface(Typeface.DEFAULT_BOLD);
                     layoutNaziv.addView(tekstRaskrsnica);
@@ -474,7 +551,11 @@ public class DataBaseFragment extends Fragment {
                     tekstNazivRaskrsnice.setGravity(Gravity.CENTER_VERTICAL);
                     tekstNazivRaskrsnice.setPaddingRelative(paddingStart, 0, 0, 0);
                     tekstNazivRaskrsnice.setText(merenje.getString("Naziv"));
-                    tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
+                    tekstNazivRaskrsnice.setId(TEXTBOX2_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        tekstNazivRaskrsnice.setTextColor(Color.parseColor("#727272"));
+                    else
+                        tekstNazivRaskrsnice.setTextColor(Color.parseColor("#000000"));
                     tekstNazivRaskrsnice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     layoutNaziv.addView(tekstNazivRaskrsnice);
                     //Tekst Datum
@@ -503,6 +584,22 @@ public class DataBaseFragment extends Fragment {
                     tekstVreme.setText("Vreme: "+merenje.getString("Vreme"));
                     tekstVreme.setGravity(Gravity.CENTER_VERTICAL);
                     layoutInformacije.addView(tekstVreme);
+
+                    LinearLayout.LayoutParams tekstOtpremljeno = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0.16f
+                    );
+                    otpremljeno.setLayoutParams(tekstOtpremljeno);
+                    otpremljeno.setId(TEXTBOX3_ID+i);
+                    if(merenje.getString("Otpremljeno").equals("true"))
+                        otpremljeno.setText("Otpremljeno!");
+                    else
+                        otpremljeno.setText("");
+                    otpremljeno.setTextColor(Color.parseColor("#D90647"));
+                    otpremljeno.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                    otpremljeno.setGravity(Gravity.CENTER);
+                    glavniLayout.addView(otpremljeno);
                     //CheckBox
 
                     LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,0.07f);

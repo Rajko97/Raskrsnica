@@ -34,8 +34,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class SplashScreen extends AppCompatActivity {
-    //private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
-    private static String URL_ZA_KORISNIKE = "http://192.168.0.106:8000/api/allUsers";
+    private static String URL_ZA_KORISNIKE = "https://api.myjson.com/bins/g2lx9";
+    //private static String URL_ZA_KORISNIKE = "http://192.168.0.106:8000/api/allUsers";
     private static String URL_ZA_ZADATKE = "https://api.myjson.com/bins/16f685";
     private ImageView logo,logo2;
     private ProgressBar pb;
@@ -60,7 +60,7 @@ public class SplashScreen extends AppCompatActivity {
 
         new Thread(new Runnable() {
             public void run() {
-                ucitajKorisnike();
+                //ucitajKorisnike();
                 pb.setProgress(100);
                 try {
                     Thread.sleep(1000);
@@ -72,6 +72,7 @@ public class SplashScreen extends AppCompatActivity {
             }
         }).start();
     }
+
 
     private void ucitajKorisnike() {
             String response = restClient.getRequest(URL_ZA_KORISNIKE);

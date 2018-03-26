@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,6 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +38,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
     JSONArray korisnici;
+    JSONArray zadaciKorisnika = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +65,14 @@ public class LoginActivity extends AppCompatActivity {
         img.startAnimation(a);
         tv2.startAnimation(a);
 
-        /*
-        Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
+
+        /*Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
         username.setAnimation(downtoup);
         password.setAnimation(downtoup);
-        button.setAnimation(downtoup);
-        */
+        button.setAnimation(downtoup);*/
+
         Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
+        animation1.setStartOffset(100);
         animation1.setDuration(600);
         animation1.setFillAfter(true);
         animation1.setZAdjustment(Animation.ZORDER_TOP);
@@ -102,7 +115,61 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < korisnici.length(); i++) {
+                //todo Salje request, ceka povratnu informaciju
+                //provera konekcije
+                //ako ima
+                //ako je uspela, cuva token  i username ulogovanog korisnika, preuzima zadatke, slike...
+                //ako nije, textView greska
+                //ako nema
+                //textView greska
+
+                JSONObject loginInfo = new JSONObject();
+                try {
+                    loginInfo.put("username", username.getText().toString());
+                    loginInfo.put("password", password.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String url = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, loginInfo, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {  //uspesan login
+                                try {
+                                    JSONObject jsonEntity = response.getJSONObject("entity");
+                                    SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("UlogovanKorisnik", username.getText().toString());
+                                    editor.putString("SecurityToken", jsonEntity.getString("remember_token"));
+                                    editor.apply();
+
+                                    ucitajZadatke(jsonEntity.getJSONArray("assignments"), jsonEntity.getString("remember_token"));
+                                    //sortirajZadatke("Zadaci"+korisnik.getString("username"));
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                                    finish();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                //mTextView.setText("Response: " + response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {  //neuspesan login
+                                tv.setText("Netačna lozinka!");
+                                tv.setBackgroundColor(Color.rgb(255, 255, 255));
+                                tv.startAnimation(animation4);
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0);
+                            }
+                        });
+                queue.add(jsonObjectRequest);
+            }
+
+                /*for (int i = 0; i < korisnici.length(); i++) {
                     try {
                         JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
                         if (korisnik.getString("username").equals(username.getText().toString())) {
@@ -137,11 +204,48 @@ public class LoginActivity extends AppCompatActivity {
                         tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
 
                     }
-                }
-            }
+                }*/
         });
     }
+    private void ucitajZadatke(JSONArray zadaciInfo, final String token) {
 
+        for(int i = 0; i <zadaciInfo.length(); i++) {
+            try {
+                final JSONObject zadatakInfo = new JSONObject(zadaciInfo.get(i).toString());
+
+                String idZadataka = zadatakInfo.getString("id");
+
+                String url = "http://www.rajko.esy.es/Raskrsnice/zadatak"+idZadataka+".json";
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {  //uspesno primljen
+                                zadaciKorisnika.put(response);
+                            }
+
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {  //neuspesno
+                                String errdsaor = "asd";
+                            }
+                        })/* {
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/json; charset=UTF-8");
+                        params.put("remember_token", token);
+                        return params;
+                    }
+                }*/;
+                queue.add(jsonObjectRequest);
+                //ucitajSlike("url adresa");
+        }
+        //deo za cuvanje zadataka
+        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("Zadaci", zadaciKorisnika.toString());
+        editor.apply();
+    }
     private void sortirajZadatke(String bazaID) {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         try {
