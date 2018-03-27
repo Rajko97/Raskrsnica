@@ -17,6 +17,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -44,15 +45,15 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    JSONArray korisnici;
     JSONArray zadaciKorisnika = new JSONArray();
+    int preuzeto = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         
-        ucitajBazu();
+        //ucitajBazu();
         final TextView tv=(TextView)findViewById(R.id.tvError);
         TextView tv2=(TextView)findViewById(R.id.tv);
         ImageView img=(ImageView)findViewById(R.id.imageView);
@@ -147,10 +148,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                     ucitajZadatke(jsonEntity.getJSONArray("assignments"), jsonEntity.getString("remember_token"));
                                     //sortirajZadatke("Zadaci"+korisnik.getString("username"));
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                  /*  Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                    finish();
+                                    finish();*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -207,44 +208,88 @@ public class LoginActivity extends AppCompatActivity {
                 }*/
         });
     }
-    private void ucitajZadatke(JSONArray zadaciInfo, final String token) {
-
-        for(int i = 0; i <zadaciInfo.length(); i++) {
+    private void ucitajZadatke(final JSONArray zadaciInfo, final String token) {
+        Dialog dialog = new Dialog(LoginActivity.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.loading_dialog);
+        final TextView tv2=dialog.findViewById(R.id.tv2);
+        tv2.setText("Preuzeto 0 / "+zadaciInfo.length());
+        final ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
+        dialog.setCancelable(false);
+        dialog.show();
+        for (int i = 0; i < zadaciInfo.length(); i++) {
             try {
                 final JSONObject zadatakInfo = new JSONObject(zadaciInfo.get(i).toString());
 
                 String idZadataka = zadatakInfo.getString("id");
 
-                String url = "http://www.rajko.esy.es/Raskrsnice/zadatak"+idZadataka+".json";
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                String url = "http://www.rajko.esy.es/Raskrsnice/zadatak" + idZadataka + ".json";
+                final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesno primljen
                                 zadaciKorisnika.put(response);
+                                if(++preuzeto == zadaciInfo.length())
+                                    sacuvajZadatke();
+                                tv2.setText("Preuzeto "+preuzeto+" / "+zadaciInfo.length());
+                                pb.setProgress((preuzeto/zadaciInfo.length())*100);
                             }
 
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {  //neuspesno
-                                String errdsaor = "asd";
+                                queue.cancelAll(new RequestQueue.RequestFilter() {
+                                    @Override
+                                    public boolean apply(Request<?> request) {
+                                        return true;
+                                    }
+                                });
+                                final Dialog dialog = new Dialog(LoginActivity.this);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                dialog.setCancelable(false);
+                                dialog.setContentView(R.layout.alert_dialog2);
+                                final TextView tv1=dialog.findViewById(R.id.tv1);
+                                tv1.setText("Greška!");
+                                final TextView tv2=dialog.findViewById(R.id.tv2);
+                                tv2.setText("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
+                                        "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!");
+                                dialog.setCancelable(false);
+                                Button btOk=dialog.findViewById(R.id.btOk);
+                                btOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        LoginActivity.this.finish();
+                                    }
+                                });
+                                dialog.show();
                             }
-                        })/* {
+                        }) {
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
                         params.put("Content-Type", "application/json; charset=UTF-8");
                         params.put("remember_token", token);
                         return params;
                     }
-                }*/;
+                };
                 queue.add(jsonObjectRequest);
                 //ucitajSlike("url adresa");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //deo za cuvanje zadataka
         }
-        //deo za cuvanje zadataka
+    }
+    private void sacuvajZadatke() {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("Zadaci", zadaciKorisnika.toString());
         editor.apply();
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+        finish();
     }
     private void sortirajZadatke(String bazaID) {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
@@ -308,7 +353,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void ucitajBazu() {
+    /*private void ucitajBazu() {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         try {
             korisnici = new JSONArray(sharedPref.getString("Korisnici", ""));
@@ -332,5 +377,5 @@ public class LoginActivity extends AppCompatActivity {
             });
             dialog.show();
         }
-    }
+    }*/
 }

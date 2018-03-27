@@ -40,7 +40,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="400dp"
                 android:layout_height="15dp"
-                android:progressDrawable="#fff"/>
+                android:background="#fff"/>
         </LinearLayout>
         <TextView
             android:id="@+id/tv2"
