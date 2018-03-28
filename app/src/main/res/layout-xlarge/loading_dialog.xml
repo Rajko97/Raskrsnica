@@ -39,8 +39,8 @@
                 android:id="@+id/progressBar2"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="400dp"
-                android:layout_height="15dp"
-                android:background="#fff"/>
+                android:layout_height="30dp"
+                android:progressDrawable="@drawable/loginbutton_background"/>
         </LinearLayout>
         <TextView
             android:id="@+id/tv2"

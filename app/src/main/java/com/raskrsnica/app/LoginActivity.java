@@ -52,8 +52,10 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
-    private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.196:8000/loginn";
+    //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
+    //private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
+    private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.196:8000/allAsigments";
 
     JSONArray zadaciKorisnika = new JSONArray();
     int preuzeto = 0;

@@ -265,6 +265,7 @@ public class DataBaseFragment extends Fragment {
                                             TextView tv1 = (TextView) rootView.findViewById(TEXTBOX1_ID+indeksiZaUpload[i]);
                                             TextView tv2 = (TextView) rootView.findViewById(TEXTBOX2_ID+indeksiZaUpload[i]);
                                             TextView tv3 = (TextView) rootView.findViewById(TEXTBOX3_ID+indeksiZaUpload[i]);
+                                            CheckBox cb = (CheckBox) rootView.findViewById(CHECKBOX_ID+indeksiZaUpload[i]);
                                             ImageView ikonica = (ImageView) rootView.findViewById(IKONICA_ID+indeksiZaUpload[i]);
 
                                             tv1.setTextColor(Color.parseColor("#727272"));
@@ -278,6 +279,20 @@ public class DataBaseFragment extends Fragment {
                                             int w = mDrawable.getIntrinsicWidth();
                                             mDrawable.setBounds(0, 0, w, h);
                                             ikonica.setImageDrawable(mDrawable);
+
+                                            if((getResources().getConfiguration().screenLayout &
+                                                    Configuration.SCREENLAYOUT_SIZE_XLARGE) ==
+                                                    Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                                                mDrawable = getResources().getDrawable(R.drawable.checkbox_background_xlarge);
+                                            }
+                                            else
+                                                mDrawable = getResources().getDrawable(R.drawable.checkbox_background);
+                                            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                                            mDrawable = DrawableCompat.wrap(mDrawable);
+                                            h = mDrawable.getIntrinsicHeight();
+                                            w = mDrawable.getIntrinsicWidth();
+                                            mDrawable.setBounds(0, 0, w, h);
+                                            cb.setButtonDrawable(mDrawable);
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
