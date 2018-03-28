@@ -52,7 +52,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.196:8000/loginn";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.196:8000/api/loginn";
     //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
     //private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
     private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.196:8000/allAsigments";
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 JSONObject loginInfo = new JSONObject();
                 try {
-                    loginInfo.put("username", username.getText().toString());
+                    loginInfo.put("email", username.getText().toString());
                     loginInfo.put("password", password.getText().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
+                        (Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesan login
                                 try {
