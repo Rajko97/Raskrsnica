@@ -128,6 +128,16 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Dialog dialog = new Dialog(LoginActivity.this);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.loading_dialog);
+                final TextView tv2=dialog.findViewById(R.id.tv2);
+                tv2.setText("");
+                final ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
+                dialog.setCancelable(false);
+                dialog.show();
+
                 JSONObject loginInfo = new JSONObject();
                 try {
                     loginInfo.put("username", username.getText().toString());
@@ -142,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesan login
                                 try {
+                                    dialog.dismiss();
                                     JSONObject jsonEntity = response.getJSONObject("entity");
                                     SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -160,6 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {  //neuspesan login
+                                dialog.dismiss();
                                 NetworkResponse response = error.networkResponse;
                                 if(error instanceof TimeoutError || error instanceof NoConnectionError) {
                                     tv.setText("Nemate internet konekciju!");
@@ -174,6 +186,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 e.printStackTrace();
                                             }
                                             break;
+                                        default:
+                                            tv.setText("Greska na serveru!");
                                     }
                                 }
                                 tv.setBackgroundColor(Color.rgb(255, 255, 255));
