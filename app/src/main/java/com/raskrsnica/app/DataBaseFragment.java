@@ -31,9 +31,18 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +51,9 @@ import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 
@@ -57,6 +69,8 @@ public class DataBaseFragment extends Fragment {
     final static int TEXTBOX1_ID = 1500, TEXTBOX2_ID = 2000, TEXTBOX3_ID = 2500;
 
     int brojMerenja = 0;
+    int poslato = 0;
+    private Dialog dialog;
     LinearLayout myLayout;
     public DataBaseFragment() {
         // Required empty public constructor
@@ -65,7 +79,7 @@ public class DataBaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_data_base, container, false);
-        restClient = RestClient.getInstance();
+
         ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
         ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
         dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
@@ -73,16 +87,16 @@ public class DataBaseFragment extends Fragment {
         dugmeObisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(getContext());
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.alert_dialog1);
-                final TextView tv1 = dialog.findViewById(R.id.tv1);
+                final Dialog dialog2 = new Dialog(getContext());
+                dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog2.setCancelable(false);
+                dialog2.setContentView(R.layout.alert_dialog1);
+                final TextView tv1 = dialog2.findViewById(R.id.tv1);
                 tv1.setText("Da li ste sigurni da želite da uklonite izabrana merenja?");
-                final TextView tv2 = dialog.findViewById(R.id.tv2);
+                final TextView tv2 = dialog2.findViewById(R.id.tv2);
                 tv2.setText("Ukoliko potvrdite, izabrani podaci koje ste merili biće zauvek izgubljeni iz uređaja!");
-                dialog.setCancelable(false);
-                Button btDa = dialog.findViewById(R.id.btDa);
+                dialog2.setCancelable(false);
+                Button btDa = dialog2.findViewById(R.id.btDa);
                 btDa.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -115,17 +129,17 @@ public class DataBaseFragment extends Fragment {
                             dugmeObisi.setClickable(false);
                             dugmeBaza.setClickable(false);
                         }
-                        dialog.cancel();
+                        dialog2.cancel();
                     }
                 });
-                Button btNe=dialog.findViewById(R.id.btNe);
+                Button btNe=dialog2.findViewById(R.id.btNe);
                 btNe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dialog.cancel();
+                        dialog2.cancel();
                     }
                 });
-                dialog.show();
+                dialog2.show();
             }
             private void obrisiJSONelement(int position) {
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
@@ -154,78 +168,15 @@ public class DataBaseFragment extends Fragment {
         dugmeBaza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean success = false;
-                for(int id = 0; id <brojMerenja; id++)
-                {
-                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID+id);
-                    if(checkBox.isChecked()) {
-                        if(uploaduj(id)) {
-                            checkBox.setChecked(false);
-                            TextView tv1 = (TextView) rootView.findViewById(TEXTBOX1_ID+id);
-                            TextView tv2 = (TextView) rootView.findViewById(TEXTBOX2_ID+id);
-                            TextView tv3 = (TextView) rootView.findViewById(TEXTBOX3_ID+id);
-                            ImageView ikonica = (ImageView) rootView.findViewById(IKONICA_ID+id);
-
-                            tv1.setTextColor(Color.parseColor("#727272"));
-                            tv2.setTextColor(Color.parseColor("#727272"));
-                            tv3.setText("Otpremljeno");
-
-                            Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
-                            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
-                            mDrawable = DrawableCompat.wrap(mDrawable);
-                            int h = mDrawable.getIntrinsicHeight();
-                            int w = mDrawable.getIntrinsicWidth();
-                            mDrawable.setBounds(0, 0, w, h);
-                            ikonica.setImageDrawable(mDrawable);
-                            /*LinearLayout ln = (LinearLayout) rootView.findViewById(LAYOUT_ID + id);
-                            ln.setVisibility(View.GONE);
-                            //ToDo Ucitaj element i pokreni metodu
-                            obrisiJSONelement(id);
-                            checkBox.setId(0);
-                            ln.setId(0);
-                            //ToDo Optimalniji nacin je da se broji koliko je bilo brisanja i da se shiftuje za toliko mesta
-                            for (int j = id; j < brojMerenja - 1; j++) {
-                                CheckBox checkBox1 = (CheckBox) rootView.findViewById(CHECKBOX_ID + j + 1);
-                                checkBox1.setId(CHECKBOX_ID + j);
-                                LinearLayout ln2 = (LinearLayout) rootView.findViewById(LAYOUT_ID + j + 1);
-                                ln2.setId(LAYOUT_ID + j);
-                            }
-                            brojMerenja--;
-                            brojCekiranih--;
-                            id--;
-                            if (brojMerenja == 0)
-                                ispisiGresku(rootView);*/
-                            success = true;
-                        }
-                        else {
-                           success = false;
-                           break;
-                        }
+                int[] indeksiZaUpload = new int[0];
+                for(int id = 0; id <brojMerenja; id++) {
+                    CheckBox checkBox = (CheckBox) rootView.findViewById(CHECKBOX_ID + id);
+                    if (checkBox.isChecked()) {
+                        indeksiZaUpload = addElement(indeksiZaUpload, id);
+                        checkBox.setChecked(false);
                     }
                 }
-                final Dialog dialog = new Dialog(getContext());
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.alert_dialog2);
-                final TextView tv1 = dialog.findViewById(R.id.tv1);
-                final TextView tv2 = dialog.findViewById(R.id.tv2);
-                dialog.setCancelable(false);
-                Button btOk = dialog.findViewById(R.id.btOk);
-                btOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.cancel();
-                    }
-                });
-                if (success) {
-                    tv1.setText("");
-                    tv2.setText("Merenja su uspesno poslata na server.");
-                } else {
-                    tv1.setText("Greska!");
-                    tv2.setText("Baza trenutno nije dostupna.");
-                }
-                dialog.show();
-
+                pokreniUpload(indeksiZaUpload);
                 ImageButton dugmeObisi = (ImageButton) rootView.findViewById(R.id.btDelete);
                 ImageButton dugmeBaza = (ImageButton) rootView.findViewById(R.id.btUpload);
                 dugmeObisi.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
@@ -233,54 +184,152 @@ public class DataBaseFragment extends Fragment {
                 dugmeObisi.setClickable(false);
                 dugmeBaza.setClickable(false);
             }
-            private boolean uploaduj(int position) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-                try {
-                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
-                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
-                    JSONObject data = jsonArray.getJSONObject(position);
-                    String response = restClient.postRequest(URL_ZA_SLANJE, data);
-                    //todo Provera da li je istekla sesija
-                    //todo provera da li je uspesno
-                   /* if (response.equals("-1"))
-                        return false;
-                    else {*/
-                        data.put("Otpremljeno", "true");
-                        jsonArray.put(position, data);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("Merenja" + korisnik, jsonArray.toString());
-                        editor.apply();
-                        return true; // test
-                   // }
 
+            private void pokreniUpload(final int[] indeksiZaUpload) {
+                //  POKRECE DIJALOG SA PROGRESOM
+                dialog = new Dialog(getContext());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.loading_dialog);
+                final TextView tv2=dialog.findViewById(R.id.tv2);
+                tv2.setText("Poslato 0 / "+indeksiZaUpload.length);
+                final ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                poslato = 0;
+
+                //OTVARA SVE ZADATKE KORISNIKA
+                final SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+                final String korisnik = sharedPref.getString("UlogovanKorisnik", "");
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
                 } catch (JSONException e) {
-                    ispisiGresku(rootView);
                     e.printStackTrace();
-                    return false;
                 }
-                //return true;
-            }
-            private void obrisiJSONelement(int position) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
 
-                try {
-                    String korisnik = sharedPref.getString("UlogovanKorisnik", "");
-                    JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
-                    JSONArray list = new JSONArray();
-                    int len = jsonArray.length();
-                    if(jsonArray != null) {
-                        for(int i=0; i<len; i++)
-                            if (i != position)
-                                list.put(jsonArray.get(i));
+                final RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                for(int i = 0; i < indeksiZaUpload.length; i++) {
 
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("Merenja"+korisnik, list.toString());
-                        editor.apply();
+                    // PRIBAVLJA JSON ELEMENT
+                    JSONObject data = null;
+                    try {
+                        JSONObject sviPodaci = jsonArray.getJSONObject(indeksiZaUpload[i]);
+                        data = sviPodaci.getJSONObject("Podaci");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    ispisiGresku(rootView);
-                    e.printStackTrace();
+
+                    // POKRECE UPLOAD ZAHTEV
+                    final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                            (Request.Method.POST, URL_ZA_SLANJE, data, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {  //uspesno primljen
+                                    if(++poslato == indeksiZaUpload.length) {
+                                        dialog.cancel();
+                                        final Dialog dialog2 = new Dialog(getContext());
+                                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        dialog2.setCancelable(false);
+                                        dialog2.setContentView(R.layout.alert_dialog2);
+                                        final TextView tv1 = dialog2.findViewById(R.id.tv1);
+                                        final TextView tv2 = dialog2.findViewById(R.id.tv2);
+                                        dialog2.setCancelable(false);
+                                        Button btOk = dialog2.findViewById(R.id.btOk);
+                                        btOk.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog2.cancel();
+                                            }
+                                        });
+                                        tv1.setText("");
+                                        tv2.setText("Merenja su uspešno poslata na server!");
+                                        dialog2.show();
+                                        oznaciDaJeUploadovano(indeksiZaUpload);
+                                    }
+                                    tv2.setText("Poslato "+poslato+" / "+indeksiZaUpload.length);
+                                    pb.setProgress((poslato/indeksiZaUpload.length)*100);
+                                }
+
+                                private void oznaciDaJeUploadovano(int[] indeksiZaUpload) {
+                                    try {
+                                        JSONArray jsonArray = new JSONArray(sharedPref.getString("Merenja"+korisnik, ""));
+                                        for(int i = 0; i < indeksiZaUpload.length; i++) {
+                                            JSONObject sviPodaci = jsonArray.getJSONObject(indeksiZaUpload[i]);
+                                            sviPodaci.put("Otpremljeno", "true");
+                                            jsonArray.put(indeksiZaUpload[i], sviPodaci);
+                                            SharedPreferences.Editor editor = sharedPref.edit();
+                                            editor.putString("Merenja" + korisnik, jsonArray.toString());
+                                            editor.apply();
+                                            //PRIKAZI DA JE UPLOADOVANO
+                                            TextView tv1 = (TextView) rootView.findViewById(TEXTBOX1_ID+indeksiZaUpload[i]);
+                                            TextView tv2 = (TextView) rootView.findViewById(TEXTBOX2_ID+indeksiZaUpload[i]);
+                                            TextView tv3 = (TextView) rootView.findViewById(TEXTBOX3_ID+indeksiZaUpload[i]);
+                                            ImageView ikonica = (ImageView) rootView.findViewById(IKONICA_ID+indeksiZaUpload[i]);
+
+                                            tv1.setTextColor(Color.parseColor("#727272"));
+                                            tv2.setTextColor(Color.parseColor("#727272"));
+                                            tv3.setText("Otpremljeno");
+
+                                            Drawable mDrawable = getResources().getDrawable(R.drawable.ic_calendar_color_x);
+                                            mDrawable.setColorFilter(getResources().getColor(R.color.colorDisabledGrey), PorterDuff.Mode.SRC_ATOP);
+                                            mDrawable = DrawableCompat.wrap(mDrawable);
+                                            int h = mDrawable.getIntrinsicHeight();
+                                            int w = mDrawable.getIntrinsicWidth();
+                                            mDrawable.setBounds(0, 0, w, h);
+                                            ikonica.setImageDrawable(mDrawable);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {  //neuspesno
+                                    queue.cancelAll(new RequestQueue.RequestFilter() {
+                                        @Override
+                                        public boolean apply(Request<?> request) {
+                                            return true;
+                                        }
+                                    });
+                                    dialog.cancel();
+                                    final Dialog dialog2 = new Dialog(getContext());
+                                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    dialog2.setCancelable(false);
+                                    dialog2.setContentView(R.layout.alert_dialog2);
+                                    final TextView tv1 = dialog2.findViewById(R.id.tv1);
+                                    final TextView tv2 = dialog2.findViewById(R.id.tv2);
+                                    dialog2.setCancelable(false);
+                                    Button btOk = dialog2.findViewById(R.id.btOk);
+                                    btOk.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dialog2.cancel();
+                                        }
+                                    });
+                                    tv1.setText("Greska!");
+                                    tv2.setText("Baza trenutno nije dostupna.");
+                                    dialog2.show();
+                                }
+                            }) {
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("Content-Type", "application/json; charset=UTF-8");
+                            params.put("remember_token", sharedPref.getString("SecurityToken", ""));
+                            return params;
+                        }
+                    };
+                    queue.add(jsonObjectRequest);
+
                 }
+            }
+
+            private int[] addElement(int[] org, int added) {
+                int[] result = Arrays.copyOf(org, org.length + 1);
+                result[org.length] = added;
+                return result;
             }
         });
 

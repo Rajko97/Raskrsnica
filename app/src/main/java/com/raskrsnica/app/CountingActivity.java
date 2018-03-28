@@ -47,6 +47,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     private TextView[][] textViews = new TextView[3][10];
     private int kvantum = 0;
     private int trajanje = 1;
+    private int pozicija = 0;
+    private int assigment_id = 0;
     private int[][][] brojVozila;
     private boolean[] ukljucenSmer = {false, false, false};
 
@@ -61,13 +63,14 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         Bundle b = getIntent().getExtras();
         if (b != null) {
             nazivRaskrsnice = b.getString("RASKRSNICA");
-            //String pozicija = b.getString("POZICIJA");
+            pozicija = Integer.valueOf(b.getString("POZICIJA"));
             trajanje = Integer.valueOf(b.getString("TRAJANJE"));
             datum = b.getString("DATUM");
             vreme = b.getString("VREME");
             smerID[0] = b.getString("SMER_LEVO");
             smerID[1] = b.getString("SMER_PRAVO");
             smerID[2] = b.getString("SMER_DESNO");
+            assigment_id = Integer.valueOf(b.getString("ZADATAK_ID"));
             //TextView header = (TextView) findViewById(R.id.textHeader);
             //header.setText("[ "+datum+" : "+vreme+" ] RASKRSNICA: "+nazivRaskrsnice+", " + "smerovi:"+ (Levo.equals("0")? "":Levo+ "(Levo), ")+ (Pravo.equals("0")? "":Pravo+"(Pravo), ")+ (Desno.equals("0")? "":Desno+"(Desno)")+ "sa brojackog mesta: "+pozicija);
 
@@ -227,30 +230,36 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
            JSONArray noviJson = new JSONArray();
            JSONObject merenje = new JSONObject();
 
-           try {
+
+           try {//json merenje unutar njega json podaci sadrzi atribut id i objekte q1 q2 q3 q4
+               //svaki objekat q sadrzi atribut direction i objekat count
                merenje.put("Naziv", nazivRaskrsnice);
                merenje.put("Datum", datum);
                merenje.put("Vreme", vreme);
                merenje.put("Otpremljeno", "false");
 
-               for (int iKvantum = 1; iKvantum < 5; iKvantum++) {
-                   JSONObject jsonKvantum = new JSONObject();
-                   JSONArray jsonSmer = new JSONArray();
+               JSONObject podaci = new JSONObject();
+               podaci.put("assignment_id", ""+assigment_id);
+
+               for (int iKvantum = 1; iKvantum < 5; iKvantum++)
+               {
+                   JSONArray jsonKvantum = new JSONArray();
+                   JSONObject jsonSmer = new JSONObject();
                    for (int iSmer = 0; iSmer < 3; iSmer++) {
                        if (!ukljucenSmer[iSmer])
                            continue;
 
-                       JSONObject jsonSmerVrednost = new JSONObject();
                        JSONArray jsonVrednosti = new JSONArray();
                        for (int iVozilo = 0; iVozilo < 10; iVozilo++) {
                            jsonVrednosti.put(brojVozila[4*(kvantum / 4 - 1)+(iKvantum-1)][iSmer][iVozilo]);
                        }
-                       jsonSmerVrednost.put(smerID[iSmer], jsonVrednosti);
-                       jsonSmer.put(jsonSmerVrednost);
+                       jsonSmer.put("direction", (pozicija+iSmer)%4+1);
+                       jsonSmer.put("count", jsonVrednosti);
                    }
-                   jsonKvantum.put("Smer", jsonSmer);
-                   merenje.put("Kvantum"+iKvantum, jsonKvantum);
+                   jsonKvantum.put(jsonSmer);
+                   podaci.put("q"+iKvantum, jsonKvantum);
                }
+               merenje.put("Podaci", podaci);
 
                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                Date pocetnoVreme = format.parse(vreme);

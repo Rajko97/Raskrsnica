@@ -21,9 +21,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Network;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -44,6 +51,9 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
+    private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
 
     JSONArray zadaciKorisnika = new JSONArray();
     int preuzeto = 0;
@@ -116,14 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo Salje request, ceka povratnu informaciju
-                //provera konekcije
-                //ako ima
-                //ako je uspela, cuva token  i username ulogovanog korisnika, preuzima zadatke, slike...
-                //ako nije, textView greska
-                //ako nema
-                //textView greska
-
                 JSONObject loginInfo = new JSONObject();
                 try {
                     loginInfo.put("username", username.getText().toString());
@@ -132,10 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                String url = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, url, loginInfo, new Response.Listener<JSONObject>() {
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesan login
                                 try {
@@ -146,22 +147,33 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString("SecurityToken", jsonEntity.getString("remember_token"));
                                     editor.apply();
 
-                                    ucitajZadatke(jsonEntity.getJSONArray("assignments"), jsonEntity.getString("remember_token"));
-                                    //sortirajZadatke("Zadaci"+korisnik.getString("username"));
-                                  /*  Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                    finish();*/
-
+                                    if(jsonEntity.getJSONArray("assignments").length() > 0)
+                                        ucitajZadatke(jsonEntity.getJSONArray("assignments"), jsonEntity.getString("remember_token"));
+                                    else
+                                        sacuvajZadatke();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                //mTextView.setText("Response: " + response.toString());
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {  //neuspesan login
-                                tv.setText("Netačna lozinka!");
+                                NetworkResponse response = error.networkResponse;
+                                if(error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                    tv.setText("Nemate internet konekciju!");
+                                }
+                                else if(response != null && response.data != null) {
+                                    switch (response.statusCode) {
+                                        case 400:
+                                            try {
+                                                JSONObject podaci = new JSONObject(response.data.toString());
+                                                tv.setText(podaci.getString("message"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
+                                    }
+                                }
                                 tv.setBackgroundColor(Color.rgb(255, 255, 255));
                                 tv.startAnimation(animation4);
                                 tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0);
@@ -224,10 +236,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String idZadataka = zadatakInfo.getString("id");
 
-                String url = "http://www.rajko.esy.es/Raskrsnice/zadatak" + idZadataka + ".json";
                 final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+idZadataka+".json", null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesno primljen
                                 zadaciKorisnika.put(response);
@@ -278,7 +289,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            //deo za cuvanje zadataka
         }
     }
     private void sacuvajZadatke() {
@@ -286,15 +296,16 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("Zadaci", zadaciKorisnika.toString());
         editor.apply();
+        sortirajZadatke();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         finish();
     }
-    private void sortirajZadatke(String bazaID) {
+    private void sortirajZadatke() {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
         try {
-            JSONArray zadaci = new JSONArray(sharedPref.getString(bazaID, ""));
+            JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci", ""));
             SharedPreferences.Editor editor = sharedPref.edit();
             JSONArray sortedJsonArray = new JSONArray();
 
@@ -346,36 +357,10 @@ public class LoginActivity extends AppCompatActivity {
             });
             for (int i = 0; i < zadaci.length(); i++)
                 sortedJsonArray.put(jsonValues.get(i));
-            editor.putString(bazaID, sortedJsonArray.toString());
+            editor.putString("Zadaci", sortedJsonArray.toString());
             editor.apply();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    /*private void ucitajBazu() {
-        SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-        try {
-            korisnici = new JSONArray(sharedPref.getString("Korisnici", ""));
-        } catch (JSONException e) {
-            final Dialog dialog = new Dialog(LoginActivity.this);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.alert_dialog2);
-            final TextView tv1=dialog.findViewById(R.id.tv1);
-            tv1.setText("Greška!");
-            final TextView tv2=dialog.findViewById(R.id.tv2);
-            tv2.setText("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
-                    "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!");
-            dialog.setCancelable(false);
-            Button btOk=dialog.findViewById(R.id.btOk);
-            btOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    LoginActivity.this.finish();
-                }
-            });
-            dialog.show();
-        }
-    }*/
 }

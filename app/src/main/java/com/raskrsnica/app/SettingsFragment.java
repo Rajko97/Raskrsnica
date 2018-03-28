@@ -31,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +46,7 @@ import java.util.Date;
 public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinnerEventsListener{
 
     final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
-            SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8;
+            SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8, ZADATAK_ID = 9;
     
     public SettingsFragment() {
         // Required empty public constructor
@@ -61,27 +63,33 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-        String korisnik = sharedPref.getString("UlogovanKorisnik", "");
         try {
             JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci", ""));
-            podaciRaskrsnice = new String[9][zadaci.length()];
-            for (int i = 0; i < zadaci.length(); i++) {
-                JSONObject zadatak = new JSONObject(zadaci.get(i).toString());
-                podaciRaskrsnice[NAZIV][i] = zadatak.getString("Raskrsnica");
-                podaciRaskrsnice[BR_MESTO][i] = zadatak.getString("BrMesto");
-                podaciRaskrsnice[DATUM][i] = zadatak.getString("Datum");
-                podaciRaskrsnice[POCETAK][i] = zadatak.getString("Vreme");
-                podaciRaskrsnice[TRAJANJE][i] = zadatak.getString("Trajanje");
-                podaciRaskrsnice[SMER_LEVO][i] = zadatak.getString("SmerLevo");
-                podaciRaskrsnice[SMER_PRAVO][i] = zadatak.getString("SmerPravo");
-                podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
-                podaciRaskrsnice[SLIKA][i] = zadatak.getString("Slika");
+            if(zadaci.length()>0) {
+                podaciRaskrsnice = new String[10][zadaci.length()];
+                for (int i = 0; i < zadaci.length(); i++) {
+                    JSONObject zadatak = new JSONObject(zadaci.get(i).toString());
+                    podaciRaskrsnice[NAZIV][i] = zadatak.getString("Raskrsnica");
+                    podaciRaskrsnice[BR_MESTO][i] = zadatak.getString("BrMesto");
+                    podaciRaskrsnice[DATUM][i] = zadatak.getString("Datum");
+                    podaciRaskrsnice[POCETAK][i] = zadatak.getString("Vreme");
+                    podaciRaskrsnice[TRAJANJE][i] = zadatak.getString("Trajanje");
+                    podaciRaskrsnice[SMER_LEVO][i] = zadatak.getString("SmerLevo");
+                    podaciRaskrsnice[SMER_PRAVO][i] = zadatak.getString("SmerPravo");
+                    podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
+                    podaciRaskrsnice[SLIKA][i] = zadatak.getString("Slika");
+                    podaciRaskrsnice[ZADATAK_ID][i] = zadatak.getString("idZadatka");
+                }
+            } else {
+                greska = true;
             }
         } catch (JSONException e) {
             greska = true;
+            e.printStackTrace();
+        }
+        if (greska){
             podaciRaskrsnice = new String[1][1];
             podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
-            e.printStackTrace();
         }
         spinner=(CustomSpinner) rootView.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]) {
@@ -124,22 +132,11 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                             + (podaciRaskrsnice[SMER_PRAVO][i].equals("1") ? "Pravo(" + strPravo + ") " : "")
                             + (podaciRaskrsnice[SMER_DESNO][i].equals("1") ? "Desno(" + strDesno + ") " : ""));
 
-                    String imagename = "";
-                    for (int j = podaciRaskrsnice[SLIKA][i].length()-1; j >= 0; j--) {
-                        if(podaciRaskrsnice[SLIKA][i].charAt(j) == '/') {
-                            imagename = podaciRaskrsnice[SLIKA][i].substring(j+1, podaciRaskrsnice[SLIKA][i].length()-4);
-                            break;
-                        }
-                    }
                     ImageView imageView = (ImageView) rootView.findViewById(R.id.imageView2);
-                    String path = Environment.getExternalStorageDirectory()+"/.Raskrsnica/"+imagename+".jpg";
-                    File imgFile = new  File(path);
-                    if(imgFile.exists())
-                    {
-                        imageView.setImageDrawable(Drawable.createFromPath(path));
-                    }
-                    else
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.img_w));
+                    Picasso.with(getContext())
+                            .load(podaciRaskrsnice[SLIKA][i])
+                            .placeholder(R.drawable.img_w)
+                            .into(imageView);
 
                     SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy HH:mm");
                     try {
@@ -210,6 +207,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                     b.putString("SMER_LEVO", podaciRaskrsnice[SMER_LEVO][i].equals("1") ? strLevo : "0");
                     b.putString("SMER_PRAVO", podaciRaskrsnice[SMER_PRAVO][i].equals("1") ? strPravo : "0");
                     b.putString("SMER_DESNO", podaciRaskrsnice[SMER_DESNO][i].equals("1") ? strDesno : "0");
+                    b.putString("ZADATAK_ID", podaciRaskrsnice[ZADATAK_ID][i]);
                     intent.putExtras(b);
                     getActivity().startActivityForResult(intent, REQ_CODE);
                 }
