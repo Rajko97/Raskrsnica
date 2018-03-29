@@ -243,7 +243,16 @@ public class LoginActivity extends AppCompatActivity {
                         (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+idZadataka+".json", null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesno primljen
-                                zadaciKorisnika.put(response);
+                                try {
+                                    JSONArray jsonArray = new JSONArray(response.toString());
+                                    JSONObject jsonZadatak = jsonArray.getJSONObject(0);
+                                    JSONObject jsonSLika = jsonArray.getJSONObject(1);
+                                    jsonZadatak.put("Slika", jsonSLika.getString("slika"));
+                                    zadaciKorisnika.put(jsonZadatak);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                //zadaciKorisnika.put(response);
                                 if(++preuzeto == zadaciInfo.length())
                                     sacuvajZadatke();
                                 tv2.setText("Preuzeto "+preuzeto+" / "+zadaciInfo.length());
