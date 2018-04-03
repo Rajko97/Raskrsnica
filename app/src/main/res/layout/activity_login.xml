@@ -80,8 +80,8 @@
             android:drawablePadding="15dp"
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
-            android:hint="Korisničko ime"
-            android:inputType="textPersonName"
+            android:hint="Email adresa"
+            android:inputType="textEmailAddress"
             android:textColorHint="#ffffff"
             android:textColor="#ffffff"
             android:textSize="22dp" />

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -52,10 +54,10 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.196:8000/api/loginn";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.195:8000/api/loginn";
     //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
     //private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
-    private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.196:8000/allAsigments";
+    private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
 
     JSONArray zadaciKorisnika = new JSONArray();
     int preuzeto = 0;
@@ -128,14 +130,55 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int greska = 0;
+                String strUsername = username.getText().toString();
+                String strPassword = password.getText().toString();
+                if(strUsername.equals("") ||strUsername.toString().isEmpty()) {
+                    greska+=1;
+                }
+                else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strUsername).matches())
+                    greska+=4;
+                if(strPassword.equals("") || strPassword.isEmpty()) {
+                    greska+=2;
+                }
+                else if(strPassword.indexOf(' ') != -1) {
+                    greska+=8;
+                }
+
+                if(greska != 0) {
+                    switch (greska) {
+                        case 1:
+                            ispisiGresku("Unesite email adresu!");
+                            break;
+                        case 2:
+                            ispisiGresku("Unesite lozinku!");
+                            break;
+                        case 3:
+                            ispisiGresku("Unesite email adresu i lozinku!");
+                            break;
+                        case 4:
+                            ispisiGresku("Email adresa nije važeća");
+                            break;
+                        case 6:
+                            ispisiGresku("Email adresa nije važeća i niste uneli lozinku");
+                            break;
+                        case 8:
+                            ispisiGresku("Lozinka ne sme da sadrži razmak!");
+                            break;
+                        case 9:
+                            ispisiGresku("Unesite email adresu i lozinka ne sme da sadrzi razmak!");
+                            break;
+                        case 12:
+                            ispisiGresku("Email adresa nije važeća i lozinka ne sme da sadrži razmak!");
+                            break;
+                    }
+                    return;
+                }
+
                 final Dialog dialog = new Dialog(LoginActivity.this);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.loading_dialog);
-                final TextView tv2=dialog.findViewById(R.id.tv2);
-                tv2.setText("");
-                final ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
-                dialog.setCancelable(false);
                 dialog.show();
 
                 JSONObject loginInfo = new JSONObject();
@@ -151,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                         (Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {  //uspesan login
+                                dialog.dismiss();
                                 try {
                                     dialog.dismiss();
                                     JSONObject jsonEntity = response.getJSONObject("entity");
@@ -173,67 +217,46 @@ public class LoginActivity extends AppCompatActivity {
                             public void onErrorResponse(VolleyError error) {  //neuspesan login
                                 dialog.dismiss();
                                 NetworkResponse response = error.networkResponse;
+
                                 if(error instanceof TimeoutError || error instanceof NoConnectionError) {
-                                    tv.setText("Nemate internet konekciju!");
+                                   ispisiGresku("Nemate internet konekciju!");
                                 }
                                 else if(response != null && response.data != null) {
                                     switch (response.statusCode) {
                                         case 400:
-                                            try {
+                                           try {
+                                                JSONObject podaci = new JSONObject(response.data.toString());
+                                                //tv.setText(podaci.getString("message"));
+                                               ispisiGresku("Greška na serveru!");
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            ispisiGresku("Korisnicko ime i nalog se ne podudaraju");
+                                            break;
+                                        case 404:
+                                          /*  try {
                                                 JSONObject podaci = new JSONObject(response.data.toString());
                                                 tv.setText(podaci.getString("message"));
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
-                                            }
+                                            }*/
+                                            ispisiGresku("Korisnik nije pronadjen");
                                             break;
                                         default:
-                                            tv.setText("Greska na serveru!");
+                                            ispisiGresku("Greška na serveru");
+                                            break;
                                     }
                                 }
-                                tv.setBackgroundColor(Color.rgb(255, 255, 255));
-                                tv.startAnimation(animation4);
-                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0);
                             }
                         });
                 queue.add(jsonObjectRequest);
             }
-
-                /*for (int i = 0; i < korisnici.length(); i++) {
-                    try {
-                        JSONObject korisnik = new JSONObject(korisnici.get(i).toString());
-                        if (korisnik.getString("username").equals(username.getText().toString())) {
-                            if(korisnik.getString("password").equals(password.getText().toString())) {
-                                SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("UlogovanKorisnik", username.getText().toString());
-                                editor.apply();
-                                sortirajZadatke("Zadaci"+korisnik.getString("username"));
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                finish();
-                                break;
-                            }
-                            else
-                                tv.setText("Netačna lozinka!");
-                                tv.setBackgroundColor(Color.rgb(255,255,255));
-                                tv.startAnimation(animation4);
-                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
-
-                            break;
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if(i == korisnici.length()-1) {
-                        tv.setText("Korisničko ime nije pronađeno");
-                        tv.setBackgroundColor(Color.rgb(255,255,255));
-                        tv.startAnimation(animation4);
-                        tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning,0,0,0);
-
-                    }
-                }*/
+            void ispisiGresku(String greska) {
+                tv.setText(greska);
+                tv.setBackgroundColor(Color.rgb(255, 255, 255));
+                tv.startAnimation(animation4);
+                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0);
+            }
         });
     }
     private void ucitajZadatke(final JSONArray zadaciInfo, final String token) {
@@ -253,10 +276,18 @@ public class LoginActivity extends AppCompatActivity {
                 String idZadataka = zadatakInfo.getString("id");
 
                 final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+idZadataka+".json", null, new Response.Listener<JSONObject>() {
+                final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+"/"+idZadataka, null, new Response.Listener<JSONArray>() {
                             @Override
-                            public void onResponse(JSONObject response) {  //uspesno primljen
+                            public void onResponse(JSONArray response) {  //uspesno primljen
+                                try {
+                                    JSONObject jsonZadatak = response.getJSONObject(0);
+                                    JSONObject jsonSLika = response.getJSONObject(1);
+                                    jsonZadatak.put("Slika", jsonSLika.getString("slika"));
+                                    zadaciKorisnika.put(jsonZadatak);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 zadaciKorisnika.put(response);
                                 if(++preuzeto == zadaciInfo.length())
                                     sacuvajZadatke();
@@ -300,7 +331,7 @@ public class LoginActivity extends AppCompatActivity {
                         return params;
                     }
                 };
-                queue.add(jsonObjectRequest);
+                queue.add(jsonArrayRequest);
                 //ucitajSlike("url adresa");
             } catch (JSONException e) {
                 e.printStackTrace();
