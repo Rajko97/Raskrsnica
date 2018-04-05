@@ -54,10 +54,10 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.195:8000/api/loginn";
-    //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
-    //private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
-    private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
+    //private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.195:8000/api/loginn";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
+    private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
+    //private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
 
     JSONArray zadaciKorisnika = new JSONArray();
     int preuzeto = 0;
@@ -178,8 +178,10 @@ public class LoginActivity extends AppCompatActivity {
                 final Dialog dialog = new Dialog(LoginActivity.this);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCancelable(false);
-                dialog.setContentView(R.layout.loading_dialog);
+                dialog.setContentView(R.layout.waitting_dialog);
+                ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
                 dialog.show();
+                pb.getIndeterminateDrawable().setColorFilter(0xFFFFFFFF, android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 JSONObject loginInfo = new JSONObject();
                 try {
@@ -196,7 +198,6 @@ public class LoginActivity extends AppCompatActivity {
                             public void onResponse(JSONObject response) {  //uspesan login
                                 dialog.dismiss();
                                 try {
-                                    dialog.dismiss();
                                     JSONObject jsonEntity = response.getJSONObject("entity");
                                     SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -277,7 +278,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+"/"+idZadataka, null, new Response.Listener<JSONArray>() {
+                        //(Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+"/"+idZadataka, null, new Response.Listener<JSONArray>() {
+                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+idZadataka+".json", null, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {  //uspesno primljen
                                 try {
@@ -288,7 +290,7 @@ public class LoginActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                zadaciKorisnika.put(response);
+                                //zadaciKorisnika.put(response);
                                 if(++preuzeto == zadaciInfo.length())
                                     sacuvajZadatke();
                                 tv2.setText("Preuzeto "+preuzeto+" / "+zadaciInfo.length());

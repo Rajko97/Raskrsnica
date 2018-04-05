@@ -45,7 +45,7 @@ import java.util.Date;
 
 public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinnerEventsListener{
 
-    private static String url_servera = "http://160.99.37.196:8000/";
+    private static String url_servera = "http://www.rajko.esy.es/Raskrsnice/";
 
     final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
             SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8, ZADATAK_ID = 9;
@@ -80,6 +80,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                     podaciRaskrsnice[SMER_PRAVO][i] = zadatak.getString("SmerPravo");
                     podaciRaskrsnice[SMER_DESNO][i] = zadatak.getString("SmerDesno");
                     podaciRaskrsnice[SLIKA][i] = url_servera+zadatak.getString("Slika");
+                    //podaciRaskrsnice[SLIKA][i] = zadatak.getString("Slika");
                     podaciRaskrsnice[ZADATAK_ID][i] = zadatak.getString("id");
                 }
             } else {
