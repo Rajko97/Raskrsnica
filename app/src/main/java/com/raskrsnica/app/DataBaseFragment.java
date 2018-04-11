@@ -62,8 +62,8 @@ import java.util.concurrent.CancellationException;
  * A simple {@link Fragment} subclass.
  */
 public class DataBaseFragment extends Fragment {
-    private static String URL_ZA_SLANJE = "https://api.myjson.com/bins/1afprx";
-    RestClient restClient;
+    private static String URL_ZA_SLANJE = "http://www.rajko.esy.es/Raskrsnice/upload.php";
+    //RestClient restClient;
 
     final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000, IKONICA_ID = 3000;
     final static int TEXTBOX1_ID = 1500, TEXTBOX2_ID = 2000, TEXTBOX3_ID = 2500;

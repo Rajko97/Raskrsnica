@@ -55,7 +55,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     //private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.195:8000/api/loginn";
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/loginCheck.json";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/NoviDogovor.json";
     private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
     //private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
 
@@ -192,27 +192,69 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
+                final CustomRequest customRequest = new CustomRequest(Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONArray>() {
                             @Override
-                            public void onResponse(JSONObject response) {  //uspesan login
-                                dialog.dismiss();
+                            public void onResponse(JSONArray response) {  //uspesan login
                                 try {
-                                    JSONObject jsonEntity = response.getJSONObject("entity");
+                                    JSONArray zaglavljeHeader = response.getJSONArray(0);
+                                    JSONArray jsoniSlike = response.getJSONArray(1);
+
+                                    JSONObject jsonEntity = zaglavljeHeader.getJSONObject(0);
                                     SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putString("UlogovanKorisnik", username.getText().toString());
+                                    editor.putString("UlogovanKorisnik", jsonEntity.getString("indeks"));
                                     editor.putString("SecurityToken", jsonEntity.getString("remember_token"));
                                     editor.apply();
 
-                                    if(jsonEntity.getJSONArray("assignments").length() > 0)
-                                        ucitajZadatke(jsonEntity.getJSONArray("assignments"), jsonEntity.getString("remember_token"));
+                                    JSONArray zadaciInfo = jsonEntity.getJSONArray("assignments");
+                                    int n = zadaciInfo.length();
+                                    if (n > 0)
+                                    {
+                                        for (int i = 0; i < n; i++) {
+                                            JSONObject zadatakInfo = new JSONObject(zadaciInfo.get(i).toString());
+                                            JSONObject noviZadatakInfo = new JSONObject();
+
+                                            String primam[] = {"id", "Naziv", "BrMesto", "Trajanje",
+                                            "SmerLevo", "SmerPravo", "SmerDesno"};
+
+                                            int tip[] = {1, 0, 0, 0, 1, 1, 1};
+
+                                            String cuvam[] = {"id", "Raskrsnica", "BrMesto", "Trajanje",
+                                                    "SmerLevo", "SmerPravo", "SmerDesno"};
+
+                                            for (int j = 0; j < cuvam.length; j++) {
+                                                if(tip[j] > 0)
+                                                    noviZadatakInfo.put(cuvam[j], ""+zadatakInfo.getInt(primam[j]));
+                                                else
+                                                    noviZadatakInfo.put(cuvam[j], zadatakInfo.getString(primam[j]));
+                                            }
+
+                                            SimpleDateFormat primamDatum = new SimpleDateFormat("yyyy-mm-dd");
+                                            SimpleDateFormat cuvamDatum = new SimpleDateFormat("d.m.yyyy");
+                                            SimpleDateFormat primamVreme = new SimpleDateFormat("HH:mm:ss");
+                                            SimpleDateFormat cuvamVreme = new SimpleDateFormat("HH:mm");
+
+                                            Date datum = primamDatum.parse(zadatakInfo.getString("Datum"));
+                                            Date vreme = primamVreme.parse(zadatakInfo.getString("Vreme"));
+
+                                            noviZadatakInfo.put("Datum", cuvamDatum.format(datum));
+                                            noviZadatakInfo.put("Vreme", cuvamVreme.format(vreme));
+                                            noviZadatakInfo.put("Slika", jsoniSlike.getString(i));
+
+                                            zadaciKorisnika.put(noviZadatakInfo);
+                                        }
+                                    }
                                     else
                                         sacuvajZadatke();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
                                 }
+                                sacuvajZadatke();
+                                dialog.dismiss();
                             }
+
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {  //neuspesan login
@@ -250,7 +292,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                queue.add(jsonObjectRequest);
+                queue.add(customRequest);
             }
             void ispisiGresku(String greska) {
                 tv.setText(greska);
