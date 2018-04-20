@@ -47,8 +47,8 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
 
     private static String url_servera = "http://www.rajko.esy.es/Raskrsnice/";
 
-    final static int REQ_CODE = 1, NAZIV = 0, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
-            SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8, ZADATAK_ID = 9;
+    final static int REQ_CODE = 1, NAZIV = 10, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
+            SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8, ZADATAK_ID = 9, ZADATAK_NAZIV = 0;
     
     public SettingsFragment() {
         // Required empty public constructor
@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
         try {
             JSONArray zadaci = new JSONArray(sharedPref.getString("Zadaci", ""));
             if(zadaci.length()>0) {
-                podaciRaskrsnice = new String[10][zadaci.length()];
+                podaciRaskrsnice = new String[11][zadaci.length()];
                 for (int i = 0; i < zadaci.length(); i++) {
                     JSONObject zadatak = new JSONObject(zadaci.get(i).toString());
                     podaciRaskrsnice[NAZIV][i] = zadatak.getString("Raskrsnica");
@@ -82,6 +82,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
                     podaciRaskrsnice[SLIKA][i] = url_servera+zadatak.getString("Slika");
                     //podaciRaskrsnice[SLIKA][i] = zadatak.getString("Slika");
                     podaciRaskrsnice[ZADATAK_ID][i] = zadatak.getString("id");
+                    podaciRaskrsnice[ZADATAK_NAZIV][i] = zadatak.getString("Zadatak");
                 }
             } else {
                 greska = true;
@@ -95,7 +96,7 @@ public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinne
             podaciRaskrsnice[0][0] = "Nemate nijedan zadatak";
         }
         spinner=(CustomSpinner) rootView.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[0]) {
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(rootView.getContext(), R.layout.view_spinner_item, podaciRaskrsnice[ZADATAK_NAZIV]) {
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                View v = null;

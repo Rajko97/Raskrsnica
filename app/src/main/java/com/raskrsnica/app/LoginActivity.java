@@ -1,12 +1,14 @@
 package com.raskrsnica.app;
 
 import android.app.Dialog;
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,6 +37,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -54,8 +57,8 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.195:8000/api/loginn";
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/NoviDogovor.json";
+    //private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.192:8000/api/login";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/RUTALOGIN.txt";
     private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
     //private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
 
@@ -192,18 +195,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final CustomRequest customRequest = new CustomRequest(Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {  //uspesan login
-                                try {
-                                    JSONArray zaglavljeHeader = response.getJSONArray(0);
-                                    JSONArray jsoniSlike = response.getJSONArray(1);
 
-                                    JSONObject jsonEntity = zaglavljeHeader.getJSONObject(0);
+                final JsonObjectRequest customRequest = new JsonObjectRequest(Request.Method.POST, RUTA_ZA_CHECK_LOGIN, loginInfo, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {  //uspesan login
+                                try {
+                                    JSONObject jsonEntity = response.getJSONObject("entity");
+
                                     SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putString("UlogovanKorisnik", jsonEntity.getString("indeks"));
-                                    editor.putString("SecurityToken", jsonEntity.getString("remember_token"));
+                                    editor.putString("SecurityToken", jsonEntity.getString("token"));
                                     editor.apply();
 
                                     JSONArray zadaciInfo = jsonEntity.getJSONArray("assignments");
@@ -214,13 +216,13 @@ public class LoginActivity extends AppCompatActivity {
                                             JSONObject zadatakInfo = new JSONObject(zadaciInfo.get(i).toString());
                                             JSONObject noviZadatakInfo = new JSONObject();
 
-                                            String primam[] = {"id", "Naziv", "BrMesto", "Trajanje",
-                                            "SmerLevo", "SmerPravo", "SmerDesno"};
+                                            String primam[] = {"id", "Naziv_Raskrsnice", "mesto", "Trajanje",
+                                            "SmerLevo", "SmerPravo", "SmerDesno", "slika", "Naziv"};
 
-                                            int tip[] = {1, 0, 0, 0, 1, 1, 1};
+                                            int tip[] = {1, 0, 0, 0, 1, 1, 1, 0, 0};
 
                                             String cuvam[] = {"id", "Raskrsnica", "BrMesto", "Trajanje",
-                                                    "SmerLevo", "SmerPravo", "SmerDesno"};
+                                                    "SmerLevo", "SmerPravo", "SmerDesno", "Slika", "Zadatak"};
 
                                             for (int j = 0; j < cuvam.length; j++) {
                                                 if(tip[j] > 0)
@@ -239,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             noviZadatakInfo.put("Datum", cuvamDatum.format(datum));
                                             noviZadatakInfo.put("Vreme", cuvamVreme.format(vreme));
-                                            noviZadatakInfo.put("Slika", jsoniSlike.getString(i));
+                                            //noviZadatakInfo.put("Slika", jsoniSlike.getString(i));
 
                                             zadaciKorisnika.put(noviZadatakInfo);
                                         }
