@@ -45,7 +45,7 @@ import java.util.Date;
 
 public class SettingsFragment extends Fragment implements CustomSpinner.OnSpinnerEventsListener{
 
-    private static String url_servera = "http://www.rajko.esy.es/Raskrsnice/";
+    private static String url_servera = "http://160.99.37.223/projekat/public/images/";
 
     final static int REQ_CODE = 1, NAZIV = 10, BR_MESTO = 1, DATUM = 2, POCETAK = 3, TRAJANJE = 4, SMER_LEVO = 5,
             SMER_PRAVO = 6, SMER_DESNO = 7, SLIKA = 8, ZADATAK_ID = 9, ZADATAK_NAZIV = 0;

@@ -57,20 +57,17 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.192:8000/api/login";
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/RUTALOGIN.txt";
-    private static String RUTA_ZA_INFO_ZADATAKA = "http://www.rajko.esy.es/Raskrsnice/zadatak";
-    //private static String RUTA_ZA_INFO_ZADATAKA = "http://160.99.37.195:8000/api/assignment";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.223:8000/api/login";
+    //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/RUTALOGIN.txt";
+
 
     JSONArray zadaciKorisnika = new JSONArray();
-    int preuzeto = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
-        //ucitajBazu();
+
         final TextView tv=(TextView)findViewById(R.id.tvError);
         TextView tv2=(TextView)findViewById(R.id.tv);
         ImageView img=(ImageView)findViewById(R.id.imageView);
@@ -83,11 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         img.startAnimation(a);
         tv2.startAnimation(a);
 
-
-        /*Animation downtoup = AnimationUtils.loadAnimation(this, R.anim.anim_downtoup);
-        username.setAnimation(downtoup);
-        password.setAnimation(downtoup);
-        button.setAnimation(downtoup);*/
 
         Animation animation1=new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,900,Animation.ABSOLUTE);
         animation1.setStartOffset(100);
@@ -303,86 +295,6 @@ public class LoginActivity extends AppCompatActivity {
                 tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0);
             }
         });
-    }
-    private void ucitajZadatke(final JSONArray zadaciInfo, final String token) {
-        Dialog dialog = new Dialog(LoginActivity.this);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.loading_dialog);
-        final TextView tv2=dialog.findViewById(R.id.tv2);
-        tv2.setText("Preuzeto 0 / "+zadaciInfo.length());
-        final ProgressBar pb = (ProgressBar) dialog.findViewById(R.id.progressBar2);
-        dialog.setCancelable(false);
-        dialog.show();
-        for (int i = 0; i < zadaciInfo.length(); i++) {
-            try {
-                final JSONObject zadatakInfo = new JSONObject(zadaciInfo.get(i).toString());
-
-                String idZadataka = zadatakInfo.getString("id");
-
-                final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                        //(Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+"/"+idZadataka, null, new Response.Listener<JSONArray>() {
-                        (Request.Method.GET, RUTA_ZA_INFO_ZADATAKA+idZadataka+".json", null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {  //uspesno primljen
-                                try {
-                                    JSONObject jsonZadatak = response.getJSONObject(0);
-                                    JSONObject jsonSLika = response.getJSONObject(1);
-                                    jsonZadatak.put("Slika", jsonSLika.getString("slika"));
-                                    zadaciKorisnika.put(jsonZadatak);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                //zadaciKorisnika.put(response);
-                                if(++preuzeto == zadaciInfo.length())
-                                    sacuvajZadatke();
-                                tv2.setText("Preuzeto "+preuzeto+" / "+zadaciInfo.length());
-                                pb.setProgress((preuzeto/zadaciInfo.length())*100);
-                            }
-
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {  //neuspesno
-                                queue.cancelAll(new RequestQueue.RequestFilter() {
-                                    @Override
-                                    public boolean apply(Request<?> request) {
-                                        return true;
-                                    }
-                                });
-                                final Dialog dialog = new Dialog(LoginActivity.this);
-                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                dialog.setCancelable(false);
-                                dialog.setContentView(R.layout.alert_dialog2);
-                                final TextView tv1=dialog.findViewById(R.id.tv1);
-                                tv1.setText("Greška!");
-                                final TextView tv2=dialog.findViewById(R.id.tv2);
-                                tv2.setText("Aplikaciji je potrebno da uspostavi vezu sa bazom!\n" +
-                                        "Proverite vašu internet konekciju. Ako još uvek imate problema, kontaktirajte profesora!");
-                                dialog.setCancelable(false);
-                                Button btOk=dialog.findViewById(R.id.btOk);
-                                btOk.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        LoginActivity.this.finish();
-                                    }
-                                });
-                                dialog.show();
-                            }
-                        }) {
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("Content-Type", "application/json; charset=UTF-8");
-                        params.put("remember_token", token);
-                        return params;
-                    }
-                };
-                queue.add(jsonArrayRequest);
-                //ucitajSlike("url adresa");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
     private void sacuvajZadatke() {
         SharedPreferences sharedPref = getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
