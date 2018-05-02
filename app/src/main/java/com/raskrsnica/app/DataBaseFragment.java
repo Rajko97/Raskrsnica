@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -62,7 +63,7 @@ import java.util.concurrent.CancellationException;
  * A simple {@link Fragment} subclass.
  */
 public class DataBaseFragment extends Fragment {
-    private static String URL_ZA_SLANJE = "http://www.rajko.esy.es/Raskrsnice/upload.php";
+    private static String URL_ZA_SLANJE = "http://192.168.0.106:8000/api/make/result";
     //RestClient restClient;
 
     final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000, IKONICA_ID = 3000;
@@ -217,6 +218,8 @@ public class DataBaseFragment extends Fragment {
                     try {
                         JSONObject sviPodaci = jsonArray.getJSONObject(indeksiZaUpload[i]);
                         data = sviPodaci.getJSONObject("Podaci");
+                        data.put("remember_token", sharedPref.getString("SecurityToken", ""));
+                        //todo ubaci remember_token
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -301,8 +304,10 @@ public class DataBaseFragment extends Fragment {
 
                             }, new Response.ErrorListener() {
                                 @Override
-                                public void onErrorResponse(VolleyError error) {  //neuspesno
+                                public void onErrorResponse(final VolleyError error) {  //neuspesno
                                     queue.cancelAll(new RequestQueue.RequestFilter() {
+                                        NetworkResponse response = error.networkResponse;
+                                        String asd = null;
                                         @Override
                                         public boolean apply(Request<?> request) {
                                             return true;
@@ -327,7 +332,7 @@ public class DataBaseFragment extends Fragment {
                                     tv2.setText("Baza trenutno nije dostupna.");
                                     dialog2.show();
                                 }
-                            }) {
+                            });/* {
                         public Map<String, String> getHeaders() throws AuthFailureError {
                             SharedPreferences sharedPref = getActivity().getSharedPreferences("Raskrsnica", Context.MODE_PRIVATE);
                             Map<String, String> params = new HashMap<String, String>();
@@ -335,7 +340,7 @@ public class DataBaseFragment extends Fragment {
                             params.put("remember_token", sharedPref.getString("SecurityToken", ""));
                             return params;
                         }
-                    };
+                    };*/
                     queue.add(jsonObjectRequest);
 
                 }

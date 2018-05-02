@@ -253,7 +253,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                        for (int iVozilo = 0; iVozilo < 10; iVozilo++) {
                            jsonVrednosti.put(brojVozila[4*(kvantum / 4 - 1)+(iKvantum-1)][iSmer][iVozilo]);
                        }
-                       jsonSmer.put("direction", (pozicija+iSmer)%4+1);
+                       jsonSmer.put("direction",""+((pozicija+iSmer)%4+1));
                        jsonSmer.put("count", jsonVrednosti);
                    }
                    jsonKvantum.put(jsonSmer);

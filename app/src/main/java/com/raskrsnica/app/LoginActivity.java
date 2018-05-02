@@ -57,7 +57,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static String RUTA_ZA_CHECK_LOGIN  = "http://160.99.37.223:8000/api/login";
+    private static String RUTA_ZA_CHECK_LOGIN  = "http://192.168.0.106:8000/api/login";
     //private static String RUTA_ZA_CHECK_LOGIN  = "http://www.rajko.esy.es/Raskrsnice/RUTALOGIN.txt";
 
 
