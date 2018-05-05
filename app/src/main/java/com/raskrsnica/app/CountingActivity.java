@@ -96,7 +96,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
         });
         d.show();
 
-        countDownTimer2 = new CountDownTimer(5000, 1000) {
+        countDownTimer2 = new CountDownTimer(getRemainingTimeinMS(), 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 try {
@@ -189,7 +189,7 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
     protected void pocniBrojanje() {
         final TextView timer = (TextView) findViewById(R.id.kvantum);
 
-        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { //900000 default
+        CountDownTimer countDownTimer = new CountDownTimer(900000, 1000) { //900000 default
             @Override
             public void onTick(long l) {
                 timer.setText("" + String.format("%02d : %02d", TimeUnit.MILLISECONDS.toMinutes(l), TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l))));
@@ -206,9 +206,12 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                             for (int j = 0; j < textViews[0].length; j++)
                                 textViews[i][j].setText("0");
                     start();
-                    timer.setText("00 : 10");
+                    timer.setText("15 : 00");
                 } else {
                     kvantum++;
+                    for (int i = 0; i < 3; i++)
+                        ukljucenSmer[i]=false;
+
                     SacuvajPodatke();
                     setResult(RESULT_OK, getIntent());
                     finish();
@@ -255,8 +258,8 @@ public class CountingActivity extends AppCompatActivity implements View.OnClickL
                        }
                        jsonSmer.put("direction",""+((pozicija+iSmer)%4+1));
                        jsonSmer.put("count", jsonVrednosti);
+                       jsonKvantum.put(jsonSmer);
                    }
-                   jsonKvantum.put(jsonSmer);
                    podaci.put("q"+iKvantum, jsonKvantum);
                }
                merenje.put("Podaci", podaci);

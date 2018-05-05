@@ -63,7 +63,7 @@ import java.util.concurrent.CancellationException;
  * A simple {@link Fragment} subclass.
  */
 public class DataBaseFragment extends Fragment {
-    private static String URL_ZA_SLANJE = "http://192.168.0.106:8000/api/make/result";
+    private static String URL_ZA_SLANJE = "http://192.168.0.109:8000/api/make/result";
     //RestClient restClient;
 
     final static int LAYOUT_ID = 500, CHECKBOX_ID = 1000, IKONICA_ID = 3000;
@@ -283,7 +283,7 @@ public class DataBaseFragment extends Fragment {
                                             mDrawable.setBounds(0, 0, w, h);
                                             ikonica.setImageDrawable(mDrawable);
 
-                                            if((getResources().getConfiguration().screenLayout &
+                                           /* if((getResources().getConfiguration().screenLayout &
                                                     Configuration.SCREENLAYOUT_SIZE_XLARGE) ==
                                                     Configuration.SCREENLAYOUT_SIZE_XLARGE) {
                                                 mDrawable = getResources().getDrawable(R.drawable.checkbox_background_xlarge);
@@ -295,7 +295,7 @@ public class DataBaseFragment extends Fragment {
                                             h = mDrawable.getIntrinsicHeight();
                                             w = mDrawable.getIntrinsicWidth();
                                             mDrawable.setBounds(0, 0, w, h);
-                                            cb.setButtonDrawable(mDrawable);
+                                            cb.setButtonDrawable(mDrawable);*/
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
